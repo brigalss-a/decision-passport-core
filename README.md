@@ -17,7 +17,7 @@
 ## Get started in 2 minutes
 
 ```bash
-git clone https://github.com/bespoke-champions-league/decision-passport-core
+git clone https://github.com/brigalss-a/decision-passport-core
 cd decision-passport-core
 pnpm install
 pnpm demo
