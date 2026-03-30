@@ -41,6 +41,13 @@ npx serve . -l 3000
 # Open http://localhost:3000/apps/verifier-web/
 ```
 
+<p align="center">
+  <img src="docs/screenshots/core-browser-pass.svg" alt="Browser verifier PASS" width="680" />
+</p>
+<p align="center">
+  <img src="docs/screenshots/core-browser-fail.svg" alt="Browser verifier FAIL" width="680" />
+</p>
+
 ---
 
 ## What is Decision Passport?
