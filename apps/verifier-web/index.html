@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision Passport — Browser Verifier</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+  .container { max-width: 800px; margin: 0 auto; padding: 2rem; }
+  h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+  .subtitle { color: #64748b; font-size: 0.875rem; margin-bottom: 2rem; }
+
+  /* Drop zone */
+  .dropzone {
+    border: 2px dashed #334155; border-radius: 0.75rem; padding: 3rem 2rem;
+    text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s;
+    margin-bottom: 1.5rem; position: relative;
+  }
+  .dropzone:hover, .dropzone.dragover { border-color: #3b82f6; background: #1e293b; }
+  .dropzone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .dropzone-label { font-size: 1rem; color: #94a3b8; }
+  .dropzone-label strong { color: #e2e8f0; }
+
+  /* Results */
+  .result { display: none; }
+  .result.visible { display: block; }
+  .status-card {
+    display: inline-block; padding: 0.5rem 1.5rem; border-radius: 0.5rem;
+    font-size: 1.75rem; font-weight: bold; color: #fff; margin: 1rem 0;
+  }
+  .status-pass { background: #22c55e; }
+  .status-fail { background: #ef4444; }
+  .status-error { background: #f59e0b; }
+
+  h2 { font-size: 1.125rem; margin: 1.5rem 0 0.75rem; border-bottom: 1px solid #334155; padding-bottom: 0.25rem; }
+  table { width: 100%; border-collapse: collapse; margin: 0.5rem 0; }
+  th, td { text-align: left; padding: 0.375rem 0.75rem; border-bottom: 1px solid #1e293b; font-size: 0.875rem; }
+  th { color: #94a3b8; font-weight: 600; }
+  code { background: #1e293b; padding: 0.125rem 0.375rem; border-radius: 0.25rem; font-size: 0.8125rem; word-break: break-all; }
+  .summary-box { background: #1e293b; padding: 0.75rem 1rem; border-radius: 0.5rem; margin: 0.5rem 0; }
+  .summary-pass { border-left: 4px solid #22c55e; }
+  .summary-fail { border-left: 4px solid #ef4444; }
+  .finding-row td { color: #fbbf24; }
+  .meta { color: #64748b; font-size: 0.8125rem; margin-top: 2rem; }
+  .try-link { color: #3b82f6; cursor: pointer; text-decoration: underline; }
+  .try-link:hover { color: #60a5fa; }
+  .btn-reset { background: #334155; color: #e2e8f0; border: none; padding: 0.5rem 1rem; border-radius: 0.375rem; cursor: pointer; font-size: 0.875rem; margin-top: 1rem; }
+  .btn-reset:hover { background: #475569; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Decision Passport &mdash; Browser Verifier</h1>
+  <p class="subtitle">Drag &amp; drop a bundle JSON file. Verification runs entirely in your browser &mdash; nothing is uploaded.</p>
+
+  <div class="dropzone" id="dropzone">
+    <div class="dropzone-label"><strong>Drop bundle.json here</strong><br>or click to browse</div>
+    <input type="file" id="fileInput" accept=".json,application/json">
+  </div>
+  <div id="sampleLinks">
+    Or try: <span class="try-link" id="tryValid">valid-bundle.json</span>
+    &nbsp;|&nbsp; <span class="try-link" id="tryTampered">tampered-bundle.json</span>
+  </div>
+
+  <div class="result" id="result">
+    <div id="statusCard" class="status-card"></div>
+
+    <h2>Bundle</h2>
+    <table id="bundleTable"></table>
+
+    <h2>Checks</h2>
+    <table><thead><tr><th>Check</th><th>Result</th><th>Detail</th></tr></thead><tbody id="checksBody"></tbody></table>
+
+    <h2>Tamper Analysis</h2>
+    <div id="tamperSummary" class="summary-box"></div>
+    <table id="findingsTable" style="display:none"><thead><tr><th>Record</th><th>Kind</th><th>Detail</th></tr></thead><tbody id="findingsBody"></tbody></table>
+
+    <h2>Records</h2>
+    <table><thead><tr><th>#</th><th>ID</th><th>Actor</th><th>Type</th><th>Action</th><th>Hash</th></tr></thead><tbody id="recordsBody"></tbody></table>
+
+    <button class="btn-reset" id="resetBtn">Verify another bundle</button>
+  </div>
+</div>
+
+<script>
+// ── Canonical serialisation (matches packages/core/src/canonical.ts) ──
+function serializeNumber(v) {
+  if (!Number.isFinite(v)) throw new Error("Non-finite number: " + v);
+  if (Object.is(v, -0)) return "0";
+  if (Number.isInteger(v)) return String(v);
+  return JSON.stringify(v);
+}
+function serializeValue(v) {
+  if (v === null || v === undefined) return "null";
+  if (typeof v === "string") return JSON.stringify(v);
+  if (typeof v === "boolean") return v ? "true" : "false";
+  if (typeof v === "number") return serializeNumber(v);
+  if (Array.isArray(v)) return "[" + v.map(serializeValue).join(",") + "]";
+  if (typeof v === "object") {
+    const keys = Object.keys(v).sort();
+    return "{" + keys.map(k => JSON.stringify(k) + ":" + serializeValue(v[k])).join(",") + "}";
+  }
+  throw new Error("Unsupported type: " + typeof v);
+}
+function canonicalSerialize(input) { return serializeValue(input); }
+
+// ── SHA-256 via Web Crypto ──
+async function sha256Hex(input) {
+  const data = new TextEncoder().encode(input);
+  const buf = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+}
+async function hashCanonical(input) { return sha256Hex(canonicalSerialize(input)); }
+async function hashPayload(payload) { return hashCanonical(payload); }
+
+const GENESIS_HASH = "GENESIS_0000000000000000000000000000000000000000000000000000000000000000";
+
+// ── Verify chain ──
+async function verifyChain(records) {
+  const checks = [];
+  for (let i = 0; i < records.length; i++) {
+    const r = records[i];
+    if (r.sequence !== i) {
+      checks.push({ name: "chain_integrity", passed: false, message: "Sequence mismatch at index " + i });
+      return checks;
+    }
+    const expectedPrev = i === 0 ? GENESIS_HASH : records[i - 1].record_hash;
+    if (r.prev_hash !== expectedPrev) {
+      checks.push({ name: "chain_integrity", passed: false, message: "prev_hash mismatch at index " + i });
+      return checks;
+    }
+    const { record_hash, ...rest } = r;
+    const recomputed = await hashCanonical(rest);
+    if (recomputed !== record_hash) {
+      checks.push({ name: "chain_integrity", passed: false, message: "record_hash mismatch at index " + i });
+      return checks;
+    }
+  }
+  checks.push({ name: "chain_integrity", passed: true });
+  return checks;
+}
+
+// ── Full bundle verification ──
+async function verifyBundle(bundle) {
+  const checks = await verifyChain(bundle.passport_records);
+  if (bundle.passport_records.length > 0) {
+    const last = bundle.passport_records[bundle.passport_records.length - 1];
+    const match = bundle.manifest.chain_hash === last.record_hash;
+    checks.push({ name: "manifest_chain_hash", passed: match, message: match ? undefined : "Manifest chain_hash mismatch" });
+  }
+  return { status: checks.every(c => c.passed) ? "PASS" : "FAIL", checks };
+}
+
+// ── Tamper explainer ──
+async function explainTamper(records, manifest) {
+  const findings = [];
+  for (let i = 0; i < records.length; i++) {
+    const r = records[i];
+    if (r.sequence !== i)
+      findings.push({ recordIndex: i, recordId: r.id, kind: "sequence", expected: String(i), actual: String(r.sequence), message: "Record " + i + " has sequence " + r.sequence + ", expected " + i });
+    const expectedPrev = i === 0 ? GENESIS_HASH : records[i - 1].record_hash;
+    if (r.prev_hash !== expectedPrev)
+      findings.push({ recordIndex: i, recordId: r.id, kind: "prev_hash", expected: expectedPrev, actual: r.prev_hash, message: "Record " + i + " prev_hash does not match record " + (i - 1) + " hash" });
+    const rePayload = await hashPayload(r.payload);
+    if (rePayload !== r.payload_hash)
+      findings.push({ recordIndex: i, recordId: r.id, kind: "payload_hash", expected: rePayload, actual: r.payload_hash, message: "Record " + i + " payload was modified" });
+    const { record_hash, ...rest } = r;
+    const reRecord = await hashCanonical(rest);
+    if (reRecord !== record_hash)
+      findings.push({ recordIndex: i, recordId: r.id, kind: "record_hash", expected: reRecord, actual: record_hash, message: "Record " + i + " record_hash mismatch" });
+  }
+  if (manifest && records.length > 0) {
+    const lastHash = records[records.length - 1].record_hash;
+    if (manifest.chain_hash !== lastHash)
+      findings.push({ recordIndex: records.length - 1, recordId: records[records.length - 1].id, kind: "manifest_chain_hash", expected: lastHash, actual: manifest.chain_hash, message: "Manifest chain_hash does not match last record hash" });
+  }
+  const tampered = findings.length > 0;
+  let summary;
+  if (!tampered) {
+    summary = "No tampering detected. All records, hashes, and chain links are intact.";
+  } else {
+    const kinds = [...new Set(findings.map(f => f.kind))];
+    const parts = [];
+    if (kinds.includes("payload_hash")) parts.push("payload content was modified");
+    if (kinds.includes("record_hash")) parts.push("record hashes are inconsistent");
+    if (kinds.includes("prev_hash")) parts.push("chain links are broken");
+    if (kinds.includes("sequence")) parts.push("record sequencing is wrong");
+    if (kinds.includes("manifest_chain_hash")) parts.push("manifest does not match chain");
+    summary = "Tampering detected in " + findings.length + " check(s): " + parts.join("; ") + ".";
+  }
+  return { tampered, findings, summary };
+}
+
+// ── Escape HTML ──
+function esc(s) { return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+// ── UI ──
+const dropzone = document.getElementById("dropzone");
+const fileInput = document.getElementById("fileInput");
+const resultDiv = document.getElementById("result");
+
+function showError(msg) {
+  resultDiv.classList.add("visible");
+  document.getElementById("statusCard").className = "status-card status-error";
+  document.getElementById("statusCard").textContent = "ERROR";
+  document.getElementById("tamperSummary").className = "summary-box summary-fail";
+  document.getElementById("tamperSummary").textContent = msg;
+  document.getElementById("bundleTable").innerHTML = "";
+  document.getElementById("checksBody").innerHTML = "";
+  document.getElementById("findingsTable").style.display = "none";
+  document.getElementById("findingsBody").innerHTML = "";
+  document.getElementById("recordsBody").innerHTML = "";
+}
+
+async function processBundle(text) {
+  let bundle;
+  try { bundle = JSON.parse(text); } catch { return showError("Invalid JSON"); }
+  if (!bundle.passport_records || !bundle.manifest) return showError("Not a valid Decision Passport bundle (missing passport_records or manifest)");
+
+  const result = await verifyBundle(bundle);
+  const explanation = await explainTamper(bundle.passport_records, bundle.manifest);
+
+  resultDiv.classList.add("visible");
+  dropzone.style.display = "none";
+  document.getElementById("sampleLinks").style.display = "none";
+
+  // Status
+  const card = document.getElementById("statusCard");
+  card.textContent = result.status;
+  card.className = "status-card " + (result.status === "PASS" ? "status-pass" : "status-fail");
+
+  // Bundle meta
+  document.getElementById("bundleTable").innerHTML =
+    "<tr><th>Version</th><td>" + esc(bundle.bundle_version) + "</td></tr>" +
+    "<tr><th>Chain ID</th><td><code>" + esc(bundle.manifest.chain_id) + "</code></td></tr>" +
+    "<tr><th>Records</th><td>" + bundle.passport_records.length + "</td></tr>" +
+    "<tr><th>Chain Hash</th><td><code>" + esc(bundle.manifest.chain_hash) + "</code></td></tr>" +
+    "<tr><th>Exported</th><td>" + esc(bundle.exported_at_utc) + "</td></tr>";
+
+  // Checks
+  document.getElementById("checksBody").innerHTML = result.checks.map(c =>
+    "<tr><td>" + esc(c.name) + '</td><td style="color:' + (c.passed ? "#22c55e" : "#ef4444") + '">' + (c.passed ? "PASS" : "FAIL") + "</td><td>" + (c.message ? esc(c.message) : "&mdash;") + "</td></tr>"
+  ).join("");
+
+  // Tamper summary
+  const tsDiv = document.getElementById("tamperSummary");
+  tsDiv.textContent = explanation.summary;
+  tsDiv.className = "summary-box " + (explanation.tampered ? "summary-fail" : "summary-pass");
+
+  // Findings
+  if (explanation.findings.length > 0) {
+    document.getElementById("findingsTable").style.display = "";
+    document.getElementById("findingsBody").innerHTML = explanation.findings.map(f =>
+      '<tr class="finding-row"><td>' + f.recordIndex + "</td><td><code>" + esc(f.kind) + "</code></td><td>" + esc(f.message) + "</td></tr>"
+    ).join("");
+  } else {
+    document.getElementById("findingsTable").style.display = "none";
+  }
+
+  // Records
+  document.getElementById("recordsBody").innerHTML = bundle.passport_records.map((r, i) =>
+    "<tr><td>" + i + "</td><td><code>" + esc(r.id) + "</code></td><td>" + esc(r.actor_id) + "</td><td>" + esc(r.actor_type) + "</td><td>" + esc(r.action_type) + "</td><td><code>" + esc(r.record_hash.slice(0, 12)) + "...</code></td></tr>"
+  ).join("");
+}
+
+// Event handlers
+dropzone.addEventListener("dragover", e => { e.preventDefault(); dropzone.classList.add("dragover"); });
+dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragover"));
+dropzone.addEventListener("drop", e => {
+  e.preventDefault(); dropzone.classList.remove("dragover");
+  const file = e.dataTransfer.files[0];
+  if (file) file.text().then(processBundle);
+});
+fileInput.addEventListener("change", () => {
+  const file = fileInput.files[0];
+  if (file) file.text().then(processBundle);
+});
+document.getElementById("resetBtn").addEventListener("click", () => {
+  resultDiv.classList.remove("visible");
+  dropzone.style.display = "";
+  document.getElementById("sampleLinks").style.display = "";
+  fileInput.value = "";
+});
+
+// Sample bundles (loaded from sibling fixtures/ if served, otherwise inline fallback)
+async function loadSample(name) {
+  try {
+    const resp = await fetch("../../fixtures/" + name);
+    if (resp.ok) return processBundle(await resp.text());
+  } catch {}
+  // Fallback: try relative to current page
+  try {
+    const resp = await fetch("./fixtures/" + name);
+    if (resp.ok) return processBundle(await resp.text());
+  } catch {}
+  showError("Could not load sample " + name + ". Serve with a local HTTP server or drop the file manually.");
+}
+document.getElementById("tryValid").addEventListener("click", () => loadSample("valid-bundle.json"));
+document.getElementById("tryTampered").addEventListener("click", () => loadSample("tampered-bundle.json"));
+</script>
+</body>
+</html>

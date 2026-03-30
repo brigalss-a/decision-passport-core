@@ -1,0 +1,9 @@
+{
+  "name": "@decision-passport/verifier-web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Zero-dependency browser verifier for Decision Passport bundles",
+  "scripts": {
+    "serve": "npx serve ../../ -l 3000 --no-clipboard"
+  }
+}

@@ -1,0 +1,404 @@
+# Decision Passport — Core
+
+> **Public Preview**
+>
+> **The trust layer for AI agent actions.**
+> Make every AI decision traceable, exportable, and independently verifiable — in minutes.
+
+[![Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6.svg)](https://www.typescriptlang.org/)
+[![pnpm](https://img.shields.io/badge/pnpm-monorepo-orange.svg)](https://pnpm.io/)
+[![Append-Only Chain](https://img.shields.io/badge/chain-append--only-brightgreen.svg)]()
+[![Offline Verification](https://img.shields.io/badge/verify-offline-blueviolet.svg)]()
+[![No Database Required](https://img.shields.io/badge/lite%20mode-no%20database-lightgrey.svg)]()
+
+---
+
+## Get started in 2 minutes
+
+```bash
+git clone https://github.com/bespoke-champions-league/decision-passport-core
+cd decision-passport-core
+pnpm install
+pnpm demo
+```
+
+**Expected output (JSON, abbreviated):**
+
+```json
+{
+  "bundle": {
+    "bundle_version": "1.4-basic",
+    "passport_records": [
+      { "sequence": 0, "action_type": "AI_RECOMMENDATION",      "actor_id": "ai-agent-01" },
+      { "sequence": 1, "action_type": "HUMAN_APPROVAL_GRANTED", "actor_id": "human-approver-01" }
+    ],
+    "manifest": { "record_count": 2, "chain_hash": "sha256:..." }
+  },
+  "result": {
+    "status": "PASS",
+    "checks": [
+      { "name": "chain_integrity",      "passed": true },
+      { "name": "manifest_chain_hash",  "passed": true }
+    ]
+  }
+}
+```
+
+No database. No API key. No cloud account.
+
+---
+
+## Verify in 60 seconds
+
+```bash
+pnpm install --frozen-lockfile
+pnpm build
+pnpm test          # 56 tests, all pass
+pnpm verify-demo   # builds bundle, verifies PASS, rejects tampered bundle
+```
+
+**What you just proved:**
+
+1. The hash chain engine builds cleanly
+2. A 2-record decision chain was created and exported
+3. The offline verifier confirmed `PASS` — every hash and chain link is intact
+4. A deliberately tampered bundle was correctly rejected as `FAIL`
+5. An HTML verification report was generated in `artifacts/`
+
+### Browser verifier
+
+Serve the repo and open `apps/verifier-web/` — drag any bundle JSON onto the page for instant client-side verification. Nothing is uploaded.
+
+```bash
+npx serve . -l 3000
+# Open http://localhost:3000/apps/verifier-web/
+```
+
+---
+
+## What is Decision Passport?
+
+Decision Passport is an **append-only, hash-linked record system** for AI agent actions.
+
+Every material action your AI agent performs — a recommendation, an approval decision, an execution result — gets stamped into a tamper-evident chain. That chain is bundled and can be independently verified by anyone, anywhere, without your API, without your database, without your cloud infrastructure.
+
+**The result:** a portable, cryptographic proof of every decision your AI system ever made.
+
+---
+
+## Before / After
+
+**Without Decision Passport**
+
+```
+AI agent runs → tool calls happen → results returned → ...nothing recorded
+→ Hard to explain what the AI decided
+→ Hard to prove what actually executed
+→ Impossible to satisfy an auditor
+→ Debugging requires reproduction
+```
+
+**With Decision Passport**
+
+```
+AI agent runs → every action stamped into append-only chain
+→ Bundle exported: portable JSON proof
+→ Verifier confirms: PASS ✓
+→ Auditor sees: exact reasoning, approvals, execution results
+→ Legal, compliance, and enterprise ready
+```
+
+---
+
+## Quick example
+
+```typescript
+import { createRecord, createManifest } from '@decision-passport/core';
+import { verifyBasicBundle } from '@decision-passport/verifier-basic';
+
+const chainId = `session-${Date.now()}`;
+
+// 1. Stamp each action
+const record1 = createRecord({
+  chainId,
+  lastRecord: null,
+  actorId: 'claude-agent-01',
+  actorType: 'ai_agent',
+  actionType: 'AI_RECOMMENDATION',
+  payload: {
+    rationale: 'Policy v2.1 — action within approved risk threshold',
+    confidence: 0.94,
+    policy_version: 'v2.1'
+  }
+});
+
+const record2 = createRecord({
+  chainId,
+  lastRecord: record1,
+  actorId: 'alice@company.com',
+  actorType: 'human',
+  actionType: 'HUMAN_APPROVAL_GRANTED',
+  payload: { note: 'Reviewed and approved' }
+});
+
+const record3 = createRecord({
+  chainId,
+  lastRecord: record2,
+  actorId: 'claude-agent-01',
+  actorType: 'ai_agent',
+  actionType: 'EXECUTION_SUCCEEDED',
+  payload: { result_summary: 'Email delivered', message_id: 'msg-8821' }
+});
+
+// 2. Export a portable proof bundle
+const records = [record1, record2, record3];
+const bundle = {
+  bundle_version: '1.4-basic' as const,
+  exported_at_utc: new Date().toISOString(),
+  passport_records: records,
+  manifest: createManifest(records)
+};
+
+// 3. Verify independently — no network, no database
+const result = verifyBasicBundle(bundle);
+console.log(result.status); // 'PASS'
+```
+
+---
+
+## Architecture
+
+```
+decision-passport-core/
+├── packages/
+│   ├── core/               ← Hash chain engine
+│   │   ├── src/types.ts         ActionType, PassportRecord, ChainManifest, BasicProofBundle
+│   │   ├── src/chain.ts         createRecord(), verifyChain(), assertValidChain()
+│   │   ├── src/hashing.ts       hashCanonical(), hashPayload() — SHA-256, deterministic
+│   │   ├── src/canonical.ts     Canonical JSON serialiser (no duplicate hashing)
+│   │   ├── src/manifest.ts      buildManifest()
+│   │   ├── src/explain-tamper.ts explainTamper() — what changed and why it broke
+│   │   └── src/errors.ts        ChainValidationError
+│   │
+│   ├── verifier-basic/     ← Offline bundle verifier
+│   │   ├── src/verify-bundle.ts   verifyBundle() — zero external deps
+│   │   └── src/html-report.ts     renderVerificationReport() — static HTML export
+│   │
+│   └── demo/               ← Runnable demo
+│       └── src/index.ts         Full demo: record → export → verify → PASS
+│
+├── apps/
+│   └── verifier-web/       ← Browser verifier (drag-and-drop, zero dependencies)
+│
+├── fixtures/               ← Deterministic test fixtures
+│   ├── valid-bundle.json        Verifies as PASS
+│   └── tampered-bundle.json     Verifies as FAIL
+│
+└── artifacts/              ← Generated by verify-demo
+    ├── verification-report.html
+    ├── tampered-report.html
+    └── verification-summary.json
+```
+
+### Trust chain model
+
+```
+PassportRecord[0]        PassportRecord[1]        PassportRecord[2]
+─────────────────        ─────────────────        ─────────────────
+id: uuid                 id: uuid                 id: uuid
+sequence: 0              sequence: 1              sequence: 2
+prev_hash: GENESIS       prev_hash: hash[0]       prev_hash: hash[1]
+payload_hash: sha256     payload_hash: sha256     payload_hash: sha256
+record_hash: sha256 ──►  record_hash: sha256 ──►  record_hash: sha256
+                                                          │
+                                                          ▼
+                                               ChainManifest
+                                               chain_hash = record_hash[2]
+                                                          │
+                                                          ▼
+                                               BasicProofBundle
+                                               (portable · verifiable · exportable)
+```
+
+Tampering with any single byte in any record breaks every subsequent hash. The chain becomes self-auditing.
+
+---
+
+## Core concepts
+
+### PassportRecord
+
+The atomic unit of trust. Every record contains:
+
+| Field | Description |
+|---|---|
+| `id` | UUID |
+| `chain_id` | Session identifier |
+| `sequence` | Monotonic counter (0, 1, 2, ...) |
+| `timestamp_utc` | ISO 8601 timestamp |
+| `actor_id` | Who acted (agent ID, user email, system name) |
+| `actor_type` | `human` / `ai_agent` / `system` / `policy` |
+| `action_type` | Category (see below) |
+| `payload` | Action data (structured) |
+| `payload_hash` | SHA-256 of payload |
+| `prev_hash` | Hash of previous record (or `GENESIS`) |
+| `record_hash` | SHA-256 of the full record (excluding itself) |
+| `metadata` | Optional — environment, tenant, policy refs |
+
+### Action types
+
+```typescript
+type ActionType =
+  | 'AI_RECOMMENDATION'       // Agent produces a decision
+  | 'HUMAN_APPROVAL_GRANTED'  // Human approves
+  | 'HUMAN_APPROVAL_REJECTED' // Human rejects
+  | 'POLICY_APPROVAL_GRANTED' // Policy engine approves
+  | 'EXECUTION_PENDING'       // Action queued
+  | 'EXECUTION_SUCCEEDED'     // Action completed successfully
+  | 'EXECUTION_FAILED'        // Action failed
+  | 'EXECUTION_ABORTED'       // Action cancelled
+  | 'HUMAN_OVERRIDE'          // Human overrides system decision
+  | 'POLICY_EXCEPTION';       // Exception granted
+```
+
+### ChainManifest
+
+Chain summary: `chain_id`, `record_count`, `first_record_id`, `last_record_id`, `chain_hash`.
+
+### BasicProofBundle
+
+The portable export format (`bundle_version: "1.4-basic"`). Contains all records + manifest. Self-contained, verifiable offline.
+
+---
+
+## Offline verification
+
+```typescript
+import { verifyBasicBundle } from '@decision-passport/verifier-basic';
+import fs from 'fs';
+
+const bundle = JSON.parse(fs.readFileSync('./bundle.json', 'utf8'));
+const result = verifyBasicBundle(bundle);
+
+console.log(result.status);  // 'PASS' | 'FAIL'
+console.log(result.checks);  // array of individual check results
+```
+
+A CLI verifier is also available at `packages/verifier-basic/src/cli.ts`:
+
+```bash
+pnpm tsx packages/verifier-basic/src/cli.ts ./bundle.json
+```
+
+The verifier checks:
+1. Every `record_hash` matches the recomputed deterministic hash
+2. Every `prev_hash` correctly chains to the previous record
+3. Sequence numbers are gapless and correct
+4. `chain_hash` in the manifest matches the terminal record
+5. Bundle schema version is recognised
+
+---
+
+## Lite vs Enterprise
+
+| Capability | Core (this repo) | Enterprise (private) |
+|---|---|---|
+| Append-only hash chain | ✓ Free | ✓ |
+| Basic bundle export (JSON) | ✓ Free | ✓ |
+| Offline verifier | ✓ Free | ✓ |
+| CLI verifier | ✓ Free | ✓ |
+| Demo + examples | ✓ Free | ✓ |
+| Execution claims (single-use auth tokens) | — | ✓ |
+| Guard enforcement (blocking before execution) | — | ✓ |
+| Replay protection (nonce + TTL) | — | ✓ |
+| Outcome binding (cryptographic result sealing) | — | ✓ |
+| PostgreSQL persistence | — | ✓ |
+| Redis distributed locking | — | ✓ |
+| Merkle proof bundle | — | ✓ |
+| Advanced verifier (enterprise-grade) | — | ✓ |
+| Sovereign signed bundles (HMAC-SHA256) | — | ✓ |
+| Air-gapped verifier packaging | — | ✓ |
+| Dashboard + live backend | — | ✓ |
+| SSO / RBAC / tenant isolation | — | ✓ |
+
+---
+
+## Pricing
+
+| Tier | Price | For |
+|---|---|---|
+| **Core** | Free | Open-source forever |
+| **Pro** | £49/month | Hosted verifier, bundle history, team workspace |
+| **Business** | £299/month | API access, multi-environment, RBAC, audit exports |
+| **Enterprise** | From £18,000/year | Execution control, claims, guard, replay protection |
+| **Sovereign** | From £60,000/year | Air-gapped, signed, regulated, defence |
+
+→ [Full pricing](docs/pricing.md)
+
+---
+
+## Roadmap
+
+- [x] Core hash chain engine
+- [x] BasicProofBundle export
+- [x] Offline verifier (zero-dependency)
+- [x] CLI verifier
+- [x] Demo with sample data
+- [x] Tamper explainer (`explainTamper()` — what changed and why it broke)
+- [x] HTML verification report export
+- [x] Browser verifier (drag-and-drop, client-side only)
+- [x] Deterministic valid + tampered fixtures
+- [ ] ASCII chain visualiser
+- [ ] Policy version binding helpers
+- [ ] Redaction mode (`metadata-only` and `hash-only` bundles)
+- [ ] Bundle diff utility (compare two bundles)
+- [ ] OpenClaw Lite bridge (see `decision-passport-openclaw-lite`)
+- [ ] Trusted timestamping integration (RFC 3161)
+
+---
+
+## Repo map
+
+This repository is the **public protocol layer**. The full ecosystem:
+
+| Repo | Visibility | Purpose |
+|---|---|---|
+| `decision-passport-core` | **Public** | This repo — protocol, chain, basic verifier |
+| `decision-passport-openclaw-lite` | **Public** | OpenClaw integration bridge (Lite) |
+| `decision-passport-control-plane` | **Private** | Claims, guard, replay, outcomes, persistence |
+| `decision-passport-sovereign` | **Private** | Signed bundles, air-gapped verifier |
+
+---
+
+## Contributing
+
+Contributions to the public protocol are welcome.
+
+1. Fork this repo
+2. `git checkout -b feat/my-improvement`
+3. Run `pnpm test` before submitting
+4. Open a PR — clearly describe what changed and why
+
+All contributors are expected to follow standard open-source etiquette.
+
+---
+
+## License
+
+[Apache-2.0](LICENSE) — see full text in LICENSE file.
+
+> You may use, modify, and distribute this software freely, including in commercial products. The express patent grant protects you and your users. Product names, logos, and hosted offerings remain the intellectual property of Bespoke Champions League Ltd.
+
+---
+
+## About
+
+**Decision Passport** is built and maintained by **Bespoke Champions League Ltd** (London, UK).
+
+It powers the trust layer inside [Bespea](https://bespea.com) — an AI governance platform for bespoke construction projects. Decision Passport emerged from a real-world problem: construction AI systems making scope, delivery, and payment decisions without any traceable record.
+
+**Grigore-Andrei Traistaru** — Founder
+contact@bespea.com
+
+*If this ends up in front of an auditor, insurer, regulator, or court... the model holds. That is the design constraint that drives everything here.*

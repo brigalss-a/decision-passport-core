@@ -1,0 +1,31 @@
+{
+  "description": "A valid proof bundle for testing. All hashes are correct and chain verifies as PASS.",
+  "bundle_version": "1.4-basic",
+  "exported_at_utc": "2026-01-01T00:00:00.000Z",
+  "passport_records": [
+    {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "chain_id": "fixture-chain",
+      "sequence": 0,
+      "timestamp_utc": "2026-01-01T00:00:00.000Z",
+      "actor_id": "ai-agent-01",
+      "actor_type": "ai_agent",
+      "action_type": "AI_RECOMMENDATION",
+      "payload": {
+        "action": "approve_order",
+        "confidence": 0.92
+      },
+      "payload_hash": "WILL_BE_RECOMPUTED",
+      "prev_hash": "GENESIS_0000000000000000000000000000000000000000000000000000000000000000",
+      "record_hash": "WILL_BE_RECOMPUTED"
+    }
+  ],
+  "manifest": {
+    "chain_id": "fixture-chain",
+    "record_count": 1,
+    "first_record_id": "00000000-0000-0000-0000-000000000001",
+    "last_record_id": "00000000-0000-0000-0000-000000000001",
+    "chain_hash": "WILL_BE_RECOMPUTED"
+  },
+  "_note": "This is a structural template. Use scripts/generate-fixtures.ts to produce fixtures with correct hashes."
+}

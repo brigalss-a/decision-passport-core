@@ -1,0 +1,15 @@
+{
+  "name": "@decision-passport/verifier-basic",
+  "version": "0.1.0",
+  "type": "module",
+  "publishConfig": { "access": "public" },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@decision-passport/core": "workspace:*"
+  }
+}
