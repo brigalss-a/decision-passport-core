@@ -1,62 +1,25 @@
 # Decision Passport — Core
 
-> **Public Preview**
->
-> **The trust layer for AI agent actions.**
-> Make every AI decision traceable, exportable, and independently verifiable — in minutes.
+**Public Preview**
 
-[![Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6.svg)](https://www.typescriptlang.org/)
-[![pnpm](https://img.shields.io/badge/pnpm-monorepo-orange.svg)](https://pnpm.io/)
-[![Append-Only Chain](https://img.shields.io/badge/chain-append--only-brightgreen.svg)]()
-[![Offline Verification](https://img.shields.io/badge/verify-offline-blueviolet.svg)]()
-[![No Database Required](https://img.shields.io/badge/lite%20mode-no%20database-lightgrey.svg)]()
+The trust layer for AI agent actions. Make every AI decision traceable, exportable, and independently verifiable — in minutes.
 
----
-
-## Get started in 2 minutes
-
-```bash
-git clone https://github.com/brigalss-a/decision-passport-core
-cd decision-passport-core
-pnpm install
-pnpm demo
-```
-
-**Expected output (JSON, abbreviated):**
-
-```json
-{
-  "bundle": {
-    "bundle_version": "1.4-basic",
-    "passport_records": [
-      { "sequence": 0, "action_type": "AI_RECOMMENDATION",      "actor_id": "ai-agent-01" },
-      { "sequence": 1, "action_type": "HUMAN_APPROVAL_GRANTED", "actor_id": "human-approver-01" }
-    ],
-    "manifest": { "record_count": 2, "chain_hash": "sha256:..." }
-  },
-  "result": {
-    "status": "PASS",
-    "checks": [
-      { "name": "chain_integrity",      "passed": true },
-      { "name": "manifest_chain_hash",  "passed": true }
-    ]
-  }
-}
-```
-
-No database. No API key. No cloud account.
+**Apache-2.0** · **TypeScript** · **pnpm** · **Append-only chain** · **Offline verification** · **No database required**
 
 ---
 
 ## Verify in 60 seconds
 
 ```bash
+git clone https://github.com/brigalss-a/decision-passport-core.git
+cd decision-passport-core
 pnpm install --frozen-lockfile
 pnpm build
 pnpm test          # 56 tests, all pass
 pnpm verify-demo   # builds bundle, verifies PASS, rejects tampered bundle
 ```
+
+No database. No API key. No cloud account.
 
 **What you just proved:**
 
@@ -106,7 +69,7 @@ AI agent runs → every action stamped into append-only chain
 → Bundle exported: portable JSON proof
 → Verifier confirms: PASS ✓
 → Auditor sees: exact reasoning, approvals, execution results
-→ Legal, compliance, and enterprise ready
+→ Designed for audit, compliance, and enterprise review workflows
 ```
 
 ---
@@ -324,17 +287,13 @@ The verifier checks:
 
 ---
 
-## Pricing
+## Commercial paths
 
-| Tier | Price | For |
-|---|---|---|
-| **Core** | Free | Open-source forever |
-| **Pro** | £49/month | Hosted verifier, bundle history, team workspace |
-| **Business** | £299/month | API access, multi-environment, RBAC, audit exports |
-| **Enterprise** | From £18,000/year | Execution control, claims, guard, replay protection |
-| **Sovereign** | From £60,000/year | Air-gapped, signed, regulated, defence |
+Core is free and open source.
 
-→ [Full pricing](docs/pricing.md)
+Hosted, business, enterprise, and sovereign deployment options are available on request.
+
+Contact: [contact@bespea.com](mailto:contact@bespea.com)
 
 ---
 
@@ -375,12 +334,17 @@ This repository is the **public protocol layer**. The full ecosystem:
 
 Contributions to the public protocol are welcome.
 
-1. Fork this repo
-2. `git checkout -b feat/my-improvement`
-3. Run `pnpm test` before submitting
-4. Open a PR — clearly describe what changed and why
+Fork the repository on GitHub, then run:
 
-All contributors are expected to follow standard open-source etiquette.
+```bash
+git clone https://github.com/YOUR_USERNAME/decision-passport-core.git
+cd decision-passport-core
+git checkout -b feat/my-improvement
+pnpm install --frozen-lockfile
+pnpm test
+```
+
+Then open a pull request with a clear description of what changed and why.
 
 ---
 
@@ -394,11 +358,12 @@ All contributors are expected to follow standard open-source etiquette.
 
 ## About
 
-**Decision Passport** is built and maintained by **Bespoke Champions League Ltd** (London, UK).
+Decision Passport is built and maintained by Bespoke Champions League Ltd, London, United Kingdom.
 
-It powers the trust layer inside [Bespea](https://bespea.com) — an AI governance platform for bespoke construction projects. Decision Passport emerged from a real-world problem: construction AI systems making scope, delivery, and payment decisions without any traceable record.
+It powers the trust layer inside [Bespea](https://bespea.com). Decision Passport emerged from a real-world problem: AI systems making material delivery, execution, and approval decisions without a portable, verifiable record.
 
-**Grigore-Andrei Traistaru** — Founder
+Maintainer:
+Grigore-Andrei Traistaru
+Founder
 contact@bespea.com
-
-*If this ends up in front of an auditor, insurer, regulator, or court... the model holds. That is the design constraint that drives everything here.*
+https://bespea.com
