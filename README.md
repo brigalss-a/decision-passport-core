@@ -1,10 +1,13 @@
 # Decision Passport — Core
 
+[![CI](https://github.com/brigalss-a/decision-passport-core/actions/workflows/ci.yml/badge.svg)](https://github.com/brigalss-a/decision-passport-core/actions/workflows/ci.yml)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+
 **Public Preview**
 
 The trust layer for AI agent actions. Make every AI decision traceable, exportable, and independently verifiable — in minutes.
 
-**Apache-2.0** · **TypeScript** · **pnpm** · **Append-only chain** · **Offline verification** · **No database required**
+**TypeScript** · **pnpm** · **Append-only chain** · **Offline verification** · **No database required**
 
 ---
 
