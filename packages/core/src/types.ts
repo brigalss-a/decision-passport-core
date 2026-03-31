@@ -13,31 +13,31 @@ export type ActionType =
 export type ActorType = "human" | "ai_agent" | "system" | "policy";
 
 export interface PassportRecord {
-  id: string;
-  chain_id: string;
-  sequence: number;
-  timestamp_utc: string;
-  actor_id: string;
-  actor_type: ActorType;
-  action_type: ActionType;
-  payload: Record<string, unknown>;
-  payload_hash: string;
-  prev_hash: string;
-  record_hash: string;
-  metadata?: Record<string, unknown>;
+  readonly id: string;
+  readonly chain_id: string;
+  readonly sequence: number;
+  readonly timestamp_utc: string;
+  readonly actor_id: string;
+  readonly actor_type: ActorType;
+  readonly action_type: ActionType;
+  readonly payload: Readonly<Record<string, unknown>>;
+  readonly payload_hash: string;
+  readonly prev_hash: string;
+  readonly record_hash: string;
+  readonly metadata?: Readonly<Record<string, unknown>>;
 }
 
 export interface ChainManifest {
-  chain_id: string;
-  record_count: number;
-  first_record_id: string;
-  last_record_id: string;
-  chain_hash: string;
+  readonly chain_id: string;
+  readonly record_count: number;
+  readonly first_record_id: string;
+  readonly last_record_id: string;
+  readonly chain_hash: string;
 }
 
 export interface BasicProofBundle {
-  bundle_version: "1.4-basic";
-  exported_at_utc: string;
-  passport_records: PassportRecord[];
-  manifest: ChainManifest;
+  readonly bundle_version: "1.4-basic";
+  readonly exported_at_utc: string;
+  readonly passport_records: readonly PassportRecord[];
+  readonly manifest: ChainManifest;
 }

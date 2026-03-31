@@ -300,6 +300,7 @@ The verifier checks:
 - [Compatibility matrix](docs/compatibility-matrix.md): which tools work with which formats
 - [JSON Schemas](docs/json-schema/): machine-readable schemas for `BasicProofBundle`, `ChainManifest`, `PassportRecord`
 - [Release verification](docs/release-verification.md): how to verify a published release locally
+- [Append-only guarantees](docs/append-only-guarantees.md): what the protocol enforces, what verification detects, storage-level limits
 
 ---
 

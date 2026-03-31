@@ -39,7 +39,7 @@ export function createRecord(params: {
   };
 }
 
-export function verifyChain(records: PassportRecord[]): { valid: boolean; error?: string } {
+export function verifyChain(records: readonly PassportRecord[]): { valid: boolean; error?: string } {
   for (let i = 0; i < records.length; i++) {
     const record = records[i];
     const expectedSequence = i;
@@ -62,7 +62,7 @@ export function verifyChain(records: PassportRecord[]): { valid: boolean; error?
   return { valid: true };
 }
 
-export function assertValidChain(records: PassportRecord[]): void {
+export function assertValidChain(records: readonly PassportRecord[]): void {
   const result = verifyChain(records);
   if (!result.valid) {
     throw new ChainValidationError(result.error ?? "Invalid chain");

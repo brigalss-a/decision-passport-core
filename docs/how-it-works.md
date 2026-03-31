@@ -150,3 +150,20 @@ For production deployments, consider binding actions to:
 - `deployment_id`
 
 These fields can be included in record metadata to help isolate chains per environment and tenant.
+
+---
+
+## Append-only design
+
+Decision Passport is append-only at the protocol and verification level.
+
+This means:
+
+- `createRecord()` only creates new records. There is no update, patch, or delete helper.
+- A chain grows only by appending a new record whose `prev_hash` points to the prior `record_hash`.
+- `verifyChain()` rejects any chain that contains a sequence gap, a `prev_hash` mismatch, a changed payload, or a wrong `record_hash`.
+- Bundles are snapshot exports. Verification fails if records are changed after export.
+
+This does not mean operating-system write protection or database immutability. Those guarantees require infrastructure outside this library.
+
+See [append-only-guarantees.md](./append-only-guarantees.md) for a complete breakdown of what is guaranteed, what is detected, and what is out of scope.

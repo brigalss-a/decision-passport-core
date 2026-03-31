@@ -1,6 +1,17 @@
-import { describe, it, expect } from "vitest";
+﻿import { describe, it, expect } from "vitest";
 import { createRecord, createManifest, diffBundles } from "../src/index.js";
-import type { BasicProofBundle } from "../src/types.js";
+import type { BasicProofBundle, PassportRecord } from "../src/types.js";
+
+// Helper: produce a deep-mutable copy of a bundle for tamper testing.
+// JSON round-trip strips readonly constraints — intentional for test-only mutation.
+function cloneForTamper(bundle: BasicProofBundle): {
+  bundle_version: "1.4-basic";
+  exported_at_utc: string;
+  passport_records: PassportRecord[];
+  manifest: { chain_id: string; record_count: number; first_record_id: string; last_record_id: string; chain_hash: string };
+} {
+  return JSON.parse(JSON.stringify(bundle));
+}
 
 function buildBundle(): BasicProofBundle {
   const chainId = "diff-test-chain";
@@ -48,20 +59,20 @@ describe("diffBundles", () => {
 
   it("detects tampered payload", () => {
     const bundleA = buildBundle();
-    const bundleB = structuredClone(bundleA);
+    const bundleB = cloneForTamper(bundleA);
     bundleB.passport_records[1] = {
       ...bundleB.passport_records[1],
       payload: { approved: false, injected: true },
     };
 
-    const result = diffBundles(bundleA, bundleB);
+    const result = diffBundles(bundleA, bundleB as BasicProofBundle);
     expect(result.identical).toBe(false);
     expect(result.findings.some((f) => f.kind === "record_changed" && f.path.includes("payload"))).toBe(true);
   });
 
   it("detects added records", () => {
     const bundleA = buildBundle();
-    const bundleB = structuredClone(bundleA);
+    const bundleB = cloneForTamper(bundleA);
 
     const extra = createRecord({
       chainId: "diff-test-chain",
@@ -71,10 +82,10 @@ describe("diffBundles", () => {
       actionType: "AI_RECOMMENDATION",
       payload: { action: "extra" },
     });
-    bundleB.passport_records.push(extra);
+    bundleB.passport_records.push(extra as PassportRecord);
     bundleB.manifest = createManifest(bundleB.passport_records);
 
-    const result = diffBundles(bundleA, bundleB);
+    const result = diffBundles(bundleA, bundleB as BasicProofBundle);
     expect(result.identical).toBe(false);
     expect(result.findings.some((f) => f.kind === "record_added")).toBe(true);
     expect(result.summary).toContain("added");
@@ -82,11 +93,11 @@ describe("diffBundles", () => {
 
   it("detects removed records", () => {
     const bundleA = buildBundle();
-    const bundleB = structuredClone(bundleA);
+    const bundleB = cloneForTamper(bundleA);
     bundleB.passport_records = bundleB.passport_records.slice(0, 2);
     bundleB.manifest = createManifest(bundleB.passport_records);
 
-    const result = diffBundles(bundleA, bundleB);
+    const result = diffBundles(bundleA, bundleB as BasicProofBundle);
     expect(result.identical).toBe(false);
     expect(result.findings.some((f) => f.kind === "record_removed")).toBe(true);
     expect(result.summary).toContain("removed");
@@ -94,8 +105,10 @@ describe("diffBundles", () => {
 
   it("detects manifest changes", () => {
     const bundleA = buildBundle();
-    const bundleB = structuredClone(bundleA);
-    bundleB.manifest = { ...bundleB.manifest, chain_hash: "0".repeat(64) };
+    const bundleB: BasicProofBundle = {
+      ...bundleA,
+      manifest: { ...bundleA.manifest, chain_hash: "0".repeat(64) },
+    };
 
     const result = diffBundles(bundleA, bundleB);
     expect(result.identical).toBe(false);
@@ -105,8 +118,7 @@ describe("diffBundles", () => {
 
   it("detects exported_at_utc change", () => {
     const bundleA = buildBundle();
-    const bundleB = structuredClone(bundleA);
-    bundleB.exported_at_utc = "2026-06-01T00:00:00.000Z";
+    const bundleB: BasicProofBundle = { ...bundleA, exported_at_utc: "2026-06-01T00:00:00.000Z" };
 
     const result = diffBundles(bundleA, bundleB);
     expect(result.identical).toBe(false);
@@ -115,26 +127,26 @@ describe("diffBundles", () => {
 
   it("detects changed record_hash without payload change", () => {
     const bundleA = buildBundle();
-    const bundleB = structuredClone(bundleA);
+    const bundleB = cloneForTamper(bundleA);
     bundleB.passport_records[0] = {
       ...bundleB.passport_records[0],
       record_hash: "0".repeat(64),
     };
 
-    const result = diffBundles(bundleA, bundleB);
+    const result = diffBundles(bundleA, bundleB as BasicProofBundle);
     expect(result.identical).toBe(false);
     expect(result.findings.some((f) => f.kind === "record_changed" && f.path.includes("record_hash"))).toBe(true);
   });
 
   it("detects metadata changes on a record", () => {
     const bundleA = buildBundle();
-    const bundleB = structuredClone(bundleA);
+    const bundleB = cloneForTamper(bundleA);
     bundleB.passport_records[0] = {
       ...bundleB.passport_records[0],
       metadata: { env: "prod" },
     };
 
-    const result = diffBundles(bundleA, bundleB);
+    const result = diffBundles(bundleA, bundleB as BasicProofBundle);
     expect(result.identical).toBe(false);
     expect(result.findings.some((f) => f.kind === "record_changed" && f.path.includes("metadata"))).toBe(true);
   });
@@ -146,7 +158,7 @@ describe("diffBundles", () => {
       passport_records: [],
       manifest: { chain_id: "empty", record_count: 0, first_record_id: "", last_record_id: "", chain_hash: "" },
     };
-    const bundleB = structuredClone(bundleA);
+    const bundleB: BasicProofBundle = { ...bundleA };
     const result = diffBundles(bundleA, bundleB);
     expect(result.identical).toBe(true);
     expect(result.findings).toHaveLength(0);
@@ -154,7 +166,7 @@ describe("diffBundles", () => {
 
   it("reports multiple differences in summary", () => {
     const bundleA = buildBundle();
-    const bundleB = structuredClone(bundleA);
+    const bundleB = cloneForTamper(bundleA);
     // Change payload
     bundleB.passport_records[0] = {
       ...bundleB.passport_records[0],
@@ -165,7 +177,7 @@ describe("diffBundles", () => {
     // Change exported time
     bundleB.exported_at_utc = "2099-01-01T00:00:00.000Z";
 
-    const result = diffBundles(bundleA, bundleB);
+    const result = diffBundles(bundleA, bundleB as BasicProofBundle);
     expect(result.identical).toBe(false);
     expect(result.findings.length).toBeGreaterThanOrEqual(3);
     expect(result.summary).toContain("field change(s)");

@@ -93,8 +93,8 @@ function diffManifests(
 }
 
 function diffRecords(
-  recordsA: PassportRecord[],
-  recordsB: PassportRecord[],
+  recordsA: readonly PassportRecord[],
+  recordsB: readonly PassportRecord[],
   findings: BundleDiffFinding[],
 ): void {
   const mapA = new Map(recordsA.map((r) => [r.id, r]));

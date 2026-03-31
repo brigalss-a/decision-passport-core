@@ -45,11 +45,11 @@ describe("verifyBasicBundle", () => {
   });
 
   it("returns FAIL when chain integrity is broken", () => {
-    const bundle = buildValidBundle(3);
-    bundle.passport_records[1] = {
-      ...bundle.passport_records[1],
-      payload: { step: 999 }
-    };
+    const clean = buildValidBundle(3);
+    // JSON round-trip produces a plain mutable object — intentional tamper for test
+    const bundle = JSON.parse(JSON.stringify(clean)) as BasicProofBundle;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (bundle.passport_records as any[])[1] = { ...bundle.passport_records[1], payload: { step: 999 } };
 
     const result = verifyBasicBundle(bundle);
     expect(result.status).toBe("FAIL");
@@ -57,8 +57,11 @@ describe("verifyBasicBundle", () => {
   });
 
   it("returns FAIL when manifest chain_hash mismatches", () => {
-    const bundle = buildValidBundle(3);
-    bundle.manifest = { ...bundle.manifest, chain_hash: "0".repeat(64) };
+    const clean = buildValidBundle(3);
+    const bundle: BasicProofBundle = {
+      ...clean,
+      manifest: { ...clean.manifest, chain_hash: "0".repeat(64) }
+    };
 
     const result = verifyBasicBundle(bundle);
     expect(result.status).toBe("FAIL");

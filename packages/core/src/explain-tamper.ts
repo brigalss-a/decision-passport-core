@@ -18,7 +18,7 @@ export interface TamperExplanation {
 }
 
 export function explainTamper(
-  records: PassportRecord[],
+  records: readonly PassportRecord[],
   manifest?: ChainManifest,
 ): TamperExplanation {
   const findings: TamperFinding[] = [];

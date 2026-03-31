@@ -1,6 +1,6 @@
 import type { ChainManifest, PassportRecord } from "./types.js";
 
-export function createManifest(records: PassportRecord[]): ChainManifest {
+export function createManifest(records: readonly PassportRecord[]): ChainManifest {
   if (records.length === 0) {
     return {
       chain_id: "empty-chain",
