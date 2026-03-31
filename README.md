@@ -150,7 +150,7 @@ decision-passport-core/
 │   │   ├── src/chain.ts         createRecord(), verifyChain(), assertValidChain()
 │   │   ├── src/hashing.ts       hashCanonical(), hashPayload() — SHA-256, deterministic
 │   │   ├── src/canonical.ts     Canonical JSON serialiser (no duplicate hashing)
-│   │   ├── src/manifest.ts      buildManifest()
+│   │   ├── src/manifest.ts      createManifest()
 │   │   ├── src/explain-tamper.ts explainTamper() — what changed and why it broke
 │   │   └── src/errors.ts        ChainValidationError
 │   │

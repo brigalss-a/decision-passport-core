@@ -62,7 +62,7 @@ When a session ends, you export a `BasicProofBundle`:
 
 ```json
 {
-  "bundle_version": "1.3-basic",
+  "bundle_version": "1.4-basic",
   "exported_at_utc": "2026-01-15T14:32:00.000Z",
   "passport_records": [...],
   "manifest": {
@@ -139,19 +139,10 @@ If the operational database is lost or corrupted, it can be rebuilt from the cha
 
 ## Environment and tenant binding
 
-Every material action should bind to:
+For production deployments, consider binding actions to:
 - `environment` — `dev`, `staging`, `prod`
 - `tenant_id`
 - `region` (for data sovereignty)
 - `deployment_id`
 
-A claim or action approved in `dev` must never be usable in `prod`. A decision made for tenant A must not be usable by tenant B. These fields are not optional in enterprise deployments.
-
----
-
-## Next steps
-
-- [Quickstart](quickstart.md)
-- [Basic verification](basic-verification.md)
-- [Architecture deep-dive](architecture.md)
-- [Lite vs Enterprise](../docs/enterprise-vs-lite.md)
+These fields can be included in record metadata to help isolate chains per environment and tenant.
