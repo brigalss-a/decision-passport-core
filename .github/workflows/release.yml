@@ -41,6 +41,12 @@ jobs:
           if [ -f artifacts/verification-summary.json ]; then
             cp artifacts/verification-summary.json release-artifacts/
           fi
+          if [ -f docs/examples/bundle-diff-report.json ]; then
+            cp docs/examples/bundle-diff-report.json release-artifacts/
+          fi
+          if [ -f docs/examples/bundle-diff-report.txt ]; then
+            cp docs/examples/bundle-diff-report.txt release-artifacts/
+          fi
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
