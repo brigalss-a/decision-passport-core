@@ -1,3 +1,5 @@
+# Release Notes: v0.1.0
+
 ## Highlights
 
 - Offline verifier with zero external dependencies

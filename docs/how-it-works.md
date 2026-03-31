@@ -13,7 +13,7 @@ Decision Passport handles the second. Every material action is stamped into an a
 
 ## The chain model
 
-```
+```text
 Record [0]                Record [1]                Record [2]
 ──────────────────        ──────────────────        ──────────────────
 id:           uuid        id:           uuid        id:           uuid
@@ -47,6 +47,7 @@ Canonical JSON means: keys sorted, no whitespace, deterministic encoding. This e
 ### How verification works
 
 For each record `i`:
+
 1. Recompute `record_hash` from all fields (excluding the stored hash itself)
 2. Compare to stored `record_hash` (must match)
 3. Confirm `prev_hash` equals `record_hash` of record `i-1` (or `GENESIS` for record 0)
@@ -87,13 +88,13 @@ Anyone with the bundle and the verifier can run:
 node verify-bundle.js ./bundle.json
 ```
 
-```
+```text
 PASS ✓  Chain: 4 records, all hashes verified, manifest consistent
 ```
 
 Or:
 
-```
+```text
 FAIL ✗  record_hash mismatch at index 2
         Expected: sha256:abc123...
         Got:      sha256:def456...
@@ -106,7 +107,7 @@ The verifier has no dependencies on production systems. It is designed to be run
 
 ## Two-layer architecture
 
-```
+```text
 Truth layer (immutable)          Operational view (disposable)
 ───────────────────────          ──────────────────────────────
 Append-only chain                Indexed database
@@ -123,6 +124,7 @@ If the operational database is lost or corrupted, it can be rebuilt from the cha
 ## What gets recorded
 
 **Store:**
+
 - Rationale summary
 - Decision basis
 - Evidence references
@@ -131,6 +133,7 @@ If the operational database is lost or corrupted, it can be rebuilt from the cha
 - Uncertainty markers
 
 **Do not store:**
+
 - Raw chain-of-thought / hidden reasoning dumps
 - Personal data in payload fields (use references, not values)
 - Secrets or credentials
@@ -140,6 +143,7 @@ If the operational database is lost or corrupted, it can be rebuilt from the cha
 ## Environment and tenant binding
 
 For production deployments, consider binding actions to:
+
 - `environment`: `dev`, `staging`, `prod`
 - `tenant_id`
 - `region` (for data sovereignty)

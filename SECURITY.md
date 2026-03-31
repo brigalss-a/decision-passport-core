@@ -5,11 +5,12 @@
 If you discover a security vulnerability in any public repo in this organisation,
 please report it **privately** by emailing:
 
-contact@bespea.com
+<contact@bespea.com>
 
 Subject: `[SECURITY] Decision Passport / Swarm Passport`
 
 Please include:
+
 - A description of the vulnerability
 - Steps to reproduce
 - Potential impact
@@ -21,4 +22,4 @@ We will acknowledge receipt within 48 hours and aim to resolve critical issues w
 
 ---
 
-Bespoke Champions League Ltd, contact@bespea.com
+Bespoke Champions League Ltd, <contact@bespea.com>

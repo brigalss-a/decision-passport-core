@@ -6,7 +6,7 @@
  *   pnpm tsx scripts/diff-bundles.ts <bundle-a.json> <bundle-b.json>
  */
 import { readFileSync } from "fs";
-import { diffBundles } from "@decision-passport/core";
+import { diffBundles } from "../packages/core/src/bundle-diff.js";
 
 const args = process.argv.slice(2);
 

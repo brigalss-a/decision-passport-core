@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/brigalss-a/decision-passport-core/docs/json-schema/record.schema.json",
+  "title": "PassportRecord",
+  "description": "A single tamper-evident record in a Decision Passport hash chain.",
+  "type": "object",
+  "required": [
+    "id",
+    "chain_id",
+    "sequence",
+    "timestamp_utc",
+    "actor_id",
+    "actor_type",
+    "action_type",
+    "payload",
+    "payload_hash",
+    "prev_hash",
+    "record_hash"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "UUID identifying this record."
+    },
+    "chain_id": {
+      "type": "string",
+      "description": "Identifier for the chain this record belongs to."
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Zero-based monotonic counter within the chain."
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of record creation."
+    },
+    "actor_id": {
+      "type": "string",
+      "description": "Identifier for the actor (agent ID, user email, system name)."
+    },
+    "actor_type": {
+      "type": "string",
+      "enum": ["human", "ai_agent", "system", "policy"],
+      "description": "Category of the actor."
+    },
+    "action_type": {
+      "type": "string",
+      "enum": [
+        "AI_RECOMMENDATION",
+        "HUMAN_APPROVAL_GRANTED",
+        "HUMAN_APPROVAL_REJECTED",
+        "POLICY_APPROVAL_GRANTED",
+        "EXECUTION_PENDING",
+        "EXECUTION_SUCCEEDED",
+        "EXECUTION_FAILED",
+        "EXECUTION_ABORTED",
+        "HUMAN_OVERRIDE",
+        "POLICY_EXCEPTION"
+      ],
+      "description": "Category of the action performed."
+    },
+    "payload": {
+      "type": "object",
+      "description": "Structured action data. Contents vary by action_type."
+    },
+    "payload_hash": {
+      "type": "string",
+      "description": "SHA-256 hex digest of canonicalSerialize(payload)."
+    },
+    "prev_hash": {
+      "type": "string",
+      "description": "record_hash of the previous record, or GENESIS_00000... for sequence 0."
+    },
+    "record_hash": {
+      "type": "string",
+      "description": "SHA-256 hex digest of canonicalSerialize(record excluding record_hash)."
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Optional metadata (environment, tenant, policy refs)."
+    }
+  },
+  "additionalProperties": false
+}

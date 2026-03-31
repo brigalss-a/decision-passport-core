@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/brigalss-a/decision-passport-core/docs/json-schema/bundle.schema.json",
+  "title": "BasicProofBundle",
+  "description": "A portable, self-contained Decision Passport proof bundle. Contains all records and the chain manifest. Verifiable offline.",
+  "type": "object",
+  "required": [
+    "bundle_version",
+    "exported_at_utc",
+    "passport_records",
+    "manifest"
+  ],
+  "properties": {
+    "bundle_version": {
+      "type": "string",
+      "const": "1.4-basic",
+      "description": "Schema version for the basic proof bundle format."
+    },
+    "exported_at_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of when the bundle was exported."
+    },
+    "passport_records": {
+      "type": "array",
+      "items": {
+        "$ref": "record.schema.json"
+      },
+      "minItems": 1,
+      "description": "Ordered array of PassportRecord objects forming the hash chain."
+    },
+    "manifest": {
+      "$ref": "manifest.schema.json",
+      "description": "Chain summary with record count, boundary IDs, and chain_hash."
+    }
+  },
+  "additionalProperties": false
+}

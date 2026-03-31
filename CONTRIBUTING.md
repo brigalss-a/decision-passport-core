@@ -49,6 +49,7 @@ Decision Passport Core and OpenClaw Lite are open-source (Apache-2.0). Contribut
 ## Schema compatibility
 
 The `BasicProofBundle` and `LiteBundle` schemas are public protocol formats. Do not change field names or types without:
+
 1. Bumping the `bundle_version`
 2. Documenting the migration path
 3. Maintaining backward-compatible verification
@@ -57,7 +58,7 @@ The `BasicProofBundle` and `LiteBundle` schemas are public protocol formats. Do 
 
 ## Questions
 
-Open a GitHub issue or email contact@bespea.com.
+Open a GitHub issue or email <contact@bespea.com>.
 
 ---
 

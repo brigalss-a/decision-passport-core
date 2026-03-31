@@ -12,6 +12,7 @@ npx serve . -l 3000
 ```
 
 Then either:
+
 - **Drag and drop** a bundle JSON file onto the page
 - **Click** to browse for a file
 - **Click** "valid-bundle.json" or "tampered-bundle.json" to verify the included fixtures

@@ -3,7 +3,7 @@
 [![CI](https://github.com/brigalss-a/decision-passport-core/actions/workflows/ci.yml/badge.svg)](https://github.com/brigalss-a/decision-passport-core/actions/workflows/ci.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
-**Public Preview**
+Public Preview
 
 The trust layer for AI agent actions. Every decision is traceable, exportable, and independently verifiable.
 
@@ -41,12 +41,14 @@ npx serve . -l 3000
 # Open http://localhost:3000/apps/verifier-web/
 ```
 
+<!-- markdownlint-disable MD033 -->
 <p align="center">
   <img src="docs/screenshots/core-browser-pass.svg" alt="Browser verifier PASS" width="680" />
 </p>
 <p align="center">
   <img src="docs/screenshots/core-browser-fail.svg" alt="Browser verifier FAIL" width="680" />
 </p>
+<!-- markdownlint-enable MD033 -->
 
 ---
 
@@ -62,9 +64,9 @@ The repo exports a portable, cryptographic proof of every decision your AI syste
 
 ## Before / After
 
-**Without Decision Passport**
+### Without Decision Passport
 
-```
+```text
 AI agent runs → tool calls happen → results returned → ...nothing recorded
 → Difficult to explain what the AI decided
 → Difficult to prove what actually executed
@@ -72,9 +74,9 @@ AI agent runs → tool calls happen → results returned → ...nothing recorded
 → Debugging requires reproduction
 ```
 
-**With Decision Passport**
+### With Decision Passport
 
-```
+```text
 AI agent runs → every action stamped into append-only chain
 → Bundle exported: portable JSON proof
 → Verifier confirms: PASS ✓
@@ -142,7 +144,7 @@ console.log(result.status); // 'PASS'
 
 ## Architecture
 
-```
+```text
 decision-passport-core/
 ├── packages/
 │   ├── core/               ← Hash chain engine
@@ -177,7 +179,7 @@ decision-passport-core/
 
 ### Trust chain model
 
-```
+```text
 PassportRecord[0]        PassportRecord[1]        PassportRecord[2]
 ─────────────────        ─────────────────        ─────────────────
 id: uuid                 id: uuid                 id: uuid
@@ -206,7 +208,7 @@ Tampering with any single byte in any record breaks every subsequent hash. The c
 The atomic unit of trust. Every record contains:
 
 | Field | Description |
-|---|---|
+| --- | --- |
 | `id` | UUID |
 | `chain_id` | Session identifier |
 | `sequence` | Monotonic counter (0, 1, 2, ...) |
@@ -285,18 +287,26 @@ console.log(result.findings);  // structured diff findings
 ```
 
 The verifier checks:
+
 1. Every `record_hash` matches the recomputed deterministic hash
 2. Every `prev_hash` correctly chains to the previous record
 3. Sequence numbers are gapless and correct
 4. `chain_hash` in the manifest matches the terminal record
 5. Bundle schema version is recognised
 
+### Schema and compatibility
+
+- [Schema and versioning](docs/schema-versioning.md): bundle structure, record fields, hashing rules, evolution guidance
+- [Compatibility matrix](docs/compatibility-matrix.md): which tools work with which formats
+- [JSON Schemas](docs/json-schema/): machine-readable schemas for `BasicProofBundle`, `ChainManifest`, `PassportRecord`
+- [Release verification](docs/release-verification.md): how to verify a published release locally
+
 ---
 
 ## Lite vs Enterprise
 
 | Capability | Core (this repo) | Enterprise (private) |
-|---|---|---|
+| --- | --- | --- |
 | Append-only hash chain | ✓ Free | ✓ |
 | Basic bundle export (JSON) | ✓ Free | ✓ |
 | Offline verifier | ✓ Free | ✓ |
@@ -352,7 +362,7 @@ Contact: [contact@bespea.com](mailto:contact@bespea.com)
 This repository is the **public protocol layer**. The full ecosystem:
 
 | Repo | Visibility | Purpose |
-|---|---|---|
+| --- | --- | --- |
 | `decision-passport-core` | **Public** | This repo: protocol, chain, basic verifier |
 | `decision-passport-openclaw-lite` | **Public** | OpenClaw integration bridge (Lite) |
 | `decision-passport-control-plane` | **Private** | Claims, guard, replay, outcomes, persistence |
@@ -395,5 +405,5 @@ It powers the trust layer inside [Bespea](https://bespea.com). Decision Passport
 Maintainer:
 Grigore-Andrei Traistaru
 Founder
-contact@bespea.com
-https://bespea.com
+<contact@bespea.com>
+<https://bespea.com>

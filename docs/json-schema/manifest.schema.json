@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/brigalss-a/decision-passport-core/docs/json-schema/manifest.schema.json",
+  "title": "ChainManifest",
+  "description": "Summary of a Decision Passport hash chain. Included in every BasicProofBundle.",
+  "type": "object",
+  "required": [
+    "chain_id",
+    "record_count",
+    "first_record_id",
+    "last_record_id",
+    "chain_hash"
+  ],
+  "properties": {
+    "chain_id": {
+      "type": "string",
+      "description": "Identifier matching the chain_id of all records in the chain."
+    },
+    "record_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total number of records in the chain."
+    },
+    "first_record_id": {
+      "type": "string",
+      "description": "UUID of the first record (sequence 0)."
+    },
+    "last_record_id": {
+      "type": "string",
+      "description": "UUID of the last record in the chain."
+    },
+    "chain_hash": {
+      "type": "string",
+      "description": "record_hash of the last record. Serves as the chain's terminal integrity anchor."
+    }
+  },
+  "additionalProperties": false
+}
