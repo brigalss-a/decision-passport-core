@@ -4,8 +4,8 @@
 
 Every AI agent action produces two things:
 
-1. A **result** — the thing the agent did
-2. A **record** — proof that it happened exactly this way
+1. A **result**: the thing the agent did
+2. A **record**: proof that it happened exactly this way
 
 Decision Passport handles the second. Every material action is stamped into an append-only, hash-linked chain. Tamper with any record and every subsequent hash breaks. The chain is self-auditing.
 
@@ -48,7 +48,7 @@ Canonical JSON means: keys sorted, no whitespace, deterministic encoding. This e
 
 For each record `i`:
 1. Recompute `record_hash` from all fields (excluding the stored hash itself)
-2. Compare to stored `record_hash` — must match
+2. Compare to stored `record_hash` (must match)
 3. Confirm `prev_hash` equals `record_hash` of record `i-1` (or `GENESIS` for record 0)
 4. Confirm `sequence` equals `i`
 
@@ -75,7 +75,7 @@ When a session ends, you export a `BasicProofBundle`:
 }
 ```
 
-This bundle is **portable**. It contains everything needed to verify the chain. No API. No database. No cloud.
+This bundle is **portable**. It contains everything needed to verify the chain, with no API, database, or cloud dependency.
 
 ---
 
@@ -100,7 +100,7 @@ FAIL ✗  record_hash mismatch at index 2
         → Record was altered after creation
 ```
 
-The verifier has no dependencies on production systems. It is designed to be run by a third party — an auditor, a regulator, a legal expert — with no access to your infrastructure.
+The verifier has no dependencies on production systems. It is designed to be run by a third party (an auditor, a regulator, a legal expert) with no access to your infrastructure.
 
 ---
 
@@ -140,7 +140,7 @@ If the operational database is lost or corrupted, it can be rebuilt from the cha
 ## Environment and tenant binding
 
 For production deployments, consider binding actions to:
-- `environment` — `dev`, `staging`, `prod`
+- `environment`: `dev`, `staging`, `prod`
 - `tenant_id`
 - `region` (for data sovereignty)
 - `deployment_id`

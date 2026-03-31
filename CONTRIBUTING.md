@@ -16,7 +16,7 @@ Decision Passport Core and OpenClaw Lite are open-source (Apache-2.0). Contribut
 
 ## What we don't accept here
 
-- Changes to enterprise features (claims, guard, outcomes) — those live in the private control-plane repo
+- Changes to enterprise features (claims, guard, outcomes). Those live in the private control-plane repo.
 - Breaking changes to the `BasicProofBundle` schema without a major version discussion
 - New external dependencies without prior discussion (the core verifier must remain zero-dependency)
 
@@ -38,10 +38,10 @@ Decision Passport Core and OpenClaw Lite are open-source (Apache-2.0). Contribut
 
 ## Code standards
 
-- TypeScript strict mode — no `any` unless absolutely necessary
+- TypeScript strict mode, no `any` unless absolutely necessary
 - All public functions must have JSDoc comments
 - All new code must include tests
-- Use `pnpm` — do not commit `yarn.lock` or `package-lock.json`
+- Use `pnpm`, do not commit `yarn.lock` or `package-lock.json`
 - No raw `console.log` in library code (demos only)
 
 ---
@@ -61,4 +61,4 @@ Open a GitHub issue or email contact@bespea.com.
 
 ---
 
-Copyright © 2025–2026 Bespoke Champions League Ltd
+Copyright © 2025-2026 Bespoke Champions League Ltd

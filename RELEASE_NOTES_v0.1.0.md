@@ -1,8 +1,8 @@
 ## Highlights
 
-- Offline verifier — zero external dependencies
-- Tamper explainer — identifies exactly what changed and why verification failed
-- Browser verifier — drag-and-drop client-side verification, nothing uploaded
+- Offline verifier with zero external dependencies
+- Tamper explainer that identifies exactly what changed and why verification failed
+- Browser verifier: drag-and-drop client-side verification, nothing uploaded
 - HTML verification report export
 - Deterministic valid + tampered test fixtures
 - 56 tests, all passing
@@ -13,8 +13,8 @@
 
 - Core hash-chain engine (`createRecord`, `verifyChain`, `assertValidChain`)
 - SHA-256 canonical hashing with deterministic JSON serialisation
-- `explainTamper()` — structured tamper analysis
-- `renderVerificationReport()` — self-contained HTML report
+- `explainTamper()`: structured tamper analysis
+- `renderVerificationReport()`: self-contained HTML report
 - Offline bundle verifier + CLI verifier
 - Browser verifier (`apps/verifier-web/`)
 - Runnable demo (`pnpm demo`) and verify-demo (`pnpm verify-demo`)
@@ -34,8 +34,8 @@ pnpm verify-demo
 
 ## Known limits
 
-- Public preview — API surface may change before 1.0
+- Public preview. API surface may change before 1.0
 - No hosted verifier in this repo
-- No enterprise control plane (claims, guard, outcomes) — those live in the private repo
+- No enterprise control plane (claims, guard, outcomes). Those live in the private repo.
 - No signed bundle path yet
 - No npm publish yet

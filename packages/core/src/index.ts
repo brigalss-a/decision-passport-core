@@ -5,3 +5,4 @@ export * from "./hashing.js";
 export * from "./chain.js";
 export * from "./manifest.js";
 export * from "./explain-tamper.js";
+export * from "./bundle-diff.js";

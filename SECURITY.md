@@ -21,4 +21,4 @@ We will acknowledge receipt within 48 hours and aim to resolve critical issues w
 
 ---
 
-Bespoke Champions League Ltd — contact@bespea.com
+Bespoke Champions League Ltd, contact@bespea.com

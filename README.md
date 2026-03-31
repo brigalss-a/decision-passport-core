@@ -1,11 +1,11 @@
-# Decision Passport — Core
+# Decision Passport: Core
 
 [![CI](https://github.com/brigalss-a/decision-passport-core/actions/workflows/ci.yml/badge.svg)](https://github.com/brigalss-a/decision-passport-core/actions/workflows/ci.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
 **Public Preview**
 
-The trust layer for AI agent actions. Make every AI decision traceable, exportable, and independently verifiable — in minutes.
+The trust layer for AI agent actions. Every decision is traceable, exportable, and independently verifiable.
 
 **TypeScript** · **pnpm** · **Append-only chain** · **Offline verification** · **No database required**
 
@@ -18,23 +18,23 @@ git clone https://github.com/brigalss-a/decision-passport-core.git
 cd decision-passport-core
 pnpm install --frozen-lockfile
 pnpm build
-pnpm test          # 56 tests, all pass
+pnpm test          # 66 tests, all pass
 pnpm verify-demo   # builds bundle, verifies PASS, rejects tampered bundle
 ```
 
-No database. No API key. No cloud account.
+No database, API key, or cloud account required.
 
-**What you just proved:**
+**What this verified:**
 
 1. The hash chain engine builds cleanly
 2. A 2-record decision chain was created and exported
-3. The offline verifier confirmed `PASS` — every hash and chain link is intact
+3. The offline verifier confirmed `PASS`, every hash and chain link intact
 4. A deliberately tampered bundle was correctly rejected as `FAIL`
 5. An HTML verification report was generated in `artifacts/`
 
 ### Browser verifier
 
-Serve the repo and open `apps/verifier-web/` — drag any bundle JSON onto the page for instant client-side verification. Nothing is uploaded.
+Serve the repo and open `apps/verifier-web/`. Drag any bundle JSON onto the page for instant client-side verification. Nothing is uploaded.
 
 ```bash
 npx serve . -l 3000
@@ -54,9 +54,9 @@ npx serve . -l 3000
 
 Decision Passport is an **append-only, hash-linked record system** for AI agent actions.
 
-Every material action your AI agent performs — a recommendation, an approval decision, an execution result — gets stamped into a tamper-evident chain. That chain is bundled and can be independently verified by anyone, anywhere, without your API, without your database, without your cloud infrastructure.
+Every material action your AI agent performs (a recommendation, an approval decision, an execution result) gets stamped into a tamper-evident chain. That chain is bundled and can be independently verified by anyone, anywhere, without your API, your database, or your cloud infrastructure.
 
-**The result:** a portable, cryptographic proof of every decision your AI system ever made.
+The repo exports a portable, cryptographic proof of every decision your AI system made.
 
 ---
 
@@ -66,9 +66,9 @@ Every material action your AI agent performs — a recommendation, an approval d
 
 ```
 AI agent runs → tool calls happen → results returned → ...nothing recorded
-→ Hard to explain what the AI decided
-→ Hard to prove what actually executed
-→ Impossible to satisfy an auditor
+→ Difficult to explain what the AI decided
+→ Difficult to prove what actually executed
+→ Cannot satisfy an auditor
 → Debugging requires reproduction
 ```
 
@@ -78,8 +78,8 @@ AI agent runs → tool calls happen → results returned → ...nothing recorded
 AI agent runs → every action stamped into append-only chain
 → Bundle exported: portable JSON proof
 → Verifier confirms: PASS ✓
-→ Auditor sees: exact reasoning, approvals, execution results
-→ Designed for audit, compliance, and enterprise review workflows
+→ Auditor sees exact reasoning, approvals, and execution results
+→ Supports audit, compliance, and enterprise review workflows
 ```
 
 ---
@@ -100,7 +100,7 @@ const record1 = createRecord({
   actorType: 'ai_agent',
   actionType: 'AI_RECOMMENDATION',
   payload: {
-    rationale: 'Policy v2.1 — action within approved risk threshold',
+    rationale: 'Policy v2.1, action within approved risk threshold',
     confidence: 0.94,
     policy_version: 'v2.1'
   }
@@ -133,7 +133,7 @@ const bundle = {
   manifest: createManifest(records)
 };
 
-// 3. Verify independently — no network, no database
+// 3. Verify independently (no network, no database)
 const result = verifyBasicBundle(bundle);
 console.log(result.status); // 'PASS'
 ```
@@ -148,15 +148,16 @@ decision-passport-core/
 │   ├── core/               ← Hash chain engine
 │   │   ├── src/types.ts         ActionType, PassportRecord, ChainManifest, BasicProofBundle
 │   │   ├── src/chain.ts         createRecord(), verifyChain(), assertValidChain()
-│   │   ├── src/hashing.ts       hashCanonical(), hashPayload() — SHA-256, deterministic
+│   │   ├── src/hashing.ts       hashCanonical(), hashPayload(): SHA-256, deterministic
 │   │   ├── src/canonical.ts     Canonical JSON serialiser (no duplicate hashing)
 │   │   ├── src/manifest.ts      createManifest()
-│   │   ├── src/explain-tamper.ts explainTamper() — what changed and why it broke
+│   │   ├── src/explain-tamper.ts explainTamper(): what changed and why it broke
+│   │   ├── src/bundle-diff.ts   diffBundles(): compare two bundles field by field
 │   │   └── src/errors.ts        ChainValidationError
 │   │
 │   ├── verifier-basic/     ← Offline bundle verifier
-│   │   ├── src/verify-bundle.ts   verifyBundle() — zero external deps
-│   │   └── src/html-report.ts     renderVerificationReport() — static HTML export
+│   │   ├── src/verify-bundle.ts   verifyBundle(): zero external deps
+│   │   └── src/html-report.ts     renderVerificationReport(): static HTML export
 │   │
 │   └── demo/               ← Runnable demo
 │       └── src/index.ts         Full demo: record → export → verify → PASS
@@ -217,7 +218,7 @@ The atomic unit of trust. Every record contains:
 | `payload_hash` | SHA-256 of payload |
 | `prev_hash` | Hash of previous record (or `GENESIS`) |
 | `record_hash` | SHA-256 of the full record (excluding itself) |
-| `metadata` | Optional — environment, tenant, policy refs |
+| `metadata` | Optional: environment, tenant, policy refs |
 
 ### Action types
 
@@ -262,6 +263,25 @@ A CLI verifier is also available at `packages/verifier-basic/src/cli.ts`:
 
 ```bash
 pnpm tsx packages/verifier-basic/src/cli.ts ./bundle.json
+```
+
+### Bundle diff
+
+Compare two bundles to see exactly what changed:
+
+```bash
+pnpm diff-bundles fixtures/valid-bundle.json fixtures/tampered-bundle.json
+```
+
+Or use the API:
+
+```typescript
+import { diffBundles } from '@decision-passport/core';
+
+const result = diffBundles(bundleA, bundleB);
+console.log(result.identical); // false
+console.log(result.summary);   // '1 difference(s) found: 1 field change(s).'
+console.log(result.findings);  // structured diff findings
 ```
 
 The verifier checks:
@@ -314,14 +334,14 @@ Contact: [contact@bespea.com](mailto:contact@bespea.com)
 - [x] Offline verifier (zero-dependency)
 - [x] CLI verifier
 - [x] Demo with sample data
-- [x] Tamper explainer (`explainTamper()` — what changed and why it broke)
+- [x] Tamper explainer (`explainTamper()`: what changed and why it broke)
 - [x] HTML verification report export
 - [x] Browser verifier (drag-and-drop, client-side only)
 - [x] Deterministic valid + tampered fixtures
 - [ ] ASCII chain visualiser
 - [ ] Policy version binding helpers
 - [ ] Redaction mode (`metadata-only` and `hash-only` bundles)
-- [ ] Bundle diff utility (compare two bundles)
+- [x] Bundle diff utility (`diffBundles()`: compare two bundles)
 - [ ] OpenClaw Lite bridge (see `decision-passport-openclaw-lite`)
 - [ ] Trusted timestamping integration (RFC 3161)
 
@@ -333,7 +353,7 @@ This repository is the **public protocol layer**. The full ecosystem:
 
 | Repo | Visibility | Purpose |
 |---|---|---|
-| `decision-passport-core` | **Public** | This repo — protocol, chain, basic verifier |
+| `decision-passport-core` | **Public** | This repo: protocol, chain, basic verifier |
 | `decision-passport-openclaw-lite` | **Public** | OpenClaw integration bridge (Lite) |
 | `decision-passport-control-plane` | **Private** | Claims, guard, replay, outcomes, persistence |
 | `decision-passport-sovereign` | **Private** | Signed bundles, air-gapped verifier |
@@ -360,7 +380,7 @@ Then open a pull request with a clear description of what changed and why.
 
 ## License
 
-[Apache-2.0](LICENSE) — see full text in LICENSE file.
+[Apache-2.0](LICENSE). See full text in LICENSE file.
 
 > You may use, modify, and distribute this software freely, including in commercial products. The express patent grant protects you and your users. Product names, logos, and hosted offerings remain the intellectual property of Bespoke Champions League Ltd.
 

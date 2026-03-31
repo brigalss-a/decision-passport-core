@@ -4,7 +4,16 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
-## [0.1.0] — 2025-06-28
+## [Unreleased]
+
+### Added
+
+- **Bundle diff utility** (`diffBundles()`): compare two `BasicProofBundle` objects and get a structured diff. Reports added/removed/changed records, manifest differences, and a human-readable summary.
+- **diff-bundles CLI** (`scripts/diff-bundles.ts`): compare two bundle JSON files from the command line (`pnpm diff-bundles a.json b.json`).
+- **10 new tests** for bundle diff (identical, tampered, added, removed, manifest, metadata, multi-diff).
+- Test count: 56 → 66.
+
+## [0.1.0] - 2025-06-28
 
 ### Added
 

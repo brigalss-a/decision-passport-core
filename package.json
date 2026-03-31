@@ -6,7 +6,8 @@
     "build": "pnpm -r build",
     "demo": "pnpm --filter @decision-passport/demo demo",
     "test": "pnpm -r test",
-    "verify-demo": "tsx scripts/verify-demo.ts"
+    "verify-demo": "tsx scripts/verify-demo.ts",
+    "diff-bundles": "tsx scripts/diff-bundles.ts"
   },
   "devDependencies": {
     "@types/node": "^20.14.0",
