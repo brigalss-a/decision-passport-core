@@ -1,0 +1,11 @@
+# Bundle Diff Report
+# Source: fixtures/valid-bundle.json vs fixtures/tampered-bundle.json
+
+RESULT: DIFFERS
+Summary: 1 difference(s) found: 1 field change(s).
+Findings: 1
+
+  [~] records[id=20a5542b-fee1-4015-b214-84b7f784d9a1].payload
+       Record 1 payload differs
+       before: {"approved_recommendation_id":"0a437d28-e9ac-4fb0-a0b6-3f23474ac9d8","note":"Reviewed and approved"}
+       after:  {"approved_recommendation_id":"0a437d28-e9ac-4fb0-a0b6-3f23474ac9d8","note":"TAMPERED — approval was forged"}

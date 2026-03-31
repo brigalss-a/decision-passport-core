@@ -8,6 +8,7 @@
     "test": "pnpm -r test",
     "verify-demo": "tsx scripts/verify-demo.ts",
     "diff-bundles": "tsx scripts/diff-bundles.ts",
+    "diff-artifacts": "tsx scripts/generate-diff-artifacts.ts",
     "checksums": "tsx scripts/generate-checksums.ts"
   },
   "devDependencies": {

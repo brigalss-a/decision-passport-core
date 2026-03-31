@@ -47,12 +47,14 @@
   .try-link:hover { color: #60a5fa; }
   .btn-reset { background: #334155; color: #e2e8f0; border: none; padding: 0.5rem 1rem; border-radius: 0.375rem; cursor: pointer; font-size: 0.875rem; margin-top: 1rem; }
   .btn-reset:hover { background: #475569; }
+  .privacy-note { background: #1e293b; border: 1px solid #334155; border-radius: 0.5rem; padding: 0.5rem 0.875rem; font-size: 0.8125rem; color: #94a3b8; margin-bottom: 1.5rem; }
 </style>
 </head>
 <body>
 <div class="container">
   <h1>Decision Passport &mdash; Browser Verifier</h1>
-  <p class="subtitle">Drag &amp; drop a bundle JSON file. Verification runs entirely in your browser &mdash; nothing is uploaded.</p>
+  <p class="subtitle">Drag &amp; drop a bundle JSON file to verify its chain integrity.</p>
+  <div class="privacy-note">&#128274; Verification runs entirely in your browser. No data is uploaded or transmitted to any server.</div>
 
   <div class="dropzone" id="dropzone">
     <div class="dropzone-label"><strong>Drop bundle.json here</strong><br>or click to browse</div>
@@ -144,6 +146,9 @@ async function verifyChain(records) {
 // ── Full bundle verification ──
 async function verifyBundle(bundle) {
   const checks = await verifyChain(bundle.passport_records);
+  // manifest_record_count
+  const countMatch = bundle.manifest.record_count === bundle.passport_records.length;
+  checks.push({ name: "manifest_record_count", passed: countMatch, message: countMatch ? undefined : `Manifest record_count (${bundle.manifest.record_count}) does not match actual count (${bundle.passport_records.length})` });
   if (bundle.passport_records.length > 0) {
     const last = bundle.passport_records[bundle.passport_records.length - 1];
     const match = bundle.manifest.chain_hash === last.record_hash;
@@ -234,7 +239,9 @@ async function processBundle(text) {
   document.getElementById("bundleTable").innerHTML =
     "<tr><th>Version</th><td>" + esc(bundle.bundle_version) + "</td></tr>" +
     "<tr><th>Chain ID</th><td><code>" + esc(bundle.manifest.chain_id) + "</code></td></tr>" +
-    "<tr><th>Records</th><td>" + bundle.passport_records.length + "</td></tr>" +
+    "<tr><th>Records</th><td>" + bundle.passport_records.length + " (manifest: " + bundle.manifest.record_count + ")</td></tr>" +
+    "<tr><th>First Record</th><td><code>" + esc(bundle.manifest.first_record_id || "&mdash;") + "</code></td></tr>" +
+    "<tr><th>Last Record</th><td><code>" + esc(bundle.manifest.last_record_id || "&mdash;") + "</code></td></tr>" +
     "<tr><th>Chain Hash</th><td><code>" + esc(bundle.manifest.chain_hash) + "</code></td></tr>" +
     "<tr><th>Exported</th><td>" + esc(bundle.exported_at_utc) + "</td></tr>";
 
@@ -283,18 +290,17 @@ document.getElementById("resetBtn").addEventListener("click", () => {
   fileInput.value = "";
 });
 
-// Sample bundles (loaded from sibling fixtures/ if served, otherwise inline fallback)
-async function loadSample(name) {
-  try {
-    const resp = await fetch("../../fixtures/" + name);
-    if (resp.ok) return processBundle(await resp.text());
-  } catch {}
-  // Fallback: try relative to current page
-  try {
-    const resp = await fetch("./fixtures/" + name);
-    if (resp.ok) return processBundle(await resp.text());
-  } catch {}
-  showError("Could not load sample " + name + ". Serve with a local HTTP server or drop the file manually.");
+// ── Inline fixture bundles ──
+// Embedded directly so sample buttons work as file:// without a local server.
+const SAMPLES = {
+  "valid-bundle.json": '{"bundle_version":"1.4-basic","exported_at_utc":"2026-01-15T12:00:00.000Z","passport_records":[{"id":"0a437d28-e9ac-4fb0-a0b6-3f23474ac9d8","chain_id":"fixture-chain-001","sequence":0,"timestamp_utc":"2026-03-30T21:34:58.494Z","actor_id":"ai-agent-01","actor_type":"ai_agent","action_type":"AI_RECOMMENDATION","payload":{"action":"approve_change_order","change_order_id":"CO-2026-0042","confidence":0.94},"payload_hash":"19a4e7c393427ed297223e401aff8bbba3dd11c2b273b35dbba9f89e7e0d368c","prev_hash":"GENESIS_0000000000000000000000000000000000000000000000000000000000000000","record_hash":"813faea464adbb65dea12d7c70136f6497a5f10ad27234cd5ed1a911a6c6374a"},{"id":"20a5542b-fee1-4015-b214-84b7f784d9a1","chain_id":"fixture-chain-001","sequence":1,"timestamp_utc":"2026-03-30T21:34:58.495Z","actor_id":"human-approver-01","actor_type":"human","action_type":"HUMAN_APPROVAL_GRANTED","payload":{"approved_recommendation_id":"0a437d28-e9ac-4fb0-a0b6-3f23474ac9d8","note":"Reviewed and approved"},"payload_hash":"24996fd0112b22e681e5ffc86dfc38641ba7c97d09ed47e825b92e37316c08be","prev_hash":"813faea464adbb65dea12d7c70136f6497a5f10ad27234cd5ed1a911a6c6374a","record_hash":"3b64a6c020aabdfee9cea9ae723ccce697c307215c66e423e4c6b4937b463b97"},{"id":"98b6a06b-ebd7-40e1-b0b5-2d2689848e4d","chain_id":"fixture-chain-001","sequence":2,"timestamp_utc":"2026-03-30T21:34:58.495Z","actor_id":"ai-agent-01","actor_type":"ai_agent","action_type":"EXECUTION_SUCCEEDED","payload":{"result":"Change order executed","execution_id":"exec-001"},"payload_hash":"6c05e924a12fbabafabfd9d7c92d3558fce63b3342121517cfcffd594589b586","prev_hash":"3b64a6c020aabdfee9cea9ae723ccce697c307215c66e423e4c6b4937b463b97","record_hash":"bc5a8cd99186a73a7a62ad9f8d6d4b18784c9665334f6b93758a619f8513b85b"}],"manifest":{"chain_id":"fixture-chain-001","record_count":3,"first_record_id":"0a437d28-e9ac-4fb0-a0b6-3f23474ac9d8","last_record_id":"98b6a06b-ebd7-40e1-b0b5-2d2689848e4d","chain_hash":"bc5a8cd99186a73a7a62ad9f8d6d4b18784c9665334f6b93758a619f8513b85b"}}',
+  "tampered-bundle.json": '{"bundle_version":"1.4-basic","exported_at_utc":"2026-01-15T12:00:00.000Z","passport_records":[{"id":"0a437d28-e9ac-4fb0-a0b6-3f23474ac9d8","chain_id":"fixture-chain-001","sequence":0,"timestamp_utc":"2026-03-30T21:34:58.494Z","actor_id":"ai-agent-01","actor_type":"ai_agent","action_type":"AI_RECOMMENDATION","payload":{"action":"approve_change_order","change_order_id":"CO-2026-0042","confidence":0.94},"payload_hash":"19a4e7c393427ed297223e401aff8bbba3dd11c2b273b35dbba9f89e7e0d368c","prev_hash":"GENESIS_0000000000000000000000000000000000000000000000000000000000000000","record_hash":"813faea464adbb65dea12d7c70136f6497a5f10ad27234cd5ed1a911a6c6374a"},{"id":"20a5542b-fee1-4015-b214-84b7f784d9a1","chain_id":"fixture-chain-001","sequence":1,"timestamp_utc":"2026-03-30T21:34:58.495Z","actor_id":"human-approver-01","actor_type":"human","action_type":"HUMAN_APPROVAL_GRANTED","payload":{"approved_recommendation_id":"0a437d28-e9ac-4fb0-a0b6-3f23474ac9d8","note":"TAMPERED \u2014 approval was forged"},"payload_hash":"24996fd0112b22e681e5ffc86dfc38641ba7c97d09ed47e825b92e37316c08be","prev_hash":"813faea464adbb65dea12d7c70136f6497a5f10ad27234cd5ed1a911a6c6374a","record_hash":"3b64a6c020aabdfee9cea9ae723ccce697c307215c66e423e4c6b4937b463b97"},{"id":"98b6a06b-ebd7-40e1-b0b5-2d2689848e4d","chain_id":"fixture-chain-001","sequence":2,"timestamp_utc":"2026-03-30T21:34:58.495Z","actor_id":"ai-agent-01","actor_type":"ai_agent","action_type":"EXECUTION_SUCCEEDED","payload":{"result":"Change order executed","execution_id":"exec-001"},"payload_hash":"6c05e924a12fbabafabfd9d7c92d3558fce63b3342121517cfcffd594589b586","prev_hash":"3b64a6c020aabdfee9cea9ae723ccce697c307215c66e423e4c6b4937b463b97","record_hash":"bc5a8cd99186a73a7a62ad9f8d6d4b18784c9665334f6b93758a619f8513b85b"}],"manifest":{"chain_id":"fixture-chain-001","record_count":3,"first_record_id":"0a437d28-e9ac-4fb0-a0b6-3f23474ac9d8","last_record_id":"98b6a06b-ebd7-40e1-b0b5-2d2689848e4d","chain_hash":"bc5a8cd99186a73a7a62ad9f8d6d4b18784c9665334f6b93758a619f8513b85b"}}'
+};
+
+function loadSample(name) {
+  const data = SAMPLES[name];
+  if (data) return processBundle(data);
+  showError("Unknown sample: " + name);
 }
 document.getElementById("tryValid").addEventListener("click", () => loadSample("valid-bundle.json"));
 document.getElementById("tryTampered").addEventListener("click", () => loadSample("tampered-bundle.json"));
