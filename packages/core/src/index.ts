@@ -7,3 +7,4 @@ export * from "./manifest.js";
 export * from "./explain-tamper.js";
 export * from "./bundle-diff.js";
 export * from "./bundle-diff-report.js";
+export * from "./reliability.js";
