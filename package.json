@@ -4,6 +4,8 @@
   "version": "0.1.0",
   "scripts": {
     "build": "pnpm -r build",
+    "typecheck": "pnpm -r run typecheck",
+    "lint": "pnpm -r run lint",
     "demo": "pnpm --filter @decision-passport/demo demo",
     "test": "pnpm -r test",
     "verify-demo": "tsx scripts/verify-demo.ts",
