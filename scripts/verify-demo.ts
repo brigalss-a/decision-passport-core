@@ -88,8 +88,21 @@ writeFileSync(join(artifactsDir, "tampered-report.html"), tamperedReport);
 
 const summary = {
   generatedAt,
-  valid: { status: result.status, checks: result.checks.length, tamperFindings: validExplanation.findings.length },
-  tampered: { status: tamperedResult.status, checks: tamperedResult.checks.length, tamperFindings: tamperedExplanation.findings.length },
+  valid: {
+    status: result.status,
+    summary: result.summary,
+    reasonCodes: result.reasonCodes,
+    checks: result.checks.length,
+    tamperFindings: validExplanation.findings.length,
+  },
+  tampered: {
+    status: tamperedResult.status,
+    summary: tamperedResult.summary,
+    reasonCodes: tamperedResult.reasonCodes,
+    checks: tamperedResult.checks.length,
+    tamperFindings: tamperedExplanation.findings.length,
+    nextSteps: tamperedResult.nextSteps,
+  },
 };
 writeFileSync(join(artifactsDir, "verification-summary.json"), JSON.stringify(summary, null, 2));
 

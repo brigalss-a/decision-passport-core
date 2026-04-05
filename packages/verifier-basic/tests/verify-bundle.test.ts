@@ -36,6 +36,8 @@ describe("verifyBasicBundle", () => {
     expect(result.status).toBe("PASS");
     expect(result.checks).toHaveLength(2);
     expect(result.checks.every((c) => c.passed)).toBe(true);
+    expect(result.reasonCodes).toEqual([]);
+    expect(result.summary).toContain("passed");
   });
 
   it("returns PASS for a single-record bundle", () => {
@@ -46,7 +48,7 @@ describe("verifyBasicBundle", () => {
 
   it("returns FAIL when chain integrity is broken", () => {
     const clean = buildValidBundle(3);
-    // JSON round-trip produces a plain mutable object — intentional tamper for test
+    // JSON round-trip produces a plain mutable object; intentional tamper for test
     const bundle = JSON.parse(JSON.stringify(clean)) as BasicProofBundle;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (bundle.passport_records as any[])[1] = { ...bundle.passport_records[1], payload: { step: 999 } };
@@ -54,6 +56,9 @@ describe("verifyBasicBundle", () => {
     const result = verifyBasicBundle(bundle);
     expect(result.status).toBe("FAIL");
     expect(result.checks.find((c) => c.name === "chain_integrity")?.passed).toBe(false);
+    expect(result.reasonCodes).toContain("CHAIN_INTEGRITY_FAILED");
+    expect(result.reasonCodes).toContain("PAYLOAD_HASH_MISMATCH");
+    expect((result.tamperFindings?.length ?? 0)).toBeGreaterThan(0);
   });
 
   it("returns FAIL when manifest chain_hash mismatches", () => {
@@ -66,9 +71,10 @@ describe("verifyBasicBundle", () => {
     const result = verifyBasicBundle(bundle);
     expect(result.status).toBe("FAIL");
     expect(result.checks.find((c) => c.name === "manifest_chain_hash")?.passed).toBe(false);
+    expect(result.reasonCodes).toContain("MANIFEST_HASH_MISMATCH");
   });
 
-  it("handles empty records (chain_integrity only)", () => {
+  it("returns FAIL for an empty records bundle", () => {
     const bundle: BasicProofBundle = {
       bundle_version: "1.4-basic",
       exported_at_utc: new Date().toISOString(),
@@ -77,7 +83,32 @@ describe("verifyBasicBundle", () => {
     };
 
     const result = verifyBasicBundle(bundle);
-    expect(result.status).toBe("PASS");
+    expect(result.status).toBe("FAIL");
     expect(result.checks).toHaveLength(1);
+    expect(result.reasonCodes).toContain("EMPTY_OR_MISSING_RECORDS");
+  });
+
+  it("returns FAIL with malformed reason for non-object input", () => {
+    const result = verifyBasicBundle(null);
+    expect(result.status).toBe("FAIL");
+    expect(result.reasonCodes).toContain("MALFORMED_BUNDLE");
+    expect(result.checks[0].name).toBe("bundle_structure");
+  });
+
+  it("returns FAIL with malformed reason for missing records array", () => {
+    const malformed = {
+      bundle_version: "1.4-basic",
+      exported_at_utc: new Date().toISOString(),
+      manifest: {
+        chain_id: "x",
+        record_count: 0,
+        first_record_id: "",
+        last_record_id: "",
+        chain_hash: ""
+      }
+    };
+    const result = verifyBasicBundle(malformed);
+    expect(result.status).toBe("FAIL");
+    expect(result.reasonCodes).toContain("MALFORMED_BUNDLE");
   });
 });

@@ -62,7 +62,7 @@ Expected verification behavior:
 
 ## Natural malformed-input boundary cases
 
-These are natural boundaries, not dedicated semantic checks in current core verifier code.
+Malformed input is classified separately from integrity failures.
 
 ### Case 6: malformed bundle shape
 
@@ -72,15 +72,16 @@ Examples:
 3. Wrong field types in parsed input.
 
 Expected behavior:
-1. Parsing or calling code may fail before verification.
-2. If an invalid object reaches the verifier path, failure mode can be runtime error rather than clean `FAIL` status.
+1. Verifier returns `FAIL` with reason code `MALFORMED_BUNDLE` when malformed shape reaches verification.
+2. JSON parsing failure can still occur before verification in caller paths.
 
 ## What a reviewer should expect from verification failure
 
 1. `status: FAIL` means integrity checks did not pass.
 2. `checks` identifies which check failed.
-3. `explainTamper()` helps classify likely tamper or corruption patterns.
-4. A single failure does not prove malicious intent by itself.
+3. `reasonCodes` distinguishes malformed structure from integrity mismatch categories.
+4. `explainTamper()` and `tamperFindings` help classify likely tamper or corruption patterns.
+5. A single failure does not prove malicious intent by itself.
 
 ## How to investigate a failure
 

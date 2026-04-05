@@ -14,6 +14,12 @@ export function renderVerificationReport(data: HtmlReportData): string {
   const status = result.status;
   const statusColor = status === "PASS" ? "#22c55e" : "#ef4444";
   const statusLabel = status === "PASS" ? "PASS" : "FAIL";
+  const reasonCodes = result.reasonCodes?.length
+    ? result.reasonCodes.map((c) => `<code>${escapeHtml(c)}</code>`).join(" ")
+    : "<span style=\"color:#94a3b8\">none</span>";
+  const nextStepsHtml = (result.nextSteps ?? [])
+    .map((s) => `<li>${escapeHtml(s)}</li>`)
+    .join("\n");
 
   const checksHtml = result.checks
     .map(
@@ -88,10 +94,18 @@ export function renderVerificationReport(data: HtmlReportData): string {
   </table>
 
   <h2>Checks</h2>
+  <div class="summary-box">${escapeHtml(result.summary)}</div>
+  <p style="margin:0.5rem 0 0.75rem"><strong>Reason codes:</strong> ${reasonCodes}</p>
   <table>
     <thead><tr><th>Check</th><th>Result</th><th>Detail</th></tr></thead>
     <tbody>${checksHtml}</tbody>
   </table>
+
+  ${
+    (result.nextSteps?.length ?? 0) > 0
+      ? `<h2>Next inspection steps</h2><ul style="margin-left:1rem;line-height:1.5">${nextStepsHtml}</ul>`
+      : ""
+  }
 
   <h2>Tamper Analysis</h2>
   <div class="summary-box">${escapeHtml(explanation.summary)}</div>

@@ -292,7 +292,10 @@ const bundle = JSON.parse(fs.readFileSync('./bundle.json', 'utf8'));
 const result = verifyBasicBundle(bundle);
 
 console.log(result.status);  // 'PASS' | 'FAIL'
-console.log(result.checks);  // array of individual check results
+console.log(result.summary);      // short human summary
+console.log(result.reasonCodes);  // stable machine-readable reason codes
+console.log(result.checks);       // array of individual check results
+console.log(result.nextSteps);    // concise triage guidance on FAIL
 ```
 
 A CLI verifier is also available at `packages/verifier-basic/src/cli.ts`:
@@ -326,7 +329,9 @@ The verifier checks:
 2. Every `prev_hash` correctly chains to the previous record
 3. Sequence numbers are gapless and correct
 4. `chain_hash` in the manifest matches the terminal record
-5. Bundle schema version is recognised
+
+If the input is malformed, verification returns `FAIL` with a structure reason code.
+If integrity checks fail, verification returns `FAIL` with integrity reason codes.
 
 ### Schema and compatibility
 

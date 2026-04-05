@@ -20,22 +20,6 @@
       "record_hash": "3e3b75f48a0d5f72fea8d00d6419e36f8ec59ff6d7749395394e9cda14905faa"
     },
     {
-      "id": "670a55d2-b838-42a0-81a0-329efbecf2e7",
-      "chain_id": "fixture-chain-001",
-      "sequence": 1,
-      "timestamp_utc": "2026-04-05T21:53:13.497Z",
-      "actor_id": "human-approver-01",
-      "actor_type": "human",
-      "action_type": "HUMAN_APPROVAL_GRANTED",
-      "payload": {
-        "approved_recommendation_id": "711be227-2bb4-4d2a-a7d8-9ef4a83f7fe5",
-        "note": "Reviewed and approved"
-      },
-      "payload_hash": "e473d10e0ec79c745d1ee68f3fe8a1b220307b0d14c1db0c0c872baf4841b200",
-      "prev_hash": "3e3b75f48a0d5f72fea8d00d6419e36f8ec59ff6d7749395394e9cda14905faa",
-      "record_hash": "a3fbab8bf1dd1f1ddaab75cb602531e7b32cc8c42d28ff1eade0ff11118d5037"
-    },
-    {
       "id": "8a15f6ce-394c-4298-b9b5-ee9698822152",
       "chain_id": "fixture-chain-001",
       "sequence": 2,

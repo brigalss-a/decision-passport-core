@@ -1,7 +1,11 @@
 /**
- * Generates deterministic test fixtures:
- *   fixtures/valid-bundle.json   — a bundle that verifies as PASS
- *   fixtures/tampered-bundle.json — identical but with payload tampered (verifies as FAIL)
+ * Generates canonical verification fixtures:
+ *   fixtures/valid-bundle.json
+ *   fixtures/tampered-bundle.json
+ *   fixtures/chain-break-bundle.json
+ *   fixtures/manifest-mismatch-bundle.json
+ *   fixtures/missing-record-bundle.json
+ *   fixtures/malformed-bundle.json
  *
  * Usage: tsx scripts/generate-fixtures.ts
  */
@@ -68,21 +72,70 @@ if (validResult.status !== "PASS") {
   process.exit(1);
 }
 
-// Create tampered bundle (change payload of record[1] without recalculating hashes)
+// Payload tamper case
 const tamperedBundle = structuredClone(validBundle);
 tamperedBundle.passport_records[1] = {
   ...tamperedBundle.passport_records[1],
   payload: {
     approved_recommendation_id: record1.id,
-    note: "TAMPERED — approval was forged"
+    note: "TAMPERED, approval was forged"
   }
-  // record_hash and payload_hash are now stale → verification should FAIL
+  // record_hash and payload_hash are stale, verification should fail
 };
 
-// Verify tampered bundle is actually caught
+// Chain break case
+const chainBreakBundle = structuredClone(validBundle);
+chainBreakBundle.passport_records[2] = {
+  ...chainBreakBundle.passport_records[2],
+  prev_hash: "0".repeat(64),
+};
+
+// Manifest mismatch case
+const manifestMismatchBundle = structuredClone(validBundle);
+manifestMismatchBundle.manifest = {
+  ...manifestMismatchBundle.manifest,
+  chain_hash: "f".repeat(64),
+};
+
+// Missing record case
+const missingRecordBundle = structuredClone(validBundle);
+missingRecordBundle.passport_records.splice(1, 1);
+
+// Malformed shape case
+const malformedBundle = {
+  bundle_version: "1.4-basic",
+  exported_at_utc: "2026-01-15T12:00:00.000Z",
+  passport_records_typo: [],
+  manifest: { chain_hash: "" },
+};
+
 const tamperedResult = verifyBasicBundle(tamperedBundle);
 if (tamperedResult.status !== "FAIL") {
-  console.error("ERROR: tampered bundle was not rejected");
+  console.error("ERROR: payload tampered bundle was not rejected");
+  process.exit(1);
+}
+
+const chainBreakResult = verifyBasicBundle(chainBreakBundle);
+if (chainBreakResult.status !== "FAIL") {
+  console.error("ERROR: chain-break bundle was not rejected");
+  process.exit(1);
+}
+
+const manifestMismatchResult = verifyBasicBundle(manifestMismatchBundle);
+if (manifestMismatchResult.status !== "FAIL") {
+  console.error("ERROR: manifest-mismatch bundle was not rejected");
+  process.exit(1);
+}
+
+const missingRecordResult = verifyBasicBundle(missingRecordBundle);
+if (missingRecordResult.status !== "FAIL") {
+  console.error("ERROR: missing-record bundle was not rejected");
+  process.exit(1);
+}
+
+const malformedResult = verifyBasicBundle(malformedBundle);
+if (malformedResult.status !== "FAIL") {
+  console.error("ERROR: malformed bundle was not rejected");
   process.exit(1);
 }
 
@@ -98,6 +151,30 @@ writeFileSync(
   JSON.stringify(tamperedBundle, null, 2) + "\n"
 );
 
+writeFileSync(
+  resolve(fixturesDir, "chain-break-bundle.json"),
+  JSON.stringify(chainBreakBundle, null, 2) + "\n"
+);
+
+writeFileSync(
+  resolve(fixturesDir, "manifest-mismatch-bundle.json"),
+  JSON.stringify(manifestMismatchBundle, null, 2) + "\n"
+);
+
+writeFileSync(
+  resolve(fixturesDir, "missing-record-bundle.json"),
+  JSON.stringify(missingRecordBundle, null, 2) + "\n"
+);
+
+writeFileSync(
+  resolve(fixturesDir, "malformed-bundle.json"),
+  JSON.stringify(malformedBundle, null, 2) + "\n"
+);
+
 console.log("Fixtures generated:");
-console.log(`  fixtures/valid-bundle.json     → verification: ${validResult.status}`);
-console.log(`  fixtures/tampered-bundle.json  → verification: ${tamperedResult.status}`);
+console.log(`  fixtures/valid-bundle.json              verification: ${validResult.status}`);
+console.log(`  fixtures/tampered-bundle.json           verification: ${tamperedResult.status}`);
+console.log(`  fixtures/chain-break-bundle.json        verification: ${chainBreakResult.status}`);
+console.log(`  fixtures/manifest-mismatch-bundle.json  verification: ${manifestMismatchResult.status}`);
+console.log(`  fixtures/missing-record-bundle.json     verification: ${missingRecordResult.status}`);
+console.log(`  fixtures/malformed-bundle.json          verification: ${malformedResult.status}`);

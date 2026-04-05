@@ -25,7 +25,12 @@ Decision Passport Core verification checks:
 ## Expected outputs and statuses
 
 Current verifier result status is PASS or FAIL.
-Each run returns structured checks with passed plus optional message fields.
+Each run returns structured checks plus:
+
+1. `summary` for human triage.
+2. `reasonCodes` for stable machine-readable classification.
+3. `nextSteps` for concise inspection guidance.
+4. `tamperFindings` when integrity failures can be mapped to tamper categories.
 
 ## PASS vs FAIL semantics
 
@@ -40,6 +45,21 @@ Each run returns structured checks with passed plus optional message fields.
 2. PASS is not legal or regulatory admissibility by itself.
 3. FAIL is not always a malicious event, it can be corruption or malformed input.
 4. Verification is not the same as observability telemetry.
+
+## Reason code taxonomy
+
+Current reason codes include:
+
+1. `MALFORMED_BUNDLE`
+2. `EMPTY_OR_MISSING_RECORDS`
+3. `CHAIN_INTEGRITY_FAILED`
+4. `MANIFEST_HASH_MISMATCH`
+5. `PAYLOAD_HASH_MISMATCH`
+6. `PREV_HASH_MISMATCH`
+7. `SEQUENCE_MISMATCH`
+8. `UNKNOWN_VERIFICATION_ERROR`
+
+Malformed and integrity failures are intentionally separated.
 
 ## Reproducibility vs determinism
 
