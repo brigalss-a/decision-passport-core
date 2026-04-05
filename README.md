@@ -337,6 +337,13 @@ The verifier checks:
 - [Append-only guarantees](docs/append-only-guarantees.md): what the protocol enforces, what verification detects, storage-level limits
 - [Bundle Diff](docs/bundle-diff.md): how to compare two bundles, generate diff artifacts, and interpret findings
 
+### Trust model docs
+
+- [Boundaries](docs/BOUNDARIES.md): exact scope, non-goals, and trust boundary edges
+- [Threat model](docs/THREAT_MODEL.md): addressed threats, assumptions, and residual risk
+- [Verification model](docs/VERIFICATION_MODEL.md): PASS and FAIL semantics, safe interpretation
+- [Tamper cases](docs/TAMPER_CASES.md): concrete failure patterns and investigation guidance
+
 ---
 
 ## Lite vs Enterprise

@@ -1,0 +1,62 @@
+# Verification Model
+
+## What verification checks
+
+Decision Passport Core verification checks:
+
+1. Sequence continuity across records.
+2. prev_hash linkage across the chain.
+3. record_hash recomputation consistency.
+4. Manifest chain_hash match with the final record hash.
+
+## What verification does not check
+
+1. Runtime authorization of actions.
+2. Policy correctness or policy approval workflow.
+3. Identity authenticity without external signing.
+4. Storage immutability guarantees.
+
+## Inputs to verification
+
+1. A parsed BasicProofBundle object.
+2. Record list with required hash fields.
+3. Manifest with chain hash fields.
+
+## Expected outputs and statuses
+
+Current verifier result status is PASS or FAIL.
+Each run returns structured checks with passed plus optional message fields.
+
+## PASS vs FAIL semantics
+
+1. PASS means internal bundle integrity checks passed.
+2. FAIL means one or more integrity checks failed.
+3. PASS does not mean runtime policy compliance.
+4. FAIL does not by itself identify actor intent.
+
+## Common verification misunderstandings
+
+1. PASS is not runtime authorization proof.
+2. PASS is not legal or regulatory admissibility by itself.
+3. FAIL is not always a malicious event, it can be corruption or malformed input.
+4. Verification is not the same as observability telemetry.
+
+## Reproducibility vs determinism
+
+1. Verification behavior is deterministic for the same bundle bytes.
+2. Record creation can include runtime UUID and timestamp values.
+3. Re-generated sample bundles can differ byte-wise while still verifying correctly.
+
+## How to interpret results safely
+
+1. Treat PASS as integrity evidence for the provided bundle only.
+2. Pair PASS with operational controls if you need enforcement guarantees.
+3. Investigate FAIL using check messages and tamper explanation paths.
+4. Keep original artifacts for repeatable review.
+
+## Verification versus logging, trust, and enforcement
+
+1. Verifying a bundle means checking internal cryptographic consistency.
+2. Trusting an execution environment requires external controls.
+3. Proving authorization requires runtime claim and guard systems.
+4. Generic logs can help context, but they are not equivalent to bundle integrity verification.
