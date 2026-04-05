@@ -19,7 +19,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **Release workflow** (`.github/workflows/release.yml`): automated GitHub Release on `v*` tags with artifact collection and SHA-256 checksums.
 - **Checksum generation** (`scripts/generate-checksums.ts`): SHA-256 checksums for fixture files.
 - **Release verification docs** (`docs/release-verification.md`): step-by-step local verification of published releases.
-- Test count: 56 → 66.
+- Test count at time of update: 79 passing in latest local validation (2026-04-05).
 
 ### Fixed
 
@@ -36,5 +36,5 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **Test suite**: 56 tests across core (48) and verifier-basic (8), including tampered-bundle fixture tests.
 - **CI workflow** (`.github/workflows/ci.yml`): install → build → test → verify-demo on every push and PR.
 - **verify-demo script**: automated CI gate that builds a bundle, verifies it, and confirms tampered bundles are rejected.
-- **Fixture generation** (`scripts/generate-fixtures.ts`): deterministic valid and tampered bundle JSON fixtures for downstream consumers.
+- **Fixture generation** (`scripts/generate-fixtures.ts`): example valid and tampered bundle JSON fixtures for downstream consumers.
 - Apache-2.0 licence, CONTRIBUTING.md, SECURITY.md.

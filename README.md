@@ -11,6 +11,41 @@ The trust layer for AI agent actions. Every decision is traceable, exportable, a
 
 ---
 
+## Trust panel
+
+| Signal | Current status |
+| --- | --- |
+| Status | Public preview |
+| API stability | Pre-1.0, changes possible |
+| Verification scope | Hash-chain integrity plus manifest chain hash checks |
+| Security disclosure | See `SECURITY.md`, report privately via email |
+| Recommended usage | Proof layer for traceability and offline verification |
+| Not yet included | Runtime enforcement, claim tokens, replay locks, signed bundles |
+
+## What this proves
+
+1. A bundle's record hashes, chain links, and manifest chain hash are internally consistent.
+2. Payload tampering and chain mutation are detected by verification.
+3. Verification runs offline with no database, API key, or cloud dependency.
+
+## What this does not prove
+
+1. Runtime policy enforcement at execution time.
+2. Storage-level immutability by itself.
+3. Who authored a bundle, unless a separate signing layer is used.
+
+## When to use this
+
+Use this repository when you need portable, offline-checkable proof artifacts for AI action history.
+
+## When you need stronger infrastructure
+
+Use stronger infrastructure when you need execution claims, fail-closed guard enforcement, replay protection, tenant isolation, signed bundles, or regulated deployment controls.
+
+## How this differs from logs, traces, and observability
+
+Logs and traces are operational telemetry. Decision Passport Core is a verifiable proof format with canonical hashing and chain integrity checks. Observability helps you inspect behavior, this repo helps you verify integrity of exported proof artifacts.
+
 ## Verify in 60 seconds
 
 ```bash
@@ -18,23 +53,24 @@ git clone https://github.com/brigalss-a/decision-passport-core.git
 cd decision-passport-core
 pnpm install --frozen-lockfile
 pnpm build
-pnpm test          # 66 tests, all pass
-pnpm verify-demo   # builds bundle, verifies PASS, rejects tampered bundle
+pnpm test
+pnpm verify-demo
 ```
 
 No database, API key, or cloud account required.
 
-**What this verified:**
+**What this verifies:**
 
-1. The hash chain engine builds cleanly
-2. A 2-record decision chain was created and exported
-3. The offline verifier confirmed `PASS`, every hash and chain link intact
-4. A deliberately tampered bundle was correctly rejected as `FAIL`
-5. An HTML verification report was generated in `artifacts/`
+1. The hash chain engine builds cleanly.
+2. A decision chain can be created and exported.
+3. The offline verifier confirms `PASS` when hashes and links are intact.
+4. A tampered bundle is rejected as `FAIL`.
+5. HTML verification reports are generated in `artifacts/`.
+6. Current local run on 2026-04-05: 79 tests passing (`pnpm test`).
 
 ### Browser verifier
 
-Serve the repo and open `apps/verifier-web/`. Drag any bundle JSON onto the page for instant client-side verification. Nothing is uploaded.
+Serve the repo and open `apps/verifier-web/`. Drag any bundle JSON onto the page for client-side verification.
 
 ```bash
 npx serve . -l 3000
@@ -56,9 +92,9 @@ npx serve . -l 3000
 
 Decision Passport is an **append-only, hash-linked record system** for AI agent actions.
 
-Every material action your AI agent performs (a recommendation, an approval decision, an execution result) gets stamped into a tamper-evident chain. That chain is bundled and can be independently verified by anyone, anywhere, without your API, your database, or your cloud infrastructure.
+Every material action your AI agent performs, such as a recommendation, an approval decision, or an execution result, is stamped into a tamper-evident chain. That chain is bundled and can be independently verified offline.
 
-The repo exports a portable, cryptographic proof of every decision your AI system made.
+This repository provides deterministic verification semantics through canonical hashing and explicit chain rules. Record creation still uses runtime UUID and timestamp values, so fixture regeneration is not byte-identical unless controlled inputs are used.
 
 ---
 
@@ -67,21 +103,19 @@ The repo exports a portable, cryptographic proof of every decision your AI syste
 ### Without Decision Passport
 
 ```text
-AI agent runs → tool calls happen → results returned → ...nothing recorded
-→ Difficult to explain what the AI decided
-→ Difficult to prove what actually executed
-→ Cannot satisfy an auditor
-→ Debugging requires reproduction
+AI agent runs, tool calls happen, results returned, nothing verifiable is exported.
+Hard to explain what was decided.
+Hard to prove what executed.
+Hard to support external review.
 ```
 
 ### With Decision Passport
 
 ```text
-AI agent runs → every action stamped into append-only chain
-→ Bundle exported: portable JSON proof
-→ Verifier confirms: PASS ✓
-→ Auditor sees exact reasoning, approvals, and execution results
-→ Supports audit, compliance, and enterprise review workflows
+AI agent runs, each material step is stamped into an append-only chain.
+Bundle exported as portable JSON proof.
+Verifier returns PASS when integrity checks succeed.
+External reviewers can independently verify chain integrity.
 ```
 
 ---
@@ -314,18 +348,18 @@ The verifier checks:
 | Offline verifier | ✓ Free | ✓ |
 | CLI verifier | ✓ Free | ✓ |
 | Demo + examples | ✓ Free | ✓ |
-| Execution claims (single-use auth tokens) | — | ✓ |
-| Guard enforcement (blocking before execution) | — | ✓ |
-| Replay protection (nonce + TTL) | — | ✓ |
-| Outcome binding (cryptographic result sealing) | — | ✓ |
-| PostgreSQL persistence | — | ✓ |
-| Redis distributed locking | — | ✓ |
-| Merkle proof bundle | — | ✓ |
-| Advanced verifier (enterprise-grade) | — | ✓ |
-| Sovereign signed bundles (HMAC-SHA256) | — | ✓ |
-| Air-gapped verifier packaging | — | ✓ |
-| Dashboard + live backend | — | ✓ |
-| SSO / RBAC / tenant isolation | — | ✓ |
+| Execution claims (single-use auth tokens) | N/A | ✓ |
+| Guard enforcement (blocking before execution) | N/A | ✓ |
+| Replay protection (nonce + TTL) | N/A | ✓ |
+| Outcome binding (cryptographic result sealing) | N/A | ✓ |
+| PostgreSQL persistence | N/A | ✓ |
+| Redis distributed locking | N/A | ✓ |
+| Merkle proof bundle | N/A | ✓ |
+| Advanced verifier (enterprise-grade) | N/A | ✓ |
+| Sovereign signed bundles (HMAC-SHA256) | N/A | ✓ |
+| Air-gapped verifier packaging | N/A | ✓ |
+| Dashboard + live backend | N/A | ✓ |
+| SSO / RBAC / tenant isolation | N/A | ✓ |
 
 ---
 

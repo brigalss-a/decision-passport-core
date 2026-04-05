@@ -6,8 +6,8 @@
 - Tamper explainer that identifies exactly what changed and why verification failed
 - Browser verifier: drag-and-drop client-side verification, nothing uploaded
 - HTML verification report export
-- Deterministic valid + tampered test fixtures
-- 56 tests, all passing
+- Example fixtures included for reproducible PASS and FAIL verification flow
+- Current local validation on 2026-04-05: 79 tests passing
 - Green GitHub Actions CI
 - Fresh-clone validated on Windows and GitHub Actions (Ubuntu)
 
@@ -20,7 +20,7 @@
 - Offline bundle verifier + CLI verifier
 - Browser verifier (`apps/verifier-web/`)
 - Runnable demo (`pnpm demo`) and verify-demo (`pnpm verify-demo`)
-- Deterministic fixtures (`fixtures/valid-bundle.json`, `fixtures/tampered-bundle.json`)
+- Example fixtures (`fixtures/valid-bundle.json`, `fixtures/tampered-bundle.json`)
 - CI workflow (install, build, test, verify-demo)
 
 ## Quickstart
@@ -41,3 +41,4 @@ pnpm verify-demo
 - No enterprise control plane (claims, guard, outcomes). Those live in the private repo.
 - No signed bundle path yet
 - No npm publish yet
+- Fixture regeneration is not byte-identical by default because record creation uses runtime UUID and timestamp values
