@@ -14,7 +14,7 @@
     "checksums": "tsx scripts/generate-checksums.ts"
   },
   "devDependencies": {
-    "@types/node": "^20.14.0",
+    "@types/node": "^20.19.39",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3",
     "vitest": "^2.1.8"
