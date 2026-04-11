@@ -68,7 +68,16 @@ Python reference implementation is available in `python/decision_passport_py` an
 3. The offline verifier confirms `PASS` when hashes and links are intact.
 4. A tampered bundle is rejected as `FAIL`.
 5. HTML verification reports are generated in `artifacts/`.
-6. Current local run on 2026-04-05: 79 tests passing (`pnpm test`).
+6. Current local validation on 2026-04-11: 105 TypeScript tests passing (`pnpm test`) and 11 Python tests passing (`python -m unittest discover -s tests -v` from `python/decision_passport_py`).
+
+### Optional Python quick check
+
+```bash
+cd python/decision_passport_py
+pip install -e .
+python -m unittest discover -s tests -v
+python -m decision_passport.verify ../../fixtures/valid-bundle.json
+```
 
 ### Browser verifier
 
