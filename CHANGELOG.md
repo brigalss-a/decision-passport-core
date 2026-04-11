@@ -8,6 +8,17 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.5.1] - 2026-04-11
+
+### Changed
+
+- README release validation snapshot updated to current local evidence (TypeScript and Python counts).
+- Added explicit Python quick-check commands in README for fixture-level verification.
+
+### Notes
+
+- Version-drift audit for `v0.2.0` references found matches only in local `reports/release-double-check/` artifacts (historical/non-release surface).
+
 ### Added
 
 - **Python reference implementation** (`python/decision_passport_py`): offline-first create/verify library with bundle diff, tamper explanation, fixture loader, and module CLI (`python -m decision_passport.verify`, `python -m decision_passport.diff`).
