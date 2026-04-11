@@ -10,6 +10,11 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **Python reference implementation** (`python/decision_passport_py`): offline-first create/verify library with bundle diff, tamper explanation, fixture loader, and module CLI (`python -m decision_passport.verify`, `python -m decision_passport.diff`).
+- **Python fixture-driven tests**: conformance tests for PASS and FAIL fixtures plus core API surface tests.
+- **Expanded conformance fixtures**: `broken-prev-hash.json`, `wrong-sequence.json`, `wrong-chain-hash.json`, `unsupported-version.json`, `compatible-optional-metadata.json`.
+- **Fixture conformance catalog** (`fixtures/README.md`) with expected verifier outcomes and reason code families.
+- **Protocol conformance spec** (`docs/protocol-conformance.md`) with normative vs informative checks.
 - **Bundle diff utility** (`diffBundles()`): compare two `BasicProofBundle` objects and get a structured diff. Reports added/removed/changed records, manifest differences, and a human-readable summary.
 - **diff-bundles CLI** (`scripts/diff-bundles.ts`): compare two bundle JSON files from the command line (`pnpm diff-bundles a.json b.json`).
 - **10 new tests** for bundle diff (identical, tampered, added, removed, manifest, metadata, multi-diff).

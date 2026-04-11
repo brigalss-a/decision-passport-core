@@ -3,6 +3,7 @@ import type { TamperFinding } from "@decision-passport/core";
 export type BasicVerifierStatus = "PASS" | "FAIL";
 
 export type BasicVerificationReasonCode =
+  | "UNSUPPORTED_BUNDLE_VERSION"
   | "CHAIN_INTEGRITY_FAILED"
   | "MANIFEST_HASH_MISMATCH"
   | "PAYLOAD_HASH_MISMATCH"

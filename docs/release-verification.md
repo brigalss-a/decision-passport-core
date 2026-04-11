@@ -8,6 +8,8 @@ Each tagged release (`v*`) produces:
 | --- | --- |
 | `valid-bundle.json` | Deterministic fixture that verifies as PASS |
 | `tampered-bundle.json` | Deterministic fixture that verifies as FAIL |
+| Conformance fixtures (`broken-prev-hash`, `wrong-sequence`, `wrong-chain-hash`, `unsupported-version`, `malformed-bundle`) | Deterministic fixtures that verify as FAIL |
+| `compatible-optional-metadata.json` | Deterministic fixture that verifies as PASS |
 | `checksums.txt` | SHA-256 checksums for fixture files |
 | `verification-summary.json` | Output of `pnpm verify-demo` (if generated) |
 
@@ -56,6 +58,18 @@ pnpm diff-bundles fixtures/valid-bundle.json fixtures/tampered-bundle.json
 ```
 
 This should report exactly one difference (the tampered payload).
+
+### 6. Verify with Python reference implementation
+
+```bash
+cd python/decision_passport_py
+pip install -e .
+python -m unittest discover -s tests -v
+python -m decision_passport.verify ../../fixtures/valid-bundle.json
+python -m decision_passport.diff ../../fixtures/valid-bundle.json ../../fixtures/tampered-bundle.json
+```
+
+The diff command exits with a non-zero code when bundles differ, which is expected for the tampered fixture pair.
 
 ---
 

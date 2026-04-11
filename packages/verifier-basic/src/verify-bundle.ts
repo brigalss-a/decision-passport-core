@@ -28,6 +28,25 @@ export function verifyBasicBundle(bundle: unknown): BasicVerifierResult {
   }
 
   const typedBundle = bundle as BasicProofBundle;
+  if (typedBundle.bundle_version !== "1.4-basic") {
+    return failWith(
+      [
+        {
+          name: "bundle_version",
+          passed: false,
+          message: `Unsupported bundle_version: ${typedBundle.bundle_version}`,
+        },
+      ],
+      ["UNSUPPORTED_BUNDLE_VERSION"],
+      "Verification failed because bundle_version is not supported by verifyBasicBundle.",
+      undefined,
+      [
+        "Use bundle_version \"1.4-basic\" for verifyBasicBundle.",
+        "Use a version-specific verifier for other bundle formats.",
+      ],
+    );
+  }
+
   const records = typedBundle.passport_records;
   const manifest = typedBundle.manifest;
 
@@ -182,6 +201,9 @@ function mapFindingCodes(
 
 function buildFailSummary(reasonCodes: BasicVerificationReasonCode[]): string {
   const parts: string[] = [];
+  if (reasonCodes.includes("UNSUPPORTED_BUNDLE_VERSION")) {
+    parts.push("bundle version is unsupported by this verifier");
+  }
   if (reasonCodes.includes("MALFORMED_BUNDLE")) {
     parts.push("bundle structure is malformed");
   }
@@ -213,6 +235,10 @@ function buildFailSummary(reasonCodes: BasicVerificationReasonCode[]): string {
 
 function buildNextSteps(reasonCodes: BasicVerificationReasonCode[]): string[] {
   const steps = new Set<string>();
+
+  if (reasonCodes.includes("UNSUPPORTED_BUNDLE_VERSION")) {
+    steps.add("Use the verifier that matches your bundle_version.");
+  }
 
   if (reasonCodes.includes("MALFORMED_BUNDLE")) {
     steps.add("Validate required top-level fields and JSON shape before verification.");

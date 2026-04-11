@@ -1,0 +1,51 @@
+# Protocol Conformance
+
+This document defines the normative conformance checks for Decision Passport Core public preview bundles.
+
+## Normative checks for 1.4-basic
+
+A verifier for 1.4-basic MUST check:
+
+1. Bundle shape: object with bundle_version, exported_at_utc, passport_records, manifest, and manifest.chain_hash.
+2. bundle_version equals 1.4-basic.
+3. passport_records is non-empty.
+4. Record sequence is 0..N-1 with no gaps.
+5. prev_hash of record i equals record_hash of i-1, and record 0 uses GENESIS hash.
+6. record_hash equals SHA-256(canonical_json(record_without_record_hash)).
+7. manifest.chain_hash equals record_hash of the final record.
+
+## Informative checks
+
+Implementations MAY provide:
+
+- Human-readable tamper explanations.
+- Structured diff reports between two bundles.
+- HTML verification reports.
+
+These features improve diagnostics but are not required for baseline conformance.
+
+## Fixture-driven conformance
+
+The fixture suite in fixtures/ is canonical conformance input for this repo.
+
+Expected baseline outcomes:
+
+- valid-bundle.json: PASS
+- tampered-bundle.json: FAIL
+- broken-prev-hash.json: FAIL
+- wrong-sequence.json: FAIL
+- wrong-chain-hash.json: FAIL
+- malformed-bundle.json: FAIL
+- unsupported-version.json: FAIL
+- compatible-optional-metadata.json: PASS
+
+## Scope boundary
+
+Conformance in this document verifies integrity and format consistency only.
+
+It does not prove:
+
+- Runtime policy enforcement.
+- Actor identity authenticity.
+- Replay resistance.
+- Signed provenance.

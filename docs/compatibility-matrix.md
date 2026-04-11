@@ -19,8 +19,14 @@
 | --- | --- | --- |
 | `fixtures/valid-bundle.json` | `1.4-basic` | PASS |
 | `fixtures/tampered-bundle.json` | `1.4-basic` | FAIL (payload tampered at index 1) |
+| `fixtures/broken-prev-hash.json` | `1.4-basic` | FAIL (prev_hash linkage mismatch) |
+| `fixtures/wrong-sequence.json` | `1.4-basic` | FAIL (record sequence mismatch) |
+| `fixtures/wrong-chain-hash.json` | `1.4-basic` | FAIL (manifest chain hash mismatch) |
+| `fixtures/malformed-bundle.json` | `1.4-basic` | FAIL (malformed structure) |
+| `fixtures/unsupported-version.json` | `2.0-future` | FAIL (unsupported bundle version) |
+| `fixtures/compatible-optional-metadata.json` | `1.4-basic` | PASS |
 
-Both fixtures are deterministic and version-locked. They are used in the CI test suite and the browser verifier.
+The conformance fixtures are deterministic and version-locked. They are used in verifier tests and by the Python reference implementation.
 
 ---
 
