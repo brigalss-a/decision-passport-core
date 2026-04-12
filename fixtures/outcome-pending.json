@@ -1,0 +1,7 @@
+{
+  "outcome_status": "PENDING",
+  "executor_id": "executor.queue",
+  "executed_at_utc": "2026-04-12T13:04:00.000Z",
+  "reason_code": "AWAITING_EXECUTION",
+  "linked_runtime_claim_id": "claim-004"
+}

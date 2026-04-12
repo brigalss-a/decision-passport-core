@@ -119,3 +119,21 @@ export type GuardDenyReason =
   | "PAYLOAD_HASH_MISMATCH"
   | "PASSPORT_NOT_AUTHORIZED"
   | "CLAIM_MALFORMED";
+
+export type OutcomeStatus =
+  | "SUCCESS"
+  | "DENIED"
+  | "FAILED"
+  | "ABORTED"
+  | "PENDING"
+  | "EXPIRED";
+
+export interface OutcomeBinding {
+  readonly outcome_status: OutcomeStatus;
+  readonly executor_id: string;
+  readonly executed_at_utc: string;
+  readonly reason_code: string;
+  readonly linked_runtime_claim_id: string;
+  readonly output_reference_hashes?: readonly string[];
+  readonly outcome_hash?: string;
+}

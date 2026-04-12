@@ -66,6 +66,12 @@ It is not a storage immutability platform.
 2. This release does not claim a full hosted/runtime guard executor implementation.
 3. RuntimeClaim semantics are verifier-visible and designed to preserve offline verification value.
 
+## Outcome boundary (v0.7.0)
+
+1. OutcomeBinding is the compact execution-result layer for v0.7.0.
+2. It distinguishes DENIED, FAILED, ABORTED, PENDING, EXPIRED, and SUCCESS as separate states.
+3. It is not a full side-effect graph, output manifest system, or runtime telemetry stream.
+
 ## Logs, traces, audit logs, proof bundles, and enforcement
 
 1. Logs and traces are operational telemetry and can be edited or incomplete.

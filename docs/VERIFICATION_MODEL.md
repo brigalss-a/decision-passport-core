@@ -77,6 +77,35 @@ Honesty boundary:
 2. Full runtime executor implementation is not included by this semantics pass.
 3. Verifier-visible claim semantics are introduced without reducing offline verification value.
 
+## OutcomeBinding in v0.7.0
+
+v0.7.0 adds a minimal OutcomeBinding model so verification can reason about what happened after authorization and claim evaluation.
+
+Minimal OutcomeBinding fields:
+
+1. outcome_status
+2. executor_id
+3. executed_at_utc
+4. reason_code
+5. linked_runtime_claim_id
+6. output_reference_hashes (optional)
+7. outcome_hash (optional)
+
+Finite outcome statuses:
+
+1. SUCCESS
+2. DENIED
+3. FAILED
+4. ABORTED
+5. PENDING
+6. EXPIRED
+
+Semantics boundary:
+
+1. OutcomeBinding is not a side-effect ledger.
+2. OutcomeBinding is not full runtime telemetry.
+3. OutcomeBinding is the compact execution-result layer used to link result state to the claim/passport path.
+
 ## Inputs to verification
 
 1. A parsed BasicProofBundle object.

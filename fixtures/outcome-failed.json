@@ -1,0 +1,7 @@
+{
+  "outcome_status": "FAILED",
+  "executor_id": "executor.worker-2",
+  "executed_at_utc": "2026-04-12T13:02:00.000Z",
+  "reason_code": "EXECUTION_EXCEPTION",
+  "linked_runtime_claim_id": "claim-002"
+}

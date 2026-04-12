@@ -1,0 +1,7 @@
+{
+  "outcome_status": "EXPIRED",
+  "executor_id": "decision.guard",
+  "executed_at_utc": "2026-04-12T13:05:00.000Z",
+  "reason_code": "CLAIM_EXPIRED",
+  "linked_runtime_claim_id": "claim-expired-001"
+}

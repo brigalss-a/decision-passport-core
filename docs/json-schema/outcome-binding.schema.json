@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/brigalss-a/decision-passport-core/docs/json-schema/outcome-binding.schema.json",
+  "title": "OutcomeBinding",
+  "description": "Compact execution-result binding linked to a Decision Passport and optional RuntimeClaim.",
+  "type": "object",
+  "required": [
+    "outcome_status",
+    "executor_id",
+    "executed_at_utc",
+    "reason_code",
+    "linked_runtime_claim_id"
+  ],
+  "properties": {
+    "outcome_status": {
+      "type": "string",
+      "enum": ["SUCCESS", "DENIED", "FAILED", "ABORTED", "PENDING", "EXPIRED"]
+    },
+    "executor_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "executed_at_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reason_code": {
+      "type": "string",
+      "minLength": 1
+    },
+    "linked_runtime_claim_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "output_reference_hashes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "outcome_hash": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "additionalProperties": false
+}

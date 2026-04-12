@@ -156,3 +156,4 @@ Additional v0.7.0 schema tracks:
 - [`docs/json-schema/decision-trail.schema.json`](json-schema/decision-trail.schema.json)
 - [`docs/json-schema/verification-result.schema.json`](json-schema/verification-result.schema.json)
 - [`docs/json-schema/runtime-claim.schema.json`](json-schema/runtime-claim.schema.json)
+- [`docs/json-schema/outcome-binding.schema.json`](json-schema/outcome-binding.schema.json)

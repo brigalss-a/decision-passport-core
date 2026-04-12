@@ -1,0 +1,7 @@
+{
+  "outcome_status": "DENIED",
+  "executor_id": "decision.guard",
+  "executed_at_utc": "2026-04-12T13:01:00.000Z",
+  "reason_code": "PASSPORT_NOT_AUTHORIZED",
+  "linked_runtime_claim_id": "claim-expired-001"
+}

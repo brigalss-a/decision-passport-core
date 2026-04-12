@@ -1,0 +1,11 @@
+{
+  "outcome_status": "SUCCESS",
+  "executor_id": "executor.worker-1",
+  "executed_at_utc": "2026-04-12T13:00:00.000Z",
+  "reason_code": "EXECUTION_SUCCEEDED",
+  "linked_runtime_claim_id": "claim-001",
+  "output_reference_hashes": [
+    "9e3d5f4c6d10c7d3171f2e1fc1f92089d2a2b2fcb66a7be2f9b0a9f0ad6d7811"
+  ],
+  "outcome_hash": "65b0ff9dbdf53c6dd17b6b55d8f3a8f911d66f1d1316f50d5b5d4a9fc236d1f2"
+}

@@ -1,0 +1,7 @@
+{
+  "outcome_status": "ABORTED",
+  "executor_id": "executor.worker-3",
+  "executed_at_utc": "2026-04-12T13:03:00.000Z",
+  "reason_code": "EXECUTION_ABORTED_BY_OPERATOR",
+  "linked_runtime_claim_id": "claim-003"
+}

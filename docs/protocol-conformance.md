@@ -110,3 +110,31 @@ Required fail-closed deny taxonomy:
 5. PAYLOAD_HASH_MISMATCH
 6. PASSPORT_NOT_AUTHORIZED
 7. CLAIM_MALFORMED
+
+## OutcomeBinding minimal conformance semantics (v0.7.0)
+
+When `outcome_binding` is present in a bundle surface, implementations SHOULD validate the OutcomeBinding schema and preserve the finite status model.
+
+Minimal OutcomeBinding fields:
+
+1. outcome_status
+2. executor_id
+3. executed_at_utc
+4. reason_code
+5. linked_runtime_claim_id
+
+Optional fields:
+
+1. output_reference_hashes
+2. outcome_hash
+
+Required finite status set:
+
+1. SUCCESS
+2. DENIED
+3. FAILED
+4. ABORTED
+5. PENDING
+6. EXPIRED
+
+OutcomeBinding conformance does not imply a full runtime executor implementation. It defines a compact execution-result surface only.
