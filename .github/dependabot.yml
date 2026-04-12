@@ -49,3 +49,9 @@ updates:
       github-actions:
         patterns:
           - "*"
+
+  - package-ecosystem: "pip"
+    directory: "/python/decision_passport_py"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3

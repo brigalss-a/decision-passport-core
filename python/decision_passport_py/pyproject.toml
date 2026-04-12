@@ -20,6 +20,12 @@ classifiers = [
   "Topic :: Software Development :: Libraries"
 ]
 
+[project.urls]
+Homepage = "https://github.com/brigalss-a/decision-passport-core"
+Repository = "https://github.com/brigalss-a/decision-passport-core"
+Documentation = "https://github.com/brigalss-a/decision-passport-core#readme"
+Issues = "https://github.com/brigalss-a/decision-passport-core/issues"
+
 [project.scripts]
 decision-passport-verify = "decision_passport.verify:main"
 decision-passport-diff = "decision_passport.diff:main"

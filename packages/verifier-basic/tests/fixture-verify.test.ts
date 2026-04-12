@@ -9,8 +9,6 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const fixturesDir = resolve(__dirname, "..", "..", "..", "fixtures");
 const manifestPath = resolve(fixturesDir, "conformance-manifest.json");
 
-const fixturesExist = existsSync(manifestPath);
-
 interface ConformanceFixture {
   fixture: string;
   expected_status: "PASS" | "FAIL";
@@ -23,16 +21,27 @@ interface ConformanceManifest {
   fixtures: ConformanceFixture[];
 }
 
-describe.skipIf(!fixturesExist)("fixture verification", () => {
+describe("fixture verification", () => {
   let manifest: ConformanceManifest;
 
   beforeAll(() => {
+    if (!existsSync(manifestPath)) {
+      throw new Error(`Missing canonical conformance manifest: ${manifestPath}`);
+    }
+
     manifest = JSON.parse(readFileSync(manifestPath, "utf-8"));
+
+    if (!Array.isArray(manifest.fixtures) || manifest.fixtures.length === 0) {
+      throw new Error("Canonical conformance manifest has no fixtures; cannot validate verifier surface");
+    }
   });
 
   it("all canonical fixtures match manifest expectations", () => {
     for (const entry of manifest.fixtures) {
       const fixturePath = resolve(fixturesDir, entry.fixture);
+      if (!existsSync(fixturePath)) {
+        throw new Error(`Missing canonical fixture referenced by conformance manifest: ${entry.fixture}`);
+      }
       const bundle = JSON.parse(readFileSync(fixturePath, "utf-8")) as BasicProofBundle;
       const result = verifyBasicBundle(bundle);
 
