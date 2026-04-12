@@ -10,6 +10,13 @@ interface Snapshot {
   code: string;
   location: string;
   failure_class: string;
+  authorization_status?: string;
+  payload_binding_status?: string;
+  runtime_claim_status?: string;
+  outcome_linkage_status?: string;
+  revocation_status?: string;
+  supersession_status?: string;
+  trail_linkage_status?: string;
 }
 
 interface GoldenFile {
@@ -61,6 +68,13 @@ function runPython(bundlePath: string): Snapshot {
     code: parsed.code,
     location: parsed.location,
     failure_class: parsed.failure_class,
+    authorization_status: parsed.authorization_status,
+    payload_binding_status: parsed.payload_binding_status,
+    runtime_claim_status: parsed.runtime_claim_status,
+    outcome_linkage_status: parsed.outcome_linkage_status,
+    revocation_status: parsed.revocation_status,
+    supersession_status: parsed.supersession_status,
+    trail_linkage_status: parsed.trail_linkage_status,
   };
 }
 
@@ -73,12 +87,41 @@ function runTypescript(bundlePath: string): Snapshot {
     code: result.code,
     location: result.location,
     failure_class: result.failure_class,
+    authorization_status: result.authorization_status,
+    payload_binding_status: result.payload_binding_status,
+    runtime_claim_status: result.runtime_claim_status,
+    outcome_linkage_status: result.outcome_linkage_status,
+    revocation_status: result.revocation_status,
+    supersession_status: result.supersession_status,
+    trail_linkage_status: result.trail_linkage_status,
   };
 }
 
 function assertEqualSnapshot(label: string, expected: Snapshot, actual: Snapshot): void {
+  const comparableActual: Snapshot = {
+    status: actual.status,
+    verdict: actual.verdict,
+    code: actual.code,
+    location: actual.location,
+    failure_class: actual.failure_class,
+  };
+
+  for (const key of [
+    "authorization_status",
+    "payload_binding_status",
+    "runtime_claim_status",
+    "outcome_linkage_status",
+    "revocation_status",
+    "supersession_status",
+    "trail_linkage_status",
+  ] as const) {
+    if (typeof expected[key] !== "undefined") {
+      comparableActual[key] = actual[key];
+    }
+  }
+
   const expectedJson = JSON.stringify(expected);
-  const actualJson = JSON.stringify(actual);
+  const actualJson = JSON.stringify(comparableActual);
   if (expectedJson !== actualJson) {
     throw new Error(`${label} mismatch. expected=${expectedJson} actual=${actualJson}`);
   }

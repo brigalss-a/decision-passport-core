@@ -58,5 +58,47 @@
     "first_record_id": "711be227-2bb4-4d2a-a7d8-9ef4a83f7fe5",
     "last_record_id": "8a15f6ce-394c-4298-b9b5-ee9698822152",
     "chain_hash": "21538d8154733b8e571fb282e2dd05e3b9f736f252a9241f0a8f7ee68be12465"
+  },
+  "decision_trail": {
+    "trail_version": "0.7.0-trail",
+    "trail_id": "trail-fixture-001",
+    "initiating_request": {
+      "request_id": "req-fixture-001",
+      "summary": "Approve change order CO-2026-0042"
+    },
+    "context_references": [],
+    "alternatives_considered": [],
+    "rejected_options": [],
+    "escalation_events": [],
+    "approval_checkpoint": {
+      "approval_status": "APPROVED",
+      "approved_by": "human-approver-01",
+      "approved_at_utc": "2026-01-15T11:58:00.000Z"
+    },
+    "final_approved_payload": {
+      "action": "approve_change_order",
+      "change_order_id": "CO-2026-0042",
+      "confidence": 0.94
+    },
+    "linked_passport_id": "passport-fixture-001"
+  },
+  "runtime_claim": {
+    "claim_id": "claim-fixture-001",
+    "passport_id": "passport-fixture-001",
+    "nonce": "nonce-fixture-001",
+    "issued_at_utc": "2026-01-15T11:59:00.000Z",
+    "expires_at_utc": "2026-01-15T12:30:00.000Z",
+    "payload_hash": "19a4e7c393427ed297223e401aff8bbba3dd11c2b273b35dbba9f89e7e0d368c",
+    "authority_ref": "policy.change-order.approver",
+    "claim_status": "ACTIVE",
+    "single_use": true,
+    "guard_version": "0.7.0-guard"
+  },
+  "outcome_binding": {
+    "outcome_status": "SUCCESS",
+    "executor_id": "ai-agent-01",
+    "executed_at_utc": "2026-01-15T12:00:00.000Z",
+    "reason_code": "EXECUTION_SUCCEEDED",
+    "linked_runtime_claim_id": "claim-fixture-001"
   }
 }

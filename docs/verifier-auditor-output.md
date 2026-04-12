@@ -14,6 +14,22 @@ Each verifier result exposes the following auditor-grade fields:
 
 These fields are deterministic and machine-readable in both TypeScript and Python verifier implementations.
 
+## Additive semantic status fields (v0.7.0)
+
+The stable auditor contract remains `verdict`, `code`, `location`, `reason`, and `remediation_hint`.
+
+v0.7.0 adds verifier-visible semantic status fields on the TypeScript `@decision-passport/verifier-basic` surface:
+
+- authorization_status
+- payload_binding_status
+- runtime_claim_status
+- outcome_linkage_status
+- revocation_status
+- supersession_status
+- trail_linkage_status
+
+These fields are additive. They do not replace the stable auditor contract and must not silently repurpose existing verifier codes.
+
 ## Contract freeze policy
 
 For the public release track, auditor fields and code taxonomy are treated as stability-critical verifier API.
@@ -68,7 +84,10 @@ PASS example (`fixtures/valid-bundle.json`):
 	"status": "PASS",
 	"verdict": "VALID",
 	"code": "SUCCESS_VALID",
-	"location": "$.bundle"
+	"location": "$.bundle",
+	"authorization_status": "AUTHORIZED",
+	"runtime_claim_status": "VALID",
+	"outcome_linkage_status": "LINKED"
 }
 ```
 
@@ -79,7 +98,10 @@ FAIL example (`fixtures/tampered-bundle.json`):
 	"status": "FAIL",
 	"verdict": "INVALID",
 	"code": "HASH_MISMATCH",
-	"location": "$.passport_records[1].payload_hash"
+	"location": "$.passport_records[1].payload_hash",
+	"authorization_status": "AUTHORIZED",
+	"runtime_claim_status": "NOT_PRESENT",
+	"outcome_linkage_status": "NOT_PRESENT"
 }
 ```
 

@@ -7,7 +7,14 @@
         "verdict": "VALID",
         "code": "SUCCESS_VALID",
         "location": "$.bundle",
-        "failure_class": "success"
+        "failure_class": "success",
+        "authorization_status": "AUTHORIZED",
+        "payload_binding_status": "MATCHED",
+        "runtime_claim_status": "VALID",
+        "outcome_linkage_status": "LINKED",
+        "revocation_status": "CLEAR",
+        "supersession_status": "NOT_DECLARED",
+        "trail_linkage_status": "LINKED"
       },
       "python": {
         "status": "PASS",
@@ -87,7 +94,14 @@
         "verdict": "INVALID",
         "code": "SEMANTIC_INCONSISTENCY",
         "location": "$.passport_records[*].action_type",
-        "failure_class": "semantic"
+        "failure_class": "semantic",
+        "authorization_status": "AUTHORIZED",
+        "payload_binding_status": "NOT_PRESENT",
+        "runtime_claim_status": "NOT_PRESENT",
+        "outcome_linkage_status": "NOT_PRESENT",
+        "revocation_status": "NOT_DECLARED",
+        "supersession_status": "NOT_DECLARED",
+        "trail_linkage_status": "NOT_PRESENT"
       },
       "python": {
         "status": "FAIL",
@@ -95,6 +109,29 @@
         "code": "SEMANTIC_INCONSISTENCY",
         "location": "$.passport_records[*].action_type",
         "failure_class": "semantic"
+      }
+    },
+    "auth-exec-mismatch.json": {
+      "typescript": {
+        "status": "FAIL",
+        "verdict": "INVALID",
+        "code": "AUTHORIZATION_EXECUTION_MISMATCH",
+        "location": "$.passport_records[0].action_type",
+        "failure_class": "authorization",
+        "authorization_status": "NOT_AUTHORIZED",
+        "payload_binding_status": "NOT_PRESENT",
+        "runtime_claim_status": "NOT_PRESENT",
+        "outcome_linkage_status": "NOT_PRESENT",
+        "revocation_status": "NOT_DECLARED",
+        "supersession_status": "NOT_DECLARED",
+        "trail_linkage_status": "NOT_PRESENT"
+      },
+      "python": {
+        "status": "FAIL",
+        "verdict": "INVALID",
+        "code": "AUTHORIZATION_EXECUTION_MISMATCH",
+        "location": "$.passport_records[0].action_type",
+        "failure_class": "authorization"
       }
     }
   }

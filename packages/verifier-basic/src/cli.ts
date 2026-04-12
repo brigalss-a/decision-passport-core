@@ -42,6 +42,13 @@ try {
       },
     ],
     reasonCodes: ["MALFORMED_BUNDLE"],
+    authorization_status: "NOT_EVALUATED",
+    payload_binding_status: "NOT_PRESENT",
+    runtime_claim_status: "NOT_PRESENT",
+    outcome_linkage_status: "NOT_PRESENT",
+    revocation_status: "NOT_DECLARED",
+    supersession_status: "NOT_DECLARED",
+    trail_linkage_status: "NOT_PRESENT",
     nextSteps: [
       "Validate JSON syntax and required fields before running verification.",
     ],

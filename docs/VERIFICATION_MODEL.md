@@ -122,6 +122,10 @@ Each run returns structured checks plus:
 3. `nextSteps` for concise inspection guidance.
 4. `tamperFindings` when integrity failures can be mapped to tamper categories.
 
+v0.7.0 also adds verifier-visible semantic status fields for authorization, payload binding, runtime claim, outcome linkage, revocation, supersession, and trail linkage.
+
+These semantic fields are additive to the stable auditor contract. The shared TypeScript/Python compatibility promise remains anchored on verdict, code, location, reason, and remediation_hint.
+
 ## PASS vs FAIL semantics
 
 1. PASS means internal bundle integrity checks passed.

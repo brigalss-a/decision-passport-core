@@ -13,6 +13,13 @@ interface ConformanceFixture {
   expected_code: string;
   expected_location: string;
   expected_status: "PASS" | "FAIL";
+  expected_authorization_status?: string;
+  expected_payload_binding_status?: string;
+  expected_runtime_claim_status?: string;
+  expected_outcome_linkage_status?: string;
+  expected_revocation_status?: string;
+  expected_supersession_status?: string;
+  expected_trail_linkage_status?: string;
   notes?: string;
 }
 
@@ -56,6 +63,13 @@ interface VerifierSnapshot {
   code: string;
   location: string;
   failure_class: string;
+  authorization_status?: string;
+  payload_binding_status?: string;
+  runtime_claim_status?: string;
+  outcome_linkage_status?: string;
+  revocation_status?: string;
+  supersession_status?: string;
+  trail_linkage_status?: string;
 }
 
 function runPythonVerifier(bundlePath: string): VerifierSnapshot {
@@ -120,7 +134,14 @@ function main(): void {
       && tsResult.verdict === fixture.expected_verdict
       && tsResult.code === fixture.expected_code
       && tsResult.location === fixture.expected_location
-      && tsResult.failure_class === fixture.failure_class;
+      && tsResult.failure_class === fixture.failure_class
+      && (!fixture.expected_authorization_status || tsResult.authorization_status === fixture.expected_authorization_status)
+      && (!fixture.expected_payload_binding_status || tsResult.payload_binding_status === fixture.expected_payload_binding_status)
+      && (!fixture.expected_runtime_claim_status || tsResult.runtime_claim_status === fixture.expected_runtime_claim_status)
+      && (!fixture.expected_outcome_linkage_status || tsResult.outcome_linkage_status === fixture.expected_outcome_linkage_status)
+      && (!fixture.expected_revocation_status || tsResult.revocation_status === fixture.expected_revocation_status)
+      && (!fixture.expected_supersession_status || tsResult.supersession_status === fixture.expected_supersession_status)
+      && (!fixture.expected_trail_linkage_status || tsResult.trail_linkage_status === fixture.expected_trail_linkage_status);
 
     const pyMatchesExpected =
       pyResult.status === fixture.expected_status
@@ -171,6 +192,13 @@ function main(): void {
         code: tsResult.code,
         location: tsResult.location,
         failure_class: tsResult.failure_class,
+        authorization_status: tsResult.authorization_status,
+        payload_binding_status: tsResult.payload_binding_status,
+        runtime_claim_status: tsResult.runtime_claim_status,
+        outcome_linkage_status: tsResult.outcome_linkage_status,
+        revocation_status: tsResult.revocation_status,
+        supersession_status: tsResult.supersession_status,
+        trail_linkage_status: tsResult.trail_linkage_status,
       },
       python: {
         status: pyResult.status,

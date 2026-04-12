@@ -1,7 +1,7 @@
 {
   "schema_version": "2",
   "category_statement": "offline-verifiable authorization and execution receipts for AI and high-consequence software actions",
-  "corpus_version": "2026-04-12-p1",
+  "corpus_version": "2026-04-12-p4",
   "supported_profiles": [
     "1.4-basic"
   ],
@@ -15,6 +15,13 @@
       "expected_verdict": "VALID",
       "expected_code": "SUCCESS_VALID",
       "expected_location": "$.bundle",
+      "expected_authorization_status": "AUTHORIZED",
+      "expected_payload_binding_status": "MATCHED",
+      "expected_runtime_claim_status": "VALID",
+      "expected_outcome_linkage_status": "LINKED",
+      "expected_revocation_status": "CLEAR",
+      "expected_supersession_status": "NOT_DECLARED",
+      "expected_trail_linkage_status": "LINKED",
       "notes": "Canonical valid proof bundle."
     },
     {
@@ -125,6 +132,13 @@
       "expected_verdict": "INVALID",
       "expected_code": "AUTHORIZATION_EXECUTION_MISMATCH",
       "expected_location": "$.passport_records[0].action_type",
+      "expected_authorization_status": "NOT_AUTHORIZED",
+      "expected_payload_binding_status": "NOT_PRESENT",
+      "expected_runtime_claim_status": "NOT_PRESENT",
+      "expected_outcome_linkage_status": "NOT_PRESENT",
+      "expected_revocation_status": "NOT_DECLARED",
+      "expected_supersession_status": "NOT_DECLARED",
+      "expected_trail_linkage_status": "NOT_PRESENT",
       "notes": "Execution action appears without prior authorization grant."
     },
     {
@@ -136,6 +150,13 @@
       "expected_verdict": "INVALID",
       "expected_code": "SEMANTIC_INCONSISTENCY",
       "expected_location": "$.passport_records[*].action_type",
+      "expected_authorization_status": "AUTHORIZED",
+      "expected_payload_binding_status": "NOT_PRESENT",
+      "expected_runtime_claim_status": "NOT_PRESENT",
+      "expected_outcome_linkage_status": "NOT_PRESENT",
+      "expected_revocation_status": "NOT_DECLARED",
+      "expected_supersession_status": "NOT_DECLARED",
+      "expected_trail_linkage_status": "NOT_PRESENT",
       "notes": "Structurally valid bundle with contradictory execution outcomes."
     },
     {

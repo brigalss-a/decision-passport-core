@@ -1,4 +1,4 @@
-import { explainTamper, verifyChain } from "@decision-passport/core";
+import { explainTamper, hashCanonical, verifyChain } from "@decision-passport/core";
 import type { ChainManifest, PassportRecord } from "@decision-passport/core";
 import type {
   AuditorFinding,
@@ -7,6 +7,67 @@ import type {
   BasicVerificationReasonCode,
   VerifierCode,
 } from "./types.js";
+
+interface DecisionTrailSurface {
+  linked_passport_id?: string;
+  final_approved_payload?: Readonly<Record<string, unknown>>;
+}
+
+interface RuntimeClaimSurface {
+  claim_id?: string;
+  passport_id?: string;
+  nonce?: string;
+  issued_at_utc?: string;
+  expires_at_utc?: string;
+  payload_hash?: string;
+  authority_ref?: string;
+  claim_status?: string;
+  single_use?: boolean;
+  guard_version?: string;
+}
+
+interface OutcomeBindingSurface {
+  outcome_status?: string;
+  executor_id?: string;
+  executed_at_utc?: string;
+  reason_code?: string;
+  linked_runtime_claim_id?: string;
+  output_reference_hashes?: readonly string[];
+  outcome_hash?: string;
+}
+
+interface BundleSurface {
+  bundle_version: string;
+  exported_at_utc: string;
+  passport_records: readonly PassportRecord[];
+  manifest: ChainManifest;
+  decision_trail?: DecisionTrailSurface;
+  runtime_claim?: RuntimeClaimSurface;
+  outcome_binding?: OutcomeBindingSurface;
+  passport_status?: string;
+  superseded_by_passport_id?: string;
+}
+
+type SemanticStatuses = Pick<
+  BasicVerifierResult,
+  | "authorization_status"
+  | "payload_binding_status"
+  | "runtime_claim_status"
+  | "outcome_linkage_status"
+  | "revocation_status"
+  | "supersession_status"
+  | "trail_linkage_status"
+>;
+
+const DEFAULT_SEMANTIC_STATUSES: SemanticStatuses = {
+  authorization_status: "NOT_EVALUATED",
+  payload_binding_status: "NOT_PRESENT",
+  runtime_claim_status: "NOT_PRESENT",
+  outcome_linkage_status: "NOT_PRESENT",
+  revocation_status: "NOT_DECLARED",
+  supersession_status: "NOT_DECLARED",
+  trail_linkage_status: "NOT_PRESENT",
+};
 
 export function verifyBasicBundle(bundle: unknown): BasicVerifierResult {
   const schemaFinding = validateBundleShape(bundle);
@@ -27,12 +88,7 @@ export function verifyBasicBundle(bundle: unknown): BasicVerifierResult {
     );
   }
 
-  const typedBundle = bundle as {
-    bundle_version: string;
-    exported_at_utc: string;
-    passport_records: readonly PassportRecord[];
-    manifest: ChainManifest;
-  };
+  const typedBundle = bundle as BundleSurface;
   if (typedBundle.bundle_version !== "1.4-basic") {
     const isProfileUnsupported = typedBundle.bundle_version.startsWith("1.4-");
     const finding = buildFinding(
@@ -125,7 +181,7 @@ export function verifyBasicBundle(bundle: unknown): BasicVerifierResult {
     );
   }
 
-  const semanticFindings = semanticChecks(records);
+  const { findings: semanticFindings, statuses } = semanticChecks(typedBundle, records);
   findings.push(...semanticFindings);
 
   const passed = checks.every((c) => c.passed);
@@ -150,6 +206,7 @@ export function verifyBasicBundle(bundle: unknown): BasicVerifierResult {
       auditor_findings: [successFinding],
       checks,
       reasonCodes: [],
+      ...statuses,
       nextSteps: [
         "Preserve original bundle bytes and checksums for future review.",
       ],
@@ -183,6 +240,7 @@ export function verifyBasicBundle(bundle: unknown): BasicVerifierResult {
     explanation.findings,
     buildNextSteps(uniqueFindings),
     primaryFinding,
+    statuses,
   );
 }
 
@@ -194,6 +252,7 @@ function failWith(
   tamperFindings?: BasicVerifierResult["tamperFindings"],
   nextSteps?: string[],
   primaryFinding?: AuditorFinding,
+  semanticStatuses: SemanticStatuses = DEFAULT_SEMANTIC_STATUSES,
 ): BasicVerifierResult {
   const resolvedPrimary = primaryFinding ?? findings[0] ?? buildFinding(
     "BUNDLE_MALFORMED",
@@ -215,6 +274,7 @@ function failWith(
     auditor_findings: findings,
     checks,
     reasonCodes,
+    ...semanticStatuses,
     tamperFindings,
     nextSteps,
   };
@@ -439,7 +499,18 @@ function dedupeFindings(findings: AuditorFinding[]): AuditorFinding[] {
     CHAIN_BROKEN: 7,
     HASH_MISMATCH: 8,
     AUTHORIZATION_EXECUTION_MISMATCH: 9,
-    SEMANTIC_INCONSISTENCY: 10,
+    CLAIM_EXPIRED: 10,
+    CLAIM_REVOKED: 11,
+    CLAIM_NONCE_REUSED: 12,
+    CLAIM_PAYLOAD_MISMATCH: 13,
+    OUTCOME_MISSING: 14,
+    OUTCOME_STATUS_INVALID: 15,
+    OUTCOME_LINKAGE_MISMATCH: 16,
+    TRAIL_LINKAGE_MISSING: 17,
+    TRAIL_PAYLOAD_MISMATCH: 18,
+    PASSPORT_REVOKED: 19,
+    PASSPORT_SUPERSEDED: 20,
+    SEMANTIC_INCONSISTENCY: 21,
   };
 
   return deduped.sort((a, b) => {
@@ -480,6 +551,28 @@ function mapLegacyReasonCodes(findings: AuditorFinding[]): BasicVerificationReas
       }
     } else if (finding.code === "AUTHORIZATION_EXECUTION_MISMATCH" || finding.code === "SEMANTIC_INCONSISTENCY") {
       codes.add("UNKNOWN_VERIFICATION_ERROR");
+    } else if (finding.code === "CLAIM_EXPIRED") {
+      codes.add("CLAIM_EXPIRED");
+    } else if (finding.code === "CLAIM_REVOKED") {
+      codes.add("CLAIM_REVOKED");
+    } else if (finding.code === "CLAIM_NONCE_REUSED") {
+      codes.add("CLAIM_NONCE_REUSED");
+    } else if (finding.code === "CLAIM_PAYLOAD_MISMATCH") {
+      codes.add("CLAIM_PAYLOAD_MISMATCH");
+    } else if (finding.code === "OUTCOME_MISSING") {
+      codes.add("OUTCOME_MISSING");
+    } else if (finding.code === "OUTCOME_STATUS_INVALID") {
+      codes.add("OUTCOME_STATUS_INVALID");
+    } else if (finding.code === "OUTCOME_LINKAGE_MISMATCH") {
+      codes.add("OUTCOME_LINKAGE_MISMATCH");
+    } else if (finding.code === "TRAIL_LINKAGE_MISSING") {
+      codes.add("TRAIL_LINKAGE_MISSING");
+    } else if (finding.code === "TRAIL_PAYLOAD_MISMATCH") {
+      codes.add("TRAIL_PAYLOAD_MISMATCH");
+    } else if (finding.code === "PASSPORT_REVOKED") {
+      codes.add("PASSPORT_REVOKED");
+    } else if (finding.code === "PASSPORT_SUPERSEDED") {
+      codes.add("PASSPORT_SUPERSEDED");
     }
   }
 
@@ -490,8 +583,12 @@ function mapLegacyReasonCodes(findings: AuditorFinding[]): BasicVerificationReas
   return [...codes].sort();
 }
 
-function semanticChecks(records: readonly { action_type: string }[]): AuditorFinding[] {
+function semanticChecks(bundle: BundleSurface, records: readonly PassportRecord[]): {
+  findings: AuditorFinding[];
+  statuses: SemanticStatuses;
+} {
   const findings: AuditorFinding[] = [];
+  const statuses: SemanticStatuses = { ...DEFAULT_SEMANTIC_STATUSES };
 
   const approvalActions = new Set(["HUMAN_APPROVAL_GRANTED", "POLICY_APPROVAL_GRANTED"]);
   const executionActions = new Set([
@@ -511,6 +608,7 @@ function semanticChecks(records: readonly { action_type: string }[]): AuditorFin
     if (executionActions.has(action) && firstExecutionIndex === -1) {
       firstExecutionIndex = i;
       if (!seenApproval) {
+        statuses.authorization_status = "NOT_AUTHORIZED";
         findings.push(
           buildFinding(
             "AUTHORIZATION_EXECUTION_MISMATCH",
@@ -520,8 +618,14 @@ function semanticChecks(records: readonly { action_type: string }[]): AuditorFin
             "authorization",
           ),
         );
+      } else {
+        statuses.authorization_status = "AUTHORIZED";
       }
     }
+  }
+
+  if (firstExecutionIndex === -1) {
+    statuses.authorization_status = "NOT_EVALUATED";
   }
 
   const actions = new Set(records.map((r) => r.action_type));
@@ -549,7 +653,229 @@ function semanticChecks(records: readonly { action_type: string }[]): AuditorFin
     );
   }
 
-  return findings;
+  const runtimeClaim = bundle.runtime_claim;
+  const trail = bundle.decision_trail;
+  const outcome = bundle.outcome_binding;
+
+  if (bundle.passport_status === "REVOKED") {
+    statuses.revocation_status = "REVOKED";
+    findings.push(
+      buildFinding(
+        "PASSPORT_REVOKED",
+        "$.passport_status",
+        "Passport is explicitly marked as REVOKED.",
+        "Treat this passport as denied and issue a new authorization artifact if execution is still intended.",
+        "authorization",
+      ),
+    );
+  } else if (runtimeClaim && runtimeClaim.claim_status) {
+    statuses.revocation_status = runtimeClaim.claim_status === "REVOKED" ? "REVOKED" : "CLEAR";
+  }
+
+  if (bundle.passport_status === "SUPERSEDED" || typeof bundle.superseded_by_passport_id === "string") {
+    statuses.supersession_status = "SUPERSEDED";
+    findings.push(
+      buildFinding(
+        "PASSPORT_SUPERSEDED",
+        "$.passport_status",
+        "Passport is explicitly marked as SUPERSEDED.",
+        "Verify only the newest passport artifact in the supersession chain.",
+        "semantic",
+      ),
+    );
+  } else if (bundle.passport_status === "ACTIVE") {
+    statuses.supersession_status = "CLEAR";
+  }
+
+  if (runtimeClaim) {
+    const hasClaimShape = Boolean(
+      runtimeClaim.claim_id
+      && runtimeClaim.passport_id
+      && runtimeClaim.nonce
+      && runtimeClaim.issued_at_utc
+      && runtimeClaim.expires_at_utc
+      && runtimeClaim.payload_hash
+      && runtimeClaim.claim_status
+      && runtimeClaim.guard_version,
+    );
+
+    if (!runtimeClaim.authority_ref) {
+      statuses.runtime_claim_status = "MALFORMED";
+      findings.push(
+        buildFinding(
+          "SCHEMA_MISSING_FIELD",
+          "$.runtime_claim.authority_ref",
+          "Runtime claim is missing authority_ref.",
+          "Add authority_ref to the RuntimeClaim before verification.",
+          "schema",
+        ),
+      );
+    } else if (!hasClaimShape) {
+      statuses.runtime_claim_status = "MALFORMED";
+      findings.push(
+        buildFinding(
+          "SCHEMA_INVALID_FIELD",
+          "$.runtime_claim",
+          "Runtime claim is present but incomplete for fail-closed evaluation.",
+          "Provide all required RuntimeClaim fields before verification.",
+          "schema",
+        ),
+      );
+    } else if (runtimeClaim.claim_status === "REVOKED") {
+      statuses.runtime_claim_status = "REVOKED";
+      statuses.revocation_status = "REVOKED";
+      findings.push(
+        buildFinding(
+          "CLAIM_REVOKED",
+          "$.runtime_claim.claim_status",
+          "Runtime claim is in REVOKED state.",
+          "Issue a new active claim before execution and preserve the revoked claim as audit evidence.",
+          "claim",
+        ),
+      );
+    } else if (
+      runtimeClaim.claim_status === "EXPIRED"
+      || runtimeClaim.expires_at_utc!.localeCompare(bundle.exported_at_utc) < 0
+    ) {
+      statuses.runtime_claim_status = "EXPIRED";
+      findings.push(
+        buildFinding(
+          "CLAIM_EXPIRED",
+          "$.runtime_claim.expires_at_utc",
+          "Runtime claim expired before verification could establish valid execution scope.",
+          "Issue a new claim with a valid TTL and re-run verification against the new claim.",
+          "claim",
+        ),
+      );
+    } else if (runtimeClaim.claim_status === "USED" && runtimeClaim.single_use === true) {
+      statuses.runtime_claim_status = "NONCE_REUSED";
+      findings.push(
+        buildFinding(
+          "CLAIM_NONCE_REUSED",
+          "$.runtime_claim.nonce",
+          "Runtime claim nonce indicates the single-use claim has already been consumed.",
+          "Do not reuse a consumed claim nonce; issue a fresh single-use claim.",
+          "claim",
+        ),
+      );
+    } else {
+      statuses.runtime_claim_status = "VALID";
+    }
+  }
+
+  if (trail) {
+    if (!runtimeClaim) {
+      statuses.trail_linkage_status = "MISSING";
+      findings.push(
+        buildFinding(
+          "TRAIL_LINKAGE_MISSING",
+          "$.decision_trail.linked_passport_id",
+          "DecisionTrail is present but no RuntimeClaim exists to establish bundle linkage.",
+          "Provide a RuntimeClaim so trail linkage can be checked deterministically.",
+          "trail",
+        ),
+      );
+    } else if (trail.linked_passport_id !== runtimeClaim.passport_id) {
+      statuses.trail_linkage_status = "MISSING";
+      findings.push(
+        buildFinding(
+          "TRAIL_LINKAGE_MISSING",
+          "$.decision_trail.linked_passport_id",
+          "DecisionTrail linked_passport_id does not match runtime_claim.passport_id.",
+          "Align DecisionTrail.linked_passport_id with the passport_id carried by RuntimeClaim.",
+          "trail",
+        ),
+      );
+    } else {
+      statuses.trail_linkage_status = "LINKED";
+    }
+
+    if (runtimeClaim?.payload_hash && trail.final_approved_payload) {
+      const approvedPayloadHash = hashCanonical(trail.final_approved_payload);
+      if (approvedPayloadHash === runtimeClaim.payload_hash) {
+        statuses.payload_binding_status = "MATCHED";
+      } else {
+        statuses.payload_binding_status = "MISMATCH";
+        statuses.runtime_claim_status = statuses.runtime_claim_status === "VALID"
+          ? "PAYLOAD_MISMATCH"
+          : statuses.runtime_claim_status;
+        statuses.trail_linkage_status = "PAYLOAD_MISMATCH";
+        findings.push(
+          buildFinding(
+            "CLAIM_PAYLOAD_MISMATCH",
+            "$.runtime_claim.payload_hash",
+            "Runtime claim payload_hash does not match the canonical hash of decision_trail.final_approved_payload.",
+            "Regenerate the RuntimeClaim payload_hash from the approved payload bytes before verification.",
+            "claim",
+          ),
+        );
+        findings.push(
+          buildFinding(
+            "TRAIL_PAYLOAD_MISMATCH",
+            "$.decision_trail.final_approved_payload",
+            "DecisionTrail final approved payload does not bind to the RuntimeClaim payload_hash.",
+            "Use the exact approved payload when issuing the claim and preserve the canonical payload bytes.",
+            "trail",
+          ),
+        );
+      }
+    } else if (trail.final_approved_payload) {
+      statuses.payload_binding_status = "NOT_EVALUATED";
+    }
+  }
+
+  if (outcome) {
+    const validOutcomeStatuses = new Set(["SUCCESS", "DENIED", "FAILED", "ABORTED", "PENDING", "EXPIRED"]);
+    if (!validOutcomeStatuses.has(outcome.outcome_status ?? "")) {
+      statuses.outcome_linkage_status = "INVALID";
+      findings.push(
+        buildFinding(
+          "OUTCOME_STATUS_INVALID",
+          "$.outcome_binding.outcome_status",
+          "OutcomeBinding outcome_status is not in the supported finite status set.",
+          "Use one of SUCCESS, DENIED, FAILED, ABORTED, PENDING, or EXPIRED.",
+          "outcome",
+        ),
+      );
+    } else if (!runtimeClaim) {
+      statuses.outcome_linkage_status = "MISMATCH";
+      findings.push(
+        buildFinding(
+          "OUTCOME_LINKAGE_MISMATCH",
+          "$.outcome_binding.linked_runtime_claim_id",
+          "OutcomeBinding is present but no RuntimeClaim exists to verify claim linkage.",
+          "Provide a RuntimeClaim so outcome linkage can be verified deterministically.",
+          "outcome",
+        ),
+      );
+    } else if (outcome.linked_runtime_claim_id !== runtimeClaim.claim_id) {
+      statuses.outcome_linkage_status = "MISMATCH";
+      findings.push(
+        buildFinding(
+          "OUTCOME_LINKAGE_MISMATCH",
+          "$.outcome_binding.linked_runtime_claim_id",
+          "OutcomeBinding linked_runtime_claim_id does not match runtime_claim.claim_id.",
+          "Align OutcomeBinding with the exact RuntimeClaim used for execution.",
+          "outcome",
+        ),
+      );
+    } else {
+      statuses.outcome_linkage_status = "LINKED";
+    }
+  } else if (runtimeClaim) {
+    statuses.outcome_linkage_status = "MISSING";
+    findings.push(
+      buildFinding(
+        "OUTCOME_MISSING",
+        "$.outcome_binding",
+        "RuntimeClaim is present but no OutcomeBinding exists to describe execution result state.",
+        "Attach a minimal OutcomeBinding so verification can classify execution result semantics.",
+        "outcome",
+      ),
+    );
+  }
+
+  return { findings, statuses };
 }
 
 function buildFinding(

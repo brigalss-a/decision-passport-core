@@ -51,6 +51,9 @@ A `BasicProofBundle` contains:
 | `exported_at_utc` | ISO 8601 string | Export timestamp |
 | `passport_records` | `PassportRecord[]` | Ordered hash chain |
 | `manifest` | `ChainManifest` | Chain summary |
+| `decision_trail` | `DecisionTrail` | Optional embedded pre-action linkage surface for v0.7.0 verifier semantics |
+| `runtime_claim` | `RuntimeClaim` | Optional fail-closed claim surface for v0.7.0 guard semantics |
+| `outcome_binding` | `OutcomeBinding` | Optional compact execution-result surface for v0.7.0 verifier semantics |
 
 ---
 
