@@ -24,7 +24,7 @@ Each tagged release (`v*`) produces:
 ```bash
 git clone https://github.com/brigalss-a/decision-passport-core.git
 cd decision-passport-core
-git checkout v0.5.1   # or any release tag
+git checkout v0.6.0   # or any release tag
 pnpm install --frozen-lockfile
 pnpm build
 ```

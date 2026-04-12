@@ -1,7 +1,7 @@
 {
   "name": "decision-passport-core-workspace",
   "private": true,
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "offline-verifiable authorization and execution receipts for AI and high-consequence software actions",
   "scripts": {
     "build": "pnpm -r build",

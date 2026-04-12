@@ -94,7 +94,7 @@ Current limitations:
 Reference path for a specific tag:
 
 ```bash
-git checkout v0.5.1
+git checkout v0.6.0
 pnpm install --frozen-lockfile
 python -m pip install -e python/decision_passport_py
 pnpm build
