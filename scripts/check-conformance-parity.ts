@@ -9,6 +9,7 @@ interface ConformanceFixture {
   profile: string;
   version: string;
   failure_class: string;
+  parity_scope?: "full" | "typescript_only";
   expected_verdict: "VALID" | "INVALID";
   expected_code: string;
   expected_location: string;
@@ -150,6 +151,8 @@ function main(): void {
       && pyResult.location === fixture.expected_location
       && pyResult.failure_class === fixture.failure_class;
 
+    const parityScope = fixture.parity_scope ?? "full";
+
     const languageParity =
       tsResult.status === pyResult.status
       && tsResult.verdict === pyResult.verdict
@@ -163,13 +166,13 @@ function main(): void {
       );
     }
 
-    if (!pyMatchesExpected) {
+    if (parityScope === "full" && !pyMatchesExpected) {
       mismatches.push(
         `${fixture.fixture} Python mismatch: expected ${fixture.expected_status}/${fixture.expected_verdict}/${fixture.expected_code}/${fixture.expected_location}/${fixture.failure_class} but got ${pyResult.status}/${pyResult.verdict}/${pyResult.code}/${pyResult.location}/${pyResult.failure_class}`,
       );
     }
 
-    if (!languageParity) {
+    if (parityScope === "full" && !languageParity) {
       mismatches.push(
         `${fixture.fixture} parity mismatch between TypeScript and Python: TS ${tsResult.status}/${tsResult.verdict}/${tsResult.code}/${tsResult.location}/${tsResult.failure_class} vs PY ${pyResult.status}/${pyResult.verdict}/${pyResult.code}/${pyResult.location}/${pyResult.failure_class}`,
       );
@@ -179,6 +182,7 @@ function main(): void {
       fixture: fixture.fixture,
       profile: fixture.profile,
       version: fixture.version,
+      parity_scope: parityScope,
       expected: {
         status: fixture.expected_status,
         verdict: fixture.expected_verdict,

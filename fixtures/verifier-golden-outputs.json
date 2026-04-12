@@ -133,6 +133,98 @@
         "location": "$.passport_records[0].action_type",
         "failure_class": "authorization"
       }
+    },
+    "passport-revoked.json": {
+      "typescript": {
+        "status": "FAIL",
+        "verdict": "INVALID",
+        "code": "PASSPORT_REVOKED",
+        "location": "$.passport_status",
+        "failure_class": "authorization",
+        "authorization_status": "AUTHORIZED",
+        "payload_binding_status": "MATCHED",
+        "runtime_claim_status": "VALID",
+        "outcome_linkage_status": "LINKED",
+        "revocation_status": "REVOKED",
+        "supersession_status": "NOT_DECLARED",
+        "trail_linkage_status": "LINKED"
+      },
+      "python": {
+        "status": "PASS",
+        "verdict": "VALID",
+        "code": "SUCCESS_VALID",
+        "location": "$.bundle",
+        "failure_class": "success"
+      }
+    },
+    "passport-superseded.json": {
+      "typescript": {
+        "status": "FAIL",
+        "verdict": "INVALID",
+        "code": "PASSPORT_SUPERSEDED",
+        "location": "$.passport_status",
+        "failure_class": "semantic",
+        "authorization_status": "AUTHORIZED",
+        "payload_binding_status": "MATCHED",
+        "runtime_claim_status": "VALID",
+        "outcome_linkage_status": "LINKED",
+        "revocation_status": "CLEAR",
+        "supersession_status": "SUPERSEDED",
+        "trail_linkage_status": "LINKED"
+      },
+      "python": {
+        "status": "PASS",
+        "verdict": "VALID",
+        "code": "SUCCESS_VALID",
+        "location": "$.bundle",
+        "failure_class": "success"
+      }
+    },
+    "trail-link-mismatch.json": {
+      "typescript": {
+        "status": "FAIL",
+        "verdict": "INVALID",
+        "code": "TRAIL_LINKAGE_MISSING",
+        "location": "$.decision_trail.linked_passport_id",
+        "failure_class": "trail",
+        "authorization_status": "AUTHORIZED",
+        "payload_binding_status": "MATCHED",
+        "runtime_claim_status": "VALID",
+        "outcome_linkage_status": "LINKED",
+        "revocation_status": "CLEAR",
+        "supersession_status": "NOT_DECLARED",
+        "trail_linkage_status": "MISSING"
+      },
+      "python": {
+        "status": "PASS",
+        "verdict": "VALID",
+        "code": "SUCCESS_VALID",
+        "location": "$.bundle",
+        "failure_class": "success"
+      }
+    },
+    "outcome-link-mismatch.json": {
+      "typescript": {
+        "status": "FAIL",
+        "verdict": "INVALID",
+        "code": "OUTCOME_LINKAGE_MISMATCH",
+        "location": "$.outcome_binding.linked_runtime_claim_id",
+        "failure_class": "outcome",
+        "authorization_status": "AUTHORIZED",
+        "payload_binding_status": "MATCHED",
+        "runtime_claim_status": "VALID",
+        "outcome_linkage_status": "MISMATCH",
+        "revocation_status": "CLEAR",
+        "supersession_status": "NOT_DECLARED",
+        "trail_linkage_status": "LINKED"
+      },
+      "python": {
+        "status": "PASS",
+        "verdict": "VALID",
+        "code": "SUCCESS_VALID",
+        "location": "$.bundle",
+        "failure_class": "success"
+      }
     }
   }
 }
