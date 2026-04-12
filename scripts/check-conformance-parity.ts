@@ -5,9 +5,15 @@ import { spawnSync } from "node:child_process";
 import { verifyBasicBundle } from "../packages/verifier-basic/src/verify-bundle.js";
 
 interface ConformanceFixture {
-  file: string;
+  fixture: string;
+  profile: string;
+  version: string;
+  failure_class: string;
+  expected_verdict: "VALID" | "INVALID";
+  expected_code: string;
+  expected_location: string;
   expected_status: "PASS" | "FAIL";
-  required_reason_codes: string[];
+  notes?: string;
 }
 
 interface ConformanceManifest {
@@ -24,22 +30,6 @@ const fixturesDir = resolve(repoRoot, "fixtures");
 const manifestPath = resolve(fixturesDir, "conformance-manifest.json");
 const artifactDir = resolve(repoRoot, "artifacts");
 const snapshotPath = resolve(artifactDir, "conformance-snapshot.json");
-
-function sortedUnique(values: string[]): string[] {
-  return [...new Set(values)].sort();
-}
-
-function arrayEquals(a: string[], b: string[]): boolean {
-  if (a.length !== b.length) {
-    return false;
-  }
-  for (let i = 0; i < a.length; i += 1) {
-    if (a[i] !== b[i]) {
-      return false;
-    }
-  }
-  return true;
-}
 
 function loadJson<T>(path: string): T {
   return JSON.parse(readFileSync(path, "utf-8")) as T;
@@ -60,7 +50,15 @@ function loadPythonVersion(): string {
   return match[1];
 }
 
-function runPythonVerifier(bundlePath: string): { status: string; reasonCodes: string[] } {
+interface VerifierSnapshot {
+  status: string;
+  verdict: string;
+  code: string;
+  location: string;
+  failure_class: string;
+}
+
+function runPythonVerifier(bundlePath: string): VerifierSnapshot {
   const pythonPath = process.env.DP_PYTHON || "python";
   const pythonSrcPath = resolve(repoRoot, "python", "decision_passport_py", "src");
   const env = {
@@ -84,9 +82,9 @@ function runPythonVerifier(bundlePath: string): { status: string; reasonCodes: s
     throw new Error(`Python verifier produced no JSON output for ${bundlePath}. stderr: ${proc.stderr}`);
   }
 
-  let parsed: { status: string; reasonCodes?: string[] };
+  let parsed: VerifierSnapshot;
   try {
-    parsed = JSON.parse(proc.stdout) as { status: string; reasonCodes?: string[] };
+    parsed = JSON.parse(proc.stdout) as VerifierSnapshot;
   } catch (error) {
     throw new Error(
       `Python verifier output was not valid JSON for ${bundlePath}: ${(error as Error).message}`,
@@ -95,7 +93,10 @@ function runPythonVerifier(bundlePath: string): { status: string; reasonCodes: s
 
   return {
     status: parsed.status,
-    reasonCodes: sortedUnique(parsed.reasonCodes ?? []),
+    verdict: parsed.verdict,
+    code: parsed.code,
+    location: parsed.location,
+    failure_class: parsed.failure_class,
   };
 }
 
@@ -109,52 +110,74 @@ function main(): void {
 
   const mismatches: string[] = [];
   const results = manifest.fixtures.map((fixture) => {
-    const fixturePath = resolve(fixturesDir, fixture.file);
+    const fixturePath = resolve(fixturesDir, fixture.fixture);
     const bundle = loadJson<unknown>(fixturePath);
     const tsResult = verifyBasicBundle(bundle);
     const pyResult = runPythonVerifier(fixturePath);
 
-    const expectedCodes = sortedUnique(fixture.required_reason_codes);
-    const tsCodes = sortedUnique(tsResult.reasonCodes);
-    const pyCodes = sortedUnique(pyResult.reasonCodes);
-
     const tsMatchesExpected =
-      tsResult.status === fixture.expected_status && arrayEquals(tsCodes, expectedCodes);
+      tsResult.status === fixture.expected_status
+      && tsResult.verdict === fixture.expected_verdict
+      && tsResult.code === fixture.expected_code
+      && tsResult.location === fixture.expected_location
+      && tsResult.failure_class === fixture.failure_class;
+
     const pyMatchesExpected =
-      pyResult.status === fixture.expected_status && arrayEquals(pyCodes, expectedCodes);
-    const languageParity = tsResult.status === pyResult.status && arrayEquals(tsCodes, pyCodes);
+      pyResult.status === fixture.expected_status
+      && pyResult.verdict === fixture.expected_verdict
+      && pyResult.code === fixture.expected_code
+      && pyResult.location === fixture.expected_location
+      && pyResult.failure_class === fixture.failure_class;
+
+    const languageParity =
+      tsResult.status === pyResult.status
+      && tsResult.verdict === pyResult.verdict
+      && tsResult.code === pyResult.code
+      && tsResult.location === pyResult.location
+      && tsResult.failure_class === pyResult.failure_class;
 
     if (!tsMatchesExpected) {
       mismatches.push(
-        `${fixture.file} TypeScript mismatch: expected ${fixture.expected_status} ${JSON.stringify(expectedCodes)} but got ${tsResult.status} ${JSON.stringify(tsCodes)}`,
+        `${fixture.fixture} TypeScript mismatch: expected ${fixture.expected_status}/${fixture.expected_verdict}/${fixture.expected_code}/${fixture.expected_location}/${fixture.failure_class} but got ${tsResult.status}/${tsResult.verdict}/${tsResult.code}/${tsResult.location}/${tsResult.failure_class}`,
       );
     }
 
     if (!pyMatchesExpected) {
       mismatches.push(
-        `${fixture.file} Python mismatch: expected ${fixture.expected_status} ${JSON.stringify(expectedCodes)} but got ${pyResult.status} ${JSON.stringify(pyCodes)}`,
+        `${fixture.fixture} Python mismatch: expected ${fixture.expected_status}/${fixture.expected_verdict}/${fixture.expected_code}/${fixture.expected_location}/${fixture.failure_class} but got ${pyResult.status}/${pyResult.verdict}/${pyResult.code}/${pyResult.location}/${pyResult.failure_class}`,
       );
     }
 
     if (!languageParity) {
       mismatches.push(
-        `${fixture.file} parity mismatch between TypeScript and Python: TS ${tsResult.status} ${JSON.stringify(tsCodes)} vs PY ${pyResult.status} ${JSON.stringify(pyCodes)}`,
+        `${fixture.fixture} parity mismatch between TypeScript and Python: TS ${tsResult.status}/${tsResult.verdict}/${tsResult.code}/${tsResult.location}/${tsResult.failure_class} vs PY ${pyResult.status}/${pyResult.verdict}/${pyResult.code}/${pyResult.location}/${pyResult.failure_class}`,
       );
     }
 
     return {
-      fixture: fixture.file,
+      fixture: fixture.fixture,
+      profile: fixture.profile,
+      version: fixture.version,
       expected: {
         status: fixture.expected_status,
-        reasonCodes: expectedCodes,
+        verdict: fixture.expected_verdict,
+        code: fixture.expected_code,
+        location: fixture.expected_location,
+        failure_class: fixture.failure_class,
       },
       typescript: {
         status: tsResult.status,
-        reasonCodes: tsCodes,
+        verdict: tsResult.verdict,
+        code: tsResult.code,
+        location: tsResult.location,
+        failure_class: tsResult.failure_class,
       },
       python: {
         status: pyResult.status,
-        reasonCodes: pyCodes,
+        verdict: pyResult.verdict,
+        code: pyResult.code,
+        location: pyResult.location,
+        failure_class: pyResult.failure_class,
       },
       parity: languageParity,
     };

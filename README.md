@@ -369,10 +369,12 @@ If integrity checks fail, verification returns `FAIL` with integrity reason code
 - [Schema and versioning](docs/schema-versioning.md): bundle structure, record fields, hashing rules, evolution guidance
 - [Compatibility matrix](docs/compatibility-matrix.md): which tools work with which formats
 - [Verifier compatibility promise](docs/verifier-compatibility-promise.md): 12-month supported/deprecated/unsupported policy
+- [Verifier auditor output](docs/verifier-auditor-output.md): deterministic verdict/code/location/reason/remediation_hint contract
 - [Protocol conformance](docs/protocol-conformance.md): normative verifier checks and fixture outcomes
 - [Conformance manifest](fixtures/conformance-manifest.json): machine-readable expected verdict map for canonical fixtures
 - [JSON Schemas](docs/json-schema/): machine-readable schemas for `BasicProofBundle`, `ChainManifest`, `PassportRecord`
 - [Release verification](docs/release-verification.md): how to verify a published release locally
+- [Release provenance](docs/release-provenance.md): official release artifacts, 3-minute local verification, and trust limitations
 - [Append-only guarantees](docs/append-only-guarantees.md): what the protocol enforces, what verification detects, storage-level limits
 - [Bundle Diff](docs/bundle-diff.md): how to compare two bundles, generate diff artifacts, and interpret findings
 

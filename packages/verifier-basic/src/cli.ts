@@ -18,6 +18,22 @@ try {
   result = {
     status: "FAIL",
     summary: "Verification failed because bundle JSON could not be parsed.",
+    verdict: "INVALID",
+    code: "BUNDLE_MALFORMED",
+    location: "$",
+    reason: "Bundle JSON could not be parsed.",
+    remediation_hint: "Validate JSON syntax and required fields before running verification.",
+    failure_class: "schema",
+    auditor_findings: [
+      {
+        verdict: "INVALID",
+        code: "BUNDLE_MALFORMED",
+        location: "$",
+        reason: "Bundle JSON could not be parsed.",
+        remediation_hint: "Validate JSON syntax and required fields before running verification.",
+        failure_class: "schema",
+      },
+    ],
     checks: [
       {
         name: "bundle_structure",

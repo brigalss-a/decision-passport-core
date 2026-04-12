@@ -10,8 +10,14 @@ _VALID_NAMES: Final[set[str]] = {
     "broken-prev-hash",
     "wrong-sequence",
     "wrong-chain-hash",
+    "malformed-bundle",
     "malformed-structure",
     "unsupported-version",
+    "unsupported-profile",
+    "missing-manifest-chain-hash",
+    "invalid-exported-at-type",
+    "auth-exec-mismatch",
+    "semantic-inconsistent",
     "compatible-optional-metadata",
 }
 
@@ -21,8 +27,14 @@ _NAME_TO_FILE: Final[dict[str, str]] = {
     "broken-prev-hash": "broken-prev-hash.json",
     "wrong-sequence": "wrong-sequence.json",
     "wrong-chain-hash": "wrong-chain-hash.json",
+    "malformed-bundle": "malformed-bundle.json",
     "malformed-structure": "malformed-bundle.json",
     "unsupported-version": "unsupported-version.json",
+    "unsupported-profile": "unsupported-profile.json",
+    "missing-manifest-chain-hash": "missing-manifest-chain-hash.json",
+    "invalid-exported-at-type": "invalid-exported-at-type.json",
+    "auth-exec-mismatch": "auth-exec-mismatch.json",
+    "semantic-inconsistent": "semantic-inconsistent.json",
     "compatible-optional-metadata": "compatible-optional-metadata.json",
 }
 

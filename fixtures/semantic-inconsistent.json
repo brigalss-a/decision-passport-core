@@ -1,0 +1,73 @@
+{
+  "bundle_version": "1.4-basic",
+  "exported_at_utc": "2026-04-12T00:38:10.462Z",
+  "passport_records": [
+    {
+      "id": "f9afde93-0427-4775-ae06-6b1040989eae",
+      "chain_id": "adv-semantic-inconsistency",
+      "sequence": 0,
+      "timestamp_utc": "2026-04-12T00:38:10.462Z",
+      "actor_id": "agent-01",
+      "actor_type": "ai_agent",
+      "action_type": "AI_RECOMMENDATION",
+      "payload": {
+        "action": "dispatch"
+      },
+      "payload_hash": "1f4534f1b3508ab4fff57b1f5965ca604fc2e92acac46b0ccb34d89287fc007a",
+      "prev_hash": "GENESIS_0000000000000000000000000000000000000000000000000000000000000000",
+      "record_hash": "a7d44ebbd6e8aed1be0649d6bda64719873849f8d975cdbc75da6e4655c5a26e"
+    },
+    {
+      "id": "ddd129cc-7a5b-4096-8981-dffcf962c6be",
+      "chain_id": "adv-semantic-inconsistency",
+      "sequence": 1,
+      "timestamp_utc": "2026-04-12T00:38:10.462Z",
+      "actor_id": "human-01",
+      "actor_type": "human",
+      "action_type": "HUMAN_APPROVAL_GRANTED",
+      "payload": {
+        "approved": true
+      },
+      "payload_hash": "20ec2f38fc96bc7d416a9af537493ae0bae26c5ad4c5a0f2d94f56f9c3e04958",
+      "prev_hash": "a7d44ebbd6e8aed1be0649d6bda64719873849f8d975cdbc75da6e4655c5a26e",
+      "record_hash": "1caa0c759f3e3a0a1286990595d9322837cc56158046f4c3b1ffe91a6f018a64"
+    },
+    {
+      "id": "e400cfce-c06a-4a7a-bbdf-4944431cf011",
+      "chain_id": "adv-semantic-inconsistency",
+      "sequence": 2,
+      "timestamp_utc": "2026-04-12T00:38:10.462Z",
+      "actor_id": "agent-01",
+      "actor_type": "ai_agent",
+      "action_type": "EXECUTION_SUCCEEDED",
+      "payload": {
+        "result": "ok"
+      },
+      "payload_hash": "1aad36b0fb02621b951649811957ba7ad67d4838c2932d02088f7d6e8db74313",
+      "prev_hash": "1caa0c759f3e3a0a1286990595d9322837cc56158046f4c3b1ffe91a6f018a64",
+      "record_hash": "aca3e1a3ce997c6fff3d870e12a9e92a6a786a26913b1cc55c959638c3310d8f"
+    },
+    {
+      "id": "5869e514-daf4-43b3-a60f-922a37bc5253",
+      "chain_id": "adv-semantic-inconsistency",
+      "sequence": 3,
+      "timestamp_utc": "2026-04-12T00:38:10.462Z",
+      "actor_id": "agent-01",
+      "actor_type": "ai_agent",
+      "action_type": "EXECUTION_FAILED",
+      "payload": {
+        "result": "error"
+      },
+      "payload_hash": "31d0e534e750b17146b5e5fb6a45d054309f9e243580eda76916f923314fef8c",
+      "prev_hash": "aca3e1a3ce997c6fff3d870e12a9e92a6a786a26913b1cc55c959638c3310d8f",
+      "record_hash": "02da9b1dadd9f1e68146f9d0cc9bcb2f56de7afac52ea3dd2664a89ceed8f102"
+    }
+  ],
+  "manifest": {
+    "chain_id": "adv-semantic-inconsistency",
+    "record_count": 4,
+    "first_record_id": "f9afde93-0427-4775-ae06-6b1040989eae",
+    "last_record_id": "5869e514-daf4-43b3-a60f-922a37bc5253",
+    "chain_hash": "02da9b1dadd9f1e68146f9d0cc9bcb2f56de7afac52ea3dd2664a89ceed8f102"
+  }
+}

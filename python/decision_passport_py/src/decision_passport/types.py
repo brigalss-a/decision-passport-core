@@ -63,6 +63,40 @@ class TamperExplanation(TypedDict):
 
 
 BasicVerifierStatus = Literal["PASS", "FAIL"]
+VerifierVerdict = Literal["VALID", "INVALID"]
+VerifierCode = Literal[
+    "SUCCESS_VALID",
+    "SCHEMA_MISSING_FIELD",
+    "SCHEMA_INVALID_FIELD",
+    "VERSION_UNSUPPORTED",
+    "PROFILE_UNSUPPORTED",
+    "HASH_MISMATCH",
+    "CHAIN_BROKEN",
+    "ORDER_INVALID",
+    "AUTHORIZATION_EXECUTION_MISMATCH",
+    "SEMANTIC_INCONSISTENCY",
+    "BUNDLE_MALFORMED",
+]
+VerifierFailureClass = Literal[
+    "success",
+    "schema",
+    "version",
+    "integrity",
+    "order",
+    "authorization",
+    "semantic",
+]
+
+
+class AuditorFinding(TypedDict):
+    verdict: VerifierVerdict
+    code: VerifierCode
+    location: str
+    reason: str
+    remediation_hint: str
+    failure_class: VerifierFailureClass
+
+
 BasicVerificationReasonCode = Literal[
     "UNSUPPORTED_BUNDLE_VERSION",
     "CHAIN_INTEGRITY_FAILED",
@@ -85,6 +119,13 @@ class BasicVerificationCheck(TypedDict):
 class BasicVerifierResult(TypedDict):
     status: BasicVerifierStatus
     summary: str
+    verdict: VerifierVerdict
+    code: VerifierCode
+    location: str
+    reason: str
+    remediation_hint: str
+    failure_class: VerifierFailureClass
+    auditor_findings: list[AuditorFinding]
     checks: list[BasicVerificationCheck]
     reasonCodes: list[BasicVerificationReasonCode]
     tamperFindings: NotRequired[list[TamperFinding]]

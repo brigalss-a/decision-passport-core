@@ -37,6 +37,7 @@ Release is blocked if any gate is red.
 - Update or add release notes file.
 - Verify README examples and paths.
 - Verify protocol conformance and compatibility docs are current.
+- Verify `docs/release-provenance.md` matches actual release workflow outputs.
 - Verify category statement is exactly: "offline-verifiable authorization and execution receipts for AI and high-consequence software actions".
 - Verify `docs/verifier-compatibility-promise.md` reflects supported/deprecated/unsupported status.
 

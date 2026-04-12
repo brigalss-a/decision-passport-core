@@ -1,5 +1,7 @@
 # Release Verification
 
+For the public provenance model, official artifact set, and 3-minute verification path, see `docs/release-provenance.md`.
+
 ## What a release includes
 
 Each tagged release (`v*`) produces:
@@ -11,6 +13,7 @@ Each tagged release (`v*`) produces:
 | `conformance-snapshot.json` | Generated release snapshot with TypeScript/Python parity evidence |
 | `checksums.txt` | SHA-256 checksums for fixture files |
 | `verification-summary.json` | Output of `pnpm verify-demo` |
+| `release-assets.txt` | Inventory of files collected into release artifacts |
 
 ---
 

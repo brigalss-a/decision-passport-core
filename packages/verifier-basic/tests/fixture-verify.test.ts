@@ -7,35 +7,40 @@ import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const fixturesDir = resolve(__dirname, "..", "..", "..", "fixtures");
-const validPath = resolve(fixturesDir, "valid-bundle.json");
-const tamperedPath = resolve(fixturesDir, "tampered-bundle.json");
+const manifestPath = resolve(fixturesDir, "conformance-manifest.json");
 
-const fixturesExist = existsSync(validPath) && existsSync(tamperedPath);
+const fixturesExist = existsSync(manifestPath);
+
+interface ConformanceFixture {
+  fixture: string;
+  expected_status: "PASS" | "FAIL";
+  expected_verdict: "VALID" | "INVALID";
+  expected_code: string;
+  expected_location: string;
+}
+
+interface ConformanceManifest {
+  fixtures: ConformanceFixture[];
+}
 
 describe.skipIf(!fixturesExist)("fixture verification", () => {
-  let validBundle: BasicProofBundle;
-  let tamperedBundle: BasicProofBundle;
+  let manifest: ConformanceManifest;
 
   beforeAll(() => {
-    validBundle = JSON.parse(readFileSync(validPath, "utf-8"));
-    tamperedBundle = JSON.parse(readFileSync(tamperedPath, "utf-8"));
+    manifest = JSON.parse(readFileSync(manifestPath, "utf-8"));
   });
 
-  it("valid-bundle.json passes verification", () => {
-    const result = verifyBasicBundle(validBundle);
-    expect(result.status).toBe("PASS");
-    expect(result.checks.every((c) => c.passed)).toBe(true);
-  });
+  it("all canonical fixtures match manifest expectations", () => {
+    for (const entry of manifest.fixtures) {
+      const fixturePath = resolve(fixturesDir, entry.fixture);
+      const bundle = JSON.parse(readFileSync(fixturePath, "utf-8")) as BasicProofBundle;
+      const result = verifyBasicBundle(bundle);
 
-  it("tampered-bundle.json fails verification", () => {
-    const result = verifyBasicBundle(tamperedBundle);
-    expect(result.status).toBe("FAIL");
-  });
-
-  it("valid bundle has expected structure", () => {
-    expect(validBundle.bundle_version).toBe("1.4-basic");
-    expect(validBundle.passport_records.length).toBeGreaterThan(0);
-    expect(validBundle.manifest.chain_id).toBeTruthy();
-    expect(validBundle.manifest.chain_hash).toBeTruthy();
+      expect(result.status, `${entry.fixture} status`).toBe(entry.expected_status);
+      expect(result.verdict, `${entry.fixture} verdict`).toBe(entry.expected_verdict);
+      expect(result.code, `${entry.fixture} code`).toBe(entry.expected_code);
+      expect(result.location, `${entry.fixture} location`).toBe(entry.expected_location);
+      expect(result.auditor_findings.length, `${entry.fixture} findings`).toBeGreaterThan(0);
+    }
   });
 });

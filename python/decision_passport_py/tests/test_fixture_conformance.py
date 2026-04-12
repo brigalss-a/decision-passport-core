@@ -1,59 +1,28 @@
 from __future__ import annotations
 
+import json
+from pathlib import Path
 import unittest
 
 from decision_passport import load_fixture, verify_basic_bundle
 
 
 class FixtureConformanceTests(unittest.TestCase):
-    def test_valid_bundle_passes(self) -> None:
-        bundle = load_fixture("valid-bundle")
-        result = verify_basic_bundle(bundle)
-        self.assertEqual(result["status"], "PASS")
-        self.assertEqual(result["reasonCodes"], [])
+    def test_manifest_contract_matches_all_fixtures(self) -> None:
+        repo_root = Path(__file__).resolve().parents[3]
+        manifest_path = repo_root / "fixtures" / "conformance-manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
 
-    def test_tampered_bundle_fails_with_payload_reason(self) -> None:
-        bundle = load_fixture("tampered-bundle")
-        result = verify_basic_bundle(bundle)
-        self.assertEqual(result["status"], "FAIL")
-        self.assertIn("CHAIN_INTEGRITY_FAILED", result["reasonCodes"])
-        self.assertIn("PAYLOAD_HASH_MISMATCH", result["reasonCodes"])
+        for entry in manifest["fixtures"]:
+            fixture_name = entry["fixture"].replace(".json", "")
+            bundle = load_fixture(fixture_name)
+            result = verify_basic_bundle(bundle)
 
-    def test_broken_prev_hash_fails(self) -> None:
-        bundle = load_fixture("broken-prev-hash")
-        result = verify_basic_bundle(bundle)
-        self.assertEqual(result["status"], "FAIL")
-        self.assertIn("PREV_HASH_MISMATCH", result["reasonCodes"])
-
-    def test_wrong_sequence_fails(self) -> None:
-        bundle = load_fixture("wrong-sequence")
-        result = verify_basic_bundle(bundle)
-        self.assertEqual(result["status"], "FAIL")
-        self.assertIn("SEQUENCE_MISMATCH", result["reasonCodes"])
-
-    def test_wrong_chain_hash_fails(self) -> None:
-        bundle = load_fixture("wrong-chain-hash")
-        result = verify_basic_bundle(bundle)
-        self.assertEqual(result["status"], "FAIL")
-        self.assertIn("MANIFEST_HASH_MISMATCH", result["reasonCodes"])
-
-    def test_malformed_structure_fails(self) -> None:
-        bundle = load_fixture("malformed-structure")
-        result = verify_basic_bundle(bundle)
-        self.assertEqual(result["status"], "FAIL")
-        self.assertIn("MALFORMED_BUNDLE", result["reasonCodes"])
-
-    def test_unsupported_version_fails(self) -> None:
-        bundle = load_fixture("unsupported-version")
-        result = verify_basic_bundle(bundle)
-        self.assertEqual(result["status"], "FAIL")
-        self.assertIn("UNSUPPORTED_BUNDLE_VERSION", result["reasonCodes"])
-
-    def test_optional_metadata_fixture_passes(self) -> None:
-        bundle = load_fixture("compatible-optional-metadata")
-        result = verify_basic_bundle(bundle)
-        self.assertEqual(result["status"], "PASS")
-        self.assertEqual(result["reasonCodes"], [])
+            self.assertEqual(result["status"], entry["expected_status"], fixture_name)
+            self.assertEqual(result["verdict"], entry["expected_verdict"], fixture_name)
+            self.assertEqual(result["code"], entry["expected_code"], fixture_name)
+            self.assertEqual(result["location"], entry["expected_location"], fixture_name)
+            self.assertGreater(len(result["auditor_findings"]), 0, fixture_name)
 
 
 if __name__ == "__main__":

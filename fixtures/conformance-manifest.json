@@ -1,89 +1,153 @@
 {
-  "schema_version": "1",
+  "schema_version": "2",
   "category_statement": "offline-verifiable authorization and execution receipts for AI and high-consequence software actions",
-  "corpus_version": "2026-04-12",
+  "corpus_version": "2026-04-12-p1",
   "supported_profiles": [
     "1.4-basic"
   ],
   "fixtures": [
     {
-      "file": "valid-bundle.json",
+      "fixture": "valid-bundle.json",
+      "profile": "1.4-basic",
+      "version": "1.4-basic",
+      "failure_class": "success",
       "expected_status": "PASS",
-      "required_reason_codes": []
+      "expected_verdict": "VALID",
+      "expected_code": "SUCCESS_VALID",
+      "expected_location": "$.bundle",
+      "notes": "Canonical valid proof bundle."
     },
     {
-      "file": "tampered-bundle.json",
-      "expected_status": "FAIL",
-      "required_reason_codes": [
-        "CHAIN_INTEGRITY_FAILED",
-        "PAYLOAD_HASH_MISMATCH"
-      ]
-    },
-    {
-      "file": "broken-prev-hash.json",
-      "expected_status": "FAIL",
-      "required_reason_codes": [
-        "CHAIN_INTEGRITY_FAILED",
-        "PREV_HASH_MISMATCH"
-      ]
-    },
-    {
-      "file": "wrong-sequence.json",
-      "expected_status": "FAIL",
-      "required_reason_codes": [
-        "CHAIN_INTEGRITY_FAILED",
-        "SEQUENCE_MISMATCH"
-      ]
-    },
-    {
-      "file": "wrong-chain-hash.json",
-      "expected_status": "FAIL",
-      "required_reason_codes": [
-        "MANIFEST_HASH_MISMATCH"
-      ]
-    },
-    {
-      "file": "malformed-bundle.json",
-      "expected_status": "FAIL",
-      "required_reason_codes": [
-        "MALFORMED_BUNDLE"
-      ]
-    },
-    {
-      "file": "unsupported-version.json",
-      "expected_status": "FAIL",
-      "required_reason_codes": [
-        "UNSUPPORTED_BUNDLE_VERSION"
-      ]
-    },
-    {
-      "file": "compatible-optional-metadata.json",
+      "fixture": "compatible-optional-metadata.json",
+      "profile": "1.4-basic",
+      "version": "1.4-basic",
+      "failure_class": "success",
       "expected_status": "PASS",
-      "required_reason_codes": []
+      "expected_verdict": "VALID",
+      "expected_code": "SUCCESS_VALID",
+      "expected_location": "$.bundle",
+      "notes": "Optional metadata remains protocol-compatible."
     },
     {
-      "file": "chain-break-bundle.json",
+      "fixture": "tampered-bundle.json",
+      "profile": "1.4-basic",
+      "version": "1.4-basic",
+      "failure_class": "integrity",
       "expected_status": "FAIL",
-      "required_reason_codes": [
-        "CHAIN_INTEGRITY_FAILED",
-        "PREV_HASH_MISMATCH"
-      ]
+      "expected_verdict": "INVALID",
+      "expected_code": "HASH_MISMATCH",
+      "expected_location": "$.passport_records[1].payload_hash",
+      "notes": "Payload tampering after record creation."
     },
     {
-      "file": "manifest-mismatch-bundle.json",
+      "fixture": "broken-prev-hash.json",
+      "profile": "1.4-basic",
+      "version": "1.4-basic",
+      "failure_class": "integrity",
       "expected_status": "FAIL",
-      "required_reason_codes": [
-        "MANIFEST_HASH_MISMATCH"
-      ]
+      "expected_verdict": "INVALID",
+      "expected_code": "CHAIN_BROKEN",
+      "expected_location": "$.passport_records[2].prev_hash",
+      "notes": "Explicit broken hash linkage between adjacent records."
     },
     {
-      "file": "missing-record-bundle.json",
+      "fixture": "wrong-chain-hash.json",
+      "profile": "1.4-basic",
+      "version": "1.4-basic",
+      "failure_class": "integrity",
       "expected_status": "FAIL",
-      "required_reason_codes": [
-        "CHAIN_INTEGRITY_FAILED",
-        "PREV_HASH_MISMATCH",
-        "SEQUENCE_MISMATCH"
-      ]
+      "expected_verdict": "INVALID",
+      "expected_code": "HASH_MISMATCH",
+      "expected_location": "$.manifest.chain_hash",
+      "notes": "Manifest terminal hash mismatch."
+    },
+    {
+      "fixture": "missing-manifest-chain-hash.json",
+      "profile": "1.4-basic",
+      "version": "1.4-basic",
+      "failure_class": "schema",
+      "expected_status": "FAIL",
+      "expected_verdict": "INVALID",
+      "expected_code": "SCHEMA_MISSING_FIELD",
+      "expected_location": "$.manifest.chain_hash",
+      "notes": "Missing required field should fail before deep checks."
+    },
+    {
+      "fixture": "invalid-exported-at-type.json",
+      "profile": "1.4-basic",
+      "version": "1.4-basic",
+      "failure_class": "schema",
+      "expected_status": "FAIL",
+      "expected_verdict": "INVALID",
+      "expected_code": "SCHEMA_INVALID_FIELD",
+      "expected_location": "$.exported_at_utc",
+      "notes": "Malformed required field type."
+    },
+    {
+      "fixture": "unsupported-version.json",
+      "profile": "unknown",
+      "version": "2.0-future",
+      "failure_class": "version",
+      "expected_status": "FAIL",
+      "expected_verdict": "INVALID",
+      "expected_code": "VERSION_UNSUPPORTED",
+      "expected_location": "$.bundle_version",
+      "notes": "Unknown protocol major/minor version."
+    },
+    {
+      "fixture": "unsupported-profile.json",
+      "profile": "1.4-enterprise",
+      "version": "1.4-enterprise",
+      "failure_class": "version",
+      "expected_status": "FAIL",
+      "expected_verdict": "INVALID",
+      "expected_code": "PROFILE_UNSUPPORTED",
+      "expected_location": "$.bundle_version",
+      "notes": "Known 1.4 family but unsupported profile."
+    },
+    {
+      "fixture": "wrong-sequence.json",
+      "profile": "1.4-basic",
+      "version": "1.4-basic",
+      "failure_class": "order",
+      "expected_status": "FAIL",
+      "expected_verdict": "INVALID",
+      "expected_code": "ORDER_INVALID",
+      "expected_location": "$.passport_records[1].sequence",
+      "notes": "Sequence numbering drift in otherwise parseable chain."
+    },
+    {
+      "fixture": "auth-exec-mismatch.json",
+      "profile": "1.4-basic",
+      "version": "1.4-basic",
+      "failure_class": "authorization",
+      "expected_status": "FAIL",
+      "expected_verdict": "INVALID",
+      "expected_code": "AUTHORIZATION_EXECUTION_MISMATCH",
+      "expected_location": "$.passport_records[0].action_type",
+      "notes": "Execution action appears without prior authorization grant."
+    },
+    {
+      "fixture": "semantic-inconsistent.json",
+      "profile": "1.4-basic",
+      "version": "1.4-basic",
+      "failure_class": "semantic",
+      "expected_status": "FAIL",
+      "expected_verdict": "INVALID",
+      "expected_code": "SEMANTIC_INCONSISTENCY",
+      "expected_location": "$.passport_records[*].action_type",
+      "notes": "Structurally valid bundle with contradictory execution outcomes."
+    },
+    {
+      "fixture": "malformed-bundle.json",
+      "profile": "unknown",
+      "version": "unknown",
+      "failure_class": "schema",
+      "expected_status": "FAIL",
+      "expected_verdict": "INVALID",
+      "expected_code": "SCHEMA_MISSING_FIELD",
+      "expected_location": "$.passport_records",
+      "notes": "Malformed bundle should fail schema checks before integrity checks."
     }
   ]
 }

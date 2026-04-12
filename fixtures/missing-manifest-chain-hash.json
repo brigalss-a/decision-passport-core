@@ -1,0 +1,61 @@
+{
+  "bundle_version": "1.4-basic",
+  "exported_at_utc": "2026-01-15T12:00:00.000Z",
+  "passport_records": [
+    {
+      "id": "711be227-2bb4-4d2a-a7d8-9ef4a83f7fe5",
+      "chain_id": "fixture-chain-001",
+      "sequence": 0,
+      "timestamp_utc": "2026-04-05T21:53:13.496Z",
+      "actor_id": "ai-agent-01",
+      "actor_type": "ai_agent",
+      "action_type": "AI_RECOMMENDATION",
+      "payload": {
+        "action": "approve_change_order",
+        "change_order_id": "CO-2026-0042",
+        "confidence": 0.94
+      },
+      "payload_hash": "19a4e7c393427ed297223e401aff8bbba3dd11c2b273b35dbba9f89e7e0d368c",
+      "prev_hash": "GENESIS_0000000000000000000000000000000000000000000000000000000000000000",
+      "record_hash": "3e3b75f48a0d5f72fea8d00d6419e36f8ec59ff6d7749395394e9cda14905faa"
+    },
+    {
+      "id": "670a55d2-b838-42a0-81a0-329efbecf2e7",
+      "chain_id": "fixture-chain-001",
+      "sequence": 1,
+      "timestamp_utc": "2026-04-05T21:53:13.497Z",
+      "actor_id": "human-approver-01",
+      "actor_type": "human",
+      "action_type": "HUMAN_APPROVAL_GRANTED",
+      "payload": {
+        "approved_recommendation_id": "711be227-2bb4-4d2a-a7d8-9ef4a83f7fe5",
+        "note": "Reviewed and approved"
+      },
+      "payload_hash": "e473d10e0ec79c745d1ee68f3fe8a1b220307b0d14c1db0c0c872baf4841b200",
+      "prev_hash": "3e3b75f48a0d5f72fea8d00d6419e36f8ec59ff6d7749395394e9cda14905faa",
+      "record_hash": "a3fbab8bf1dd1f1ddaab75cb602531e7b32cc8c42d28ff1eade0ff11118d5037"
+    },
+    {
+      "id": "8a15f6ce-394c-4298-b9b5-ee9698822152",
+      "chain_id": "fixture-chain-001",
+      "sequence": 2,
+      "timestamp_utc": "2026-04-05T21:53:13.497Z",
+      "actor_id": "ai-agent-01",
+      "actor_type": "ai_agent",
+      "action_type": "EXECUTION_SUCCEEDED",
+      "payload": {
+        "result": "Change order executed",
+        "execution_id": "exec-001"
+      },
+      "payload_hash": "6c05e924a12fbabafabfd9d7c92d3558fce63b3342121517cfcffd594589b586",
+      "prev_hash": "a3fbab8bf1dd1f1ddaab75cb602531e7b32cc8c42d28ff1eade0ff11118d5037",
+      "record_hash": "21538d8154733b8e571fb282e2dd05e3b9f736f252a9241f0a8f7ee68be12465"
+    }
+  ],
+  "manifest": {
+    "chain_id": "fixture-chain-001",
+    "record_count": 3,
+    "first_record_id": "711be227-2bb4-4d2a-a7d8-9ef4a83f7fe5",
+    "last_record_id": "8a15f6ce-394c-4298-b9b5-ee9698822152"
+  }
+}

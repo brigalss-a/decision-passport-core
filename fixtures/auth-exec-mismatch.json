@@ -1,0 +1,28 @@
+{
+  "bundle_version": "1.4-basic",
+  "exported_at_utc": "2026-04-12T00:38:10.459Z",
+  "passport_records": [
+    {
+      "id": "c21cb515-6e56-406b-a7f1-fc173c108239",
+      "chain_id": "adv-auth-mismatch",
+      "sequence": 0,
+      "timestamp_utc": "2026-04-12T00:38:10.458Z",
+      "actor_id": "agent-01",
+      "actor_type": "ai_agent",
+      "action_type": "EXECUTION_SUCCEEDED",
+      "payload": {
+        "result": "executed-without-approval"
+      },
+      "payload_hash": "37db321c037fd01fc208932fd6d95fd400663c53ef0be25c35a52e9530110058",
+      "prev_hash": "GENESIS_0000000000000000000000000000000000000000000000000000000000000000",
+      "record_hash": "93810115fd55d0b6ede127353cb067caf2189ec81ad4858f5431e916c648f915"
+    }
+  ],
+  "manifest": {
+    "chain_id": "adv-auth-mismatch",
+    "record_count": 1,
+    "first_record_id": "c21cb515-6e56-406b-a7f1-fc173c108239",
+    "last_record_id": "c21cb515-6e56-406b-a7f1-fc173c108239",
+    "chain_hash": "93810115fd55d0b6ede127353cb067caf2189ec81ad4858f5431e916c648f915"
+  }
+}

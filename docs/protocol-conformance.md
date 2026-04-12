@@ -26,6 +26,18 @@ Implementations MAY provide:
 
 These features improve diagnostics but are not required for baseline conformance.
 
+## Auditor output contract
+
+Verifier outputs expose deterministic auditor fields:
+
+- verdict
+- code
+- location
+- reason
+- remediation_hint
+
+The canonical taxonomy and field rules are defined in `docs/verifier-auditor-output.md`.
+
 ## Fixture-driven conformance
 
 The fixture suite in fixtures/ is canonical conformance input for this repo.
