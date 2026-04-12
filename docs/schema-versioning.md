@@ -20,6 +20,27 @@ Both formats share the same `PassportRecord` and `ChainManifest` structures.
 
 ---
 
+## v0.7.0 schema scope lock
+
+For v0.7.0, schema expansion is core-first and constrained to trust-critical semantics.
+
+Planned primary schema additions:
+
+1. DecisionTrail
+2. RuntimeClaim
+3. OutcomeBinding
+4. extended verifier result semantics for authorization, runtime claim, and outcome linkage states
+
+Scope boundaries for v0.7.0:
+
+1. no hosted runtime executor semantics in this release line
+2. no enterprise-only control plane schema in this repository
+3. no broad signing/profile schema expansion without complete fixture and verifier support
+
+Normative source for v0.7.0 model semantics remains decision-passport-core.
+
+---
+
 ## Bundle structure
 
 A `BasicProofBundle` contains:

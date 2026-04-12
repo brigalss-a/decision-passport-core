@@ -22,6 +22,33 @@ The trust layer for AI and high-consequence software actions. Every decision is 
 | Recommended usage | Proof layer for traceability and offline verification |
 | Not yet included | Runtime enforcement, claim tokens, replay locks, signed bundles |
 
+## v0.7.0 Core-First Scope Lock
+
+Decision Passport v0.7.0 is implemented core-first in this repository.
+
+For v0.7.0, this repository is the canonical source for:
+
+1. model semantics
+2. verifier semantics
+3. fixture and golden output corpus
+4. protocol/spec documentation
+
+Primary v0.7.0 scope:
+
+1. DecisionTrail
+2. RuntimeClaim
+3. OutcomeBinding
+4. upgraded verifier semantics for authorization, runtime claim, and outcome linkage
+
+Explicitly out of v0.7.0 scope:
+
+1. hosted guard runtime implementation
+2. enterprise-only control plane surfaces
+3. broad signing/profile expansion without complete verifier and fixture coverage
+4. UI-first feature expansion
+
+Sovereign and OpenClaw Lite can adopt v0.7.0 semantics after they are locked in core. They do not define the canonical model for this release.
+
 ## What this proves
 
 1. A bundle's record hashes, chain links, and manifest chain hash are internally consistent.

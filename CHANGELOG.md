@@ -8,6 +8,21 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- v0.7.0 core-first scope lock: DecisionTrail, RuntimeClaim, OutcomeBinding, and upgraded verifier semantics are the primary release line.
+
+### Changed
+
+- Established decision-passport-core as the canonical source for v0.7.0 model semantics, verifier semantics, fixtures/golden outputs, and protocol/spec docs.
+
+### Out of scope
+
+- Hosted guard runtime implementation.
+- Enterprise-only control plane surfaces.
+- Broad signing/profile expansion without complete verifier and fixture coverage.
+- UI-first feature expansion.
+
 ## [0.6.0] - 2026-04-12
 
 ### Added

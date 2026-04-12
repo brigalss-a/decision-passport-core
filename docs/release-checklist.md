@@ -10,6 +10,14 @@ Use this checklist before publishing a Decision Passport Core release.
 
 Release is blocked if any gate is red.
 
+## v0.7.0 scope lock gates
+
+- Confirm v0.7.0 primary scope remains: DecisionTrail, RuntimeClaim, OutcomeBinding, upgraded verifier semantics.
+- Confirm decision-passport-core remains canonical source for model semantics, verifier semantics, fixtures/golden outputs, and protocol/spec docs.
+- Confirm out-of-scope items are not represented as implemented release features.
+- Confirm every new semantic is classified in docs as implemented, partially implemented, spec-only, or future work.
+- Confirm no broad signing/profile expansion is shipped unless complete verifier and fixture support is included.
+
 ## Protocol and fixtures
 
 - Confirm verifyBasicBundle only accepts bundle_version 1.4-basic.
