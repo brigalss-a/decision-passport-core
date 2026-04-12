@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/brigalss-a/decision-passport-core/docs/json-schema/runtime-claim.schema.json",
+  "title": "RuntimeClaim",
+  "description": "Fail-closed runtime claim semantics for Decision Guard evaluation.",
+  "type": "object",
+  "required": [
+    "claim_id",
+    "passport_id",
+    "nonce",
+    "issued_at_utc",
+    "expires_at_utc",
+    "payload_hash",
+    "authority_ref",
+    "claim_status",
+    "single_use",
+    "guard_version"
+  ],
+  "properties": {
+    "claim_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "passport_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "nonce": {
+      "type": "string",
+      "minLength": 1
+    },
+    "issued_at_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "payload_hash": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authority_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claim_status": {
+      "type": "string",
+      "enum": ["ACTIVE", "REVOKED", "USED", "EXPIRED"]
+    },
+    "single_use": {
+      "type": "boolean"
+    },
+    "guard_version": {
+      "type": "string",
+      "const": "0.7.0-guard"
+    }
+  },
+  "additionalProperties": false
+}

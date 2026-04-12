@@ -95,3 +95,27 @@ export interface DecisionTrail {
   readonly final_approved_payload: Readonly<Record<string, unknown>>;
   readonly linked_passport_id: string;
 }
+
+export type RuntimeClaimStatus = "ACTIVE" | "REVOKED" | "USED" | "EXPIRED";
+
+export interface RuntimeClaim {
+  readonly claim_id: string;
+  readonly passport_id: string;
+  readonly nonce: string;
+  readonly issued_at_utc: string;
+  readonly expires_at_utc: string;
+  readonly payload_hash: string;
+  readonly authority_ref: string;
+  readonly claim_status: RuntimeClaimStatus;
+  readonly single_use: boolean;
+  readonly guard_version: "0.7.0-guard";
+}
+
+export type GuardDenyReason =
+  | "AUTHORITY_MISSING"
+  | "CLAIM_EXPIRED"
+  | "CLAIM_REVOKED"
+  | "NONCE_REUSED"
+  | "PAYLOAD_HASH_MISMATCH"
+  | "PASSPORT_NOT_AUTHORIZED"
+  | "CLAIM_MALFORMED";

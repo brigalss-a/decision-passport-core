@@ -1,0 +1,12 @@
+{
+  "claim_id": "claim-reused-nonce-001",
+  "passport_id": "passport-2026-04-12-003",
+  "nonce": "nonce-already-used-778",
+  "issued_at_utc": "2026-04-12T12:02:00.000Z",
+  "expires_at_utc": "2026-04-12T12:12:00.000Z",
+  "payload_hash": "f7e7f1580f4ff398f9f8c2cbdfd8fda3f7db96c2cc6f2e4dd2b6f85f89c2f7e1",
+  "authority_ref": "policy.ops.delete_export.approver.security",
+  "claim_status": "USED",
+  "single_use": true,
+  "guard_version": "0.7.0-guard"
+}

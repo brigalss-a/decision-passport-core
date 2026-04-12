@@ -33,6 +33,50 @@ DecisionTrail is not final authorization by itself. The canonical authorization 
 4. Storage immutability guarantees.
 5. Transcript-level conversational provenance beyond structured trail fields.
 
+## RuntimeClaim and Guard semantics in v0.7.0
+
+v0.7.0 defines Decision Guard runtime semantics with a fail-closed model and verifier-visible claim state.
+
+RuntimeClaim minimal fields:
+
+1. claim_id
+2. passport_id
+3. nonce
+4. issued_at_utc
+5. expires_at_utc
+6. payload_hash
+7. authority_ref
+8. claim_status
+9. single_use
+10. guard_version
+
+Fail-closed guard evaluation order:
+
+1. validate structure
+2. validate authority present
+3. validate claim status
+4. validate TTL
+5. validate nonce/single-use eligibility
+6. validate payload hash match
+7. validate passport authorization status
+8. decide allow/deny and emit auditable reason
+
+Finite deny reasons:
+
+1. AUTHORITY_MISSING
+2. CLAIM_EXPIRED
+3. CLAIM_REVOKED
+4. NONCE_REUSED
+5. PAYLOAD_HASH_MISMATCH
+6. PASSPORT_NOT_AUTHORIZED
+7. CLAIM_MALFORMED
+
+Honesty boundary:
+
+1. Decision Guard runtime semantics are defined in this release line.
+2. Full runtime executor implementation is not included by this semantics pass.
+3. Verifier-visible claim semantics are introduced without reducing offline verification value.
+
 ## Inputs to verification
 
 1. A parsed BasicProofBundle object.

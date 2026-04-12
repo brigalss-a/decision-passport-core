@@ -32,6 +32,10 @@
     "manifest": {
       "$ref": "manifest.schema.json",
       "description": "Chain summary with record count, boundary IDs, and chain_hash."
+    },
+    "runtime_claim": {
+      "$ref": "runtime-claim.schema.json",
+      "description": "Optional v0.7.0 runtime claim used by Decision Guard semantics."
     }
   },
   "additionalProperties": false

@@ -24,6 +24,10 @@ Machine-readable expected outcomes are defined in `conformance-manifest.json`.
 | decision-trail-minimal.json | N/A (spec fixture) | N/A |
 | decision-trail-valid.json | N/A (spec fixture) | N/A |
 | decision-trail-invalid-missing-final-payload.json | N/A (spec fixture) | N/A |
+| runtime-claim-valid.json | N/A (spec fixture) | N/A |
+| runtime-claim-expired.json | N/A (spec fixture) | N/A |
+| runtime-claim-nonce-reused.json | N/A (spec fixture) | N/A |
+| runtime-claim-payload-mismatch.json | N/A (spec fixture) | N/A |
 
 ## Notes
 
@@ -32,3 +36,4 @@ Machine-readable expected outcomes are defined in `conformance-manifest.json`.
 - The canonical expected verdict/code/location contract is `conformance-manifest.json`.
 - chain-break-bundle.json, manifest-mismatch-bundle.json, and missing-record-bundle.json are retained as legacy aliases for older references and are intentionally excluded from the canonical manifest.
 - decision-trail-* fixtures are schema/spec fixtures for v0.7.0 model development and are not yet part of verifier conformance manifest checks.
+- runtime-claim-* fixtures are schema/spec fixtures for v0.7.0 guard semantics and are not yet part of verifier conformance manifest checks.

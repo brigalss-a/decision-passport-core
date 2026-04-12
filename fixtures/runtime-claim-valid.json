@@ -1,0 +1,12 @@
+{
+  "claim_id": "claim-001",
+  "passport_id": "passport-2026-04-12-001",
+  "nonce": "nonce-001-unique",
+  "issued_at_utc": "2026-04-12T12:00:00.000Z",
+  "expires_at_utc": "2026-04-12T12:15:00.000Z",
+  "payload_hash": "f7e7f1580f4ff398f9f8c2cbdfd8fda3f7db96c2cc6f2e4dd2b6f85f89c2f7e1",
+  "authority_ref": "policy.ops.delete_export.approver.security",
+  "claim_status": "ACTIVE",
+  "single_use": true,
+  "guard_version": "0.7.0-guard"
+}

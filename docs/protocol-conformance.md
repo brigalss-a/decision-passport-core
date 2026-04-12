@@ -83,3 +83,30 @@ A DecisionTrail artifact MUST include:
 10. linked_passport_id
 
 DecisionTrail conformance does not imply action authorization. Authorization proof remains in Decision Passport verification semantics.
+
+## RuntimeClaim and Guard conformance semantics (v0.7.0)
+
+When `runtime_claim` is present in a bundle surface, implementations SHOULD validate the RuntimeClaim schema and apply fail-closed guard semantics.
+
+Minimal RuntimeClaim fields:
+
+1. claim_id
+2. passport_id
+3. nonce
+4. issued_at_utc
+5. expires_at_utc
+6. payload_hash
+7. authority_ref
+8. claim_status
+9. single_use
+10. guard_version
+
+Required fail-closed deny taxonomy:
+
+1. AUTHORITY_MISSING
+2. CLAIM_EXPIRED
+3. CLAIM_REVOKED
+4. NONCE_REUSED
+5. PAYLOAD_HASH_MISMATCH
+6. PASSPORT_NOT_AUTHORIZED
+7. CLAIM_MALFORMED
