@@ -59,6 +59,28 @@ pnpm verify-demo
 
 No database, API key, or cloud account required.
 
+### First 5 Minutes (high-confidence path)
+
+Use this exact sequence for a fast, trust-focused validation pass:
+
+```bash
+pnpm install --frozen-lockfile
+pnpm build
+pnpm test
+pnpm conformance
+pnpm verify-demo
+pnpm example:smoke
+python -m decision_passport.verify examples/reference-integrations/webhook-approval-receipt.bundle.json
+python -m decision_passport.verify examples/reference-integrations/agent-tool-execution-receipt.bundle.json
+```
+
+If all commands pass, you have validated:
+
+1. Core verifier correctness.
+2. TypeScript/Python conformance parity.
+3. Deterministic reference-integration behavior.
+4. Auditor-grade output paths on canonical bundle surfaces.
+
 Python reference implementation is available in `python/decision_passport_py` and mirrors the protocol surface for offline create and verify flows.
 
 **What this verifies:**
@@ -452,6 +474,18 @@ This repository is the **public protocol layer**. The full ecosystem:
 | `decision-passport-openclaw-lite` | **Public** | OpenClaw integration bridge (Lite) |
 | `decision-passport-control-plane-real` | **Private** | Claims, guard, replay, outcomes, persistence |
 | `decision-passport-sovereign-real` | **Private** | Signed bundles, air-gapped verifier |
+
+---
+
+## External Technical Validation
+
+To keep this repository technically honest, we keep public feedback channels focused on reproducible verifier and conformance evidence.
+
+- Adoption and validation signals: `docs/adoption-signals.md`
+- Verifier contract feedback template: `.github/ISSUE_TEMPLATE/verifier-contract-feedback.md`
+- Conformance/integration feedback template: `.github/ISSUE_TEMPLATE/conformance-or-integration-feedback.md`
+
+When reporting feedback, include exact commands, fixture/bundle inputs, and expected vs actual verifier outputs.
 
 ---
 

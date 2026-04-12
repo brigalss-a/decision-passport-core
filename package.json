@@ -15,6 +15,8 @@
     "example:webhook-receipt": "tsx examples/reference-integrations/webhook-approval-receipt.ts",
     "example:agent-receipt": "tsx examples/reference-integrations/agent-tool-execution-receipt.ts",
     "example:smoke": "tsx scripts/check-reference-integrations.ts",
+    "workflow:discipline": "tsx scripts/check-workflow-discipline.ts",
+    "verifier:golden": "tsx scripts/check-verifier-golden.ts",
     "test": "pnpm -r test",
     "conformance": "tsx scripts/check-conformance-parity.ts",
     "verify-demo": "tsx scripts/verify-demo.ts",

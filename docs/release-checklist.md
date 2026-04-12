@@ -20,9 +20,14 @@ Release is blocked if any gate is red.
 
 - Run pnpm install --frozen-lockfile.
 - Run pnpm build.
+- Run pnpm typecheck.
+- Run pnpm lint.
 - Run pnpm test.
+- Run pnpm verifier:golden.
+- Run pnpm example:smoke.
 - Run pnpm conformance.
 - Run pnpm verify-demo.
+- Run pnpm workflow:discipline.
 
 ## Python reference validation
 
@@ -30,11 +35,14 @@ Release is blocked if any gate is red.
 - Run python -m unittest discover -s tests -v.
 - Run python -m decision_passport.verify ../../fixtures/valid-bundle.json.
 - Run python -m decision_passport.diff ../../fixtures/valid-bundle.json ../../fixtures/tampered-bundle.json.
+- Run python -m decision_passport.verify ../../examples/reference-integrations/webhook-approval-receipt.bundle.json.
+- Run python -m decision_passport.verify ../../examples/reference-integrations/agent-tool-execution-receipt.bundle.json.
 
 ## Docs and release notes
 
 - Update CHANGELOG.md Unreleased section.
 - Update or add release notes file.
+- Verify release notes file name matches tag exactly: RELEASE_NOTES_vX.Y.Z.md.
 - Verify README examples and paths.
 - Verify protocol conformance and compatibility docs are current.
 - Verify `docs/release-provenance.md` matches actual release workflow outputs.
@@ -46,3 +54,4 @@ Release is blocked if any gate is red.
 - Run pnpm checksums.
 - Verify release artifact checksums match generated output.
 - Verify `fixtures/conformance-manifest.json` and `artifacts/conformance-snapshot.json` are present and aligned.
+- Verify GitHub artifact attestation for at least `checksums.txt` and `conformance-snapshot.json` from the tagged release.

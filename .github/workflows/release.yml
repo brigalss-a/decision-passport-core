@@ -6,6 +6,8 @@ on:
 
 permissions:
   contents: write
+  attestations: write
+  id-token: write
 
 jobs:
   release:
@@ -13,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
-      - uses: pnpm/action-setup@v6
+      - uses: pnpm/action-setup@08c4be7e2e672a47d11bd04269e27e5f3e8529cb # v6
         with:
           version: 9
 
@@ -22,17 +24,19 @@ jobs:
           node-version: 20
           cache: pnpm
 
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
         with:
           python-version: "3.12"
 
       - run: pnpm install --frozen-lockfile
+      - run: pnpm workflow:discipline
       - run: python -m pip install --upgrade pip
       - run: python -m pip install -e python/decision_passport_py
       - run: pnpm build
       - run: pnpm typecheck
       - run: pnpm lint
       - run: pnpm test
+      - run: pnpm verifier:golden
       - run: pnpm example:smoke
       - run: python -m decision_passport.verify examples/reference-integrations/webhook-approval-receipt.bundle.json
       - run: python -m decision_passport.verify examples/reference-integrations/agent-tool-execution-receipt.bundle.json
@@ -67,6 +71,7 @@ jobs:
           cp checksums.txt release-artifacts/
           cp artifacts/verification-summary.json release-artifacts/
           cp artifacts/conformance-snapshot.json release-artifacts/
+          cp "${{ steps.notes.outputs.file }}" release-artifacts/
 
       - name: Verify release artifact completeness
         run: |
@@ -74,11 +79,17 @@ jobs:
           test -f release-artifacts/conformance-snapshot.json
           test -f release-artifacts/verification-summary.json
           test -f release-artifacts/checksums.txt
+          test -f "release-artifacts/${{ steps.notes.outputs.file }}"
           ls -1 release-artifacts > release-artifacts/release-assets.txt
           cat release-artifacts/release-assets.txt
 
+      - name: Attest release artifacts
+        uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
+        with:
+          subject-path: release-artifacts/*
+
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v3
+        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3
         with:
           body_path: ${{ steps.notes.outputs.file }}
           files: |

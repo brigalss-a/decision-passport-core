@@ -1,0 +1,101 @@
+{
+  "schema_version": "1",
+  "fixtures": {
+    "valid-bundle.json": {
+      "typescript": {
+        "status": "PASS",
+        "verdict": "VALID",
+        "code": "SUCCESS_VALID",
+        "location": "$.bundle",
+        "failure_class": "success"
+      },
+      "python": {
+        "status": "PASS",
+        "verdict": "VALID",
+        "code": "SUCCESS_VALID",
+        "location": "$.bundle",
+        "failure_class": "success"
+      }
+    },
+    "tampered-bundle.json": {
+      "typescript": {
+        "status": "FAIL",
+        "verdict": "INVALID",
+        "code": "HASH_MISMATCH",
+        "location": "$.passport_records[1].payload_hash",
+        "failure_class": "integrity"
+      },
+      "python": {
+        "status": "FAIL",
+        "verdict": "INVALID",
+        "code": "HASH_MISMATCH",
+        "location": "$.passport_records[1].payload_hash",
+        "failure_class": "integrity"
+      }
+    },
+    "malformed-bundle.json": {
+      "typescript": {
+        "status": "FAIL",
+        "verdict": "INVALID",
+        "code": "SCHEMA_MISSING_FIELD",
+        "location": "$.passport_records",
+        "failure_class": "schema"
+      },
+      "python": {
+        "status": "FAIL",
+        "verdict": "INVALID",
+        "code": "SCHEMA_MISSING_FIELD",
+        "location": "$.passport_records",
+        "failure_class": "schema"
+      }
+    },
+    "unsupported-version.json": {
+      "typescript": {
+        "status": "FAIL",
+        "verdict": "INVALID",
+        "code": "VERSION_UNSUPPORTED",
+        "location": "$.bundle_version",
+        "failure_class": "version"
+      },
+      "python": {
+        "status": "FAIL",
+        "verdict": "INVALID",
+        "code": "VERSION_UNSUPPORTED",
+        "location": "$.bundle_version",
+        "failure_class": "version"
+      }
+    },
+    "unsupported-profile.json": {
+      "typescript": {
+        "status": "FAIL",
+        "verdict": "INVALID",
+        "code": "PROFILE_UNSUPPORTED",
+        "location": "$.bundle_version",
+        "failure_class": "version"
+      },
+      "python": {
+        "status": "FAIL",
+        "verdict": "INVALID",
+        "code": "PROFILE_UNSUPPORTED",
+        "location": "$.bundle_version",
+        "failure_class": "version"
+      }
+    },
+    "semantic-inconsistent.json": {
+      "typescript": {
+        "status": "FAIL",
+        "verdict": "INVALID",
+        "code": "SEMANTIC_INCONSISTENCY",
+        "location": "$.passport_records[*].action_type",
+        "failure_class": "semantic"
+      },
+      "python": {
+        "status": "FAIL",
+        "verdict": "INVALID",
+        "code": "SEMANTIC_INCONSISTENCY",
+        "location": "$.passport_records[*].action_type",
+        "failure_class": "semantic"
+      }
+    }
+  }
+}
