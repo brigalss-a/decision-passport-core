@@ -1,0 +1,18 @@
+{
+  "trail_version": "0.7.0-trail",
+  "trail_id": "trail-invalid-001",
+  "initiating_request": {
+    "request_id": "req-invalid-001",
+    "summary": "Attempt to execute without final payload binding"
+  },
+  "context_references": [],
+  "alternatives_considered": [],
+  "rejected_options": [],
+  "escalation_events": [],
+  "approval_checkpoint": {
+    "approval_status": "APPROVED",
+    "approved_by": "approver@example.com",
+    "approved_at_utc": "2026-04-12T12:10:00.000Z"
+  },
+  "linked_passport_id": "passport-invalid-001"
+}

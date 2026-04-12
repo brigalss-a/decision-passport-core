@@ -64,3 +64,22 @@ It does not prove:
 - Actor identity authenticity.
 - Replay resistance.
 - Signed provenance.
+
+## DecisionTrail minimal conformance (v0.7.0)
+
+DecisionTrail is a separate structured artifact that links to, but does not replace, Decision Passport.
+
+A DecisionTrail artifact MUST include:
+
+1. trail_version
+2. trail_id
+3. initiating_request
+4. context_references
+5. alternatives_considered
+6. rejected_options
+7. escalation_events
+8. approval_checkpoint
+9. final_approved_payload
+10. linked_passport_id
+
+DecisionTrail conformance does not imply action authorization. Authorization proof remains in Decision Passport verification semantics.

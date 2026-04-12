@@ -1,0 +1,22 @@
+{
+  "trail_version": "0.7.0-trail",
+  "trail_id": "trail-min-001",
+  "initiating_request": {
+    "request_id": "req-min-001",
+    "summary": "Approve outbound webhook to partner endpoint"
+  },
+  "context_references": [],
+  "alternatives_considered": [],
+  "rejected_options": [],
+  "escalation_events": [],
+  "approval_checkpoint": {
+    "approval_status": "APPROVED",
+    "approved_by": "alice@company.com",
+    "approved_at_utc": "2026-04-12T12:00:00.000Z"
+  },
+  "final_approved_payload": {
+    "action": "post_webhook",
+    "target": "https://partner.example/v1/callback"
+  },
+  "linked_passport_id": "passport-min-001"
+}

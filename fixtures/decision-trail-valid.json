@@ -1,0 +1,63 @@
+{
+  "trail_version": "0.7.0-trail",
+  "trail_id": "trail-valid-001",
+  "initiating_request": {
+    "request_id": "req-2026-04-12-001",
+    "summary": "Delete dormant tenant export after retention expiry",
+    "submitted_by": "ops-bot",
+    "submitted_at_utc": "2026-04-12T10:50:00.000Z"
+  },
+  "context_references": [
+    {
+      "ref_id": "ctx-policy-retention-v3",
+      "ref_type": "policy",
+      "hash": "6c2d6c7d4f245365c072f4a4c3d10c4d7a191fb4240a1e6f54f8628d3a4e29c3"
+    },
+    {
+      "ref_id": "ctx-ticket-7842",
+      "ref_type": "incident",
+      "uri": "https://tickets.internal/7842"
+    }
+  ],
+  "alternatives_considered": [
+    {
+      "alternative_id": "alt-archive",
+      "summary": "Archive export to cold storage",
+      "selected": false
+    },
+    {
+      "alternative_id": "alt-delete",
+      "summary": "Delete expired export and store signed receipt only",
+      "selected": true
+    }
+  ],
+  "rejected_options": [
+    {
+      "option_id": "alt-archive",
+      "reason": "Retention policy mandates deletion after legal hold clearance"
+    }
+  ],
+  "escalation_events": [
+    {
+      "event_id": "esc-1",
+      "reason": "Irreversible mutation requested",
+      "trigger": "risk_threshold_high",
+      "policy_basis": "policy.retention.v3.section.7",
+      "escalated_at_utc": "2026-04-12T11:05:00.000Z"
+    }
+  ],
+  "approval_checkpoint": {
+    "approval_status": "APPROVED",
+    "approved_by": "reviewer.security@company.com",
+    "approved_at_utc": "2026-04-12T11:12:00.000Z",
+    "policy_ref": "policy.retention.v3.section.7",
+    "note": "Approved after legal hold check passed"
+  },
+  "final_approved_payload": {
+    "action": "delete_export",
+    "tenant_id": "tenant-778",
+    "export_id": "exp-901",
+    "reason": "retention_expired"
+  },
+  "linked_passport_id": "passport-2026-04-12-001"
+}

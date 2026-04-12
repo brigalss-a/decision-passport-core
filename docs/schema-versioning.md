@@ -150,3 +150,8 @@ Machine-readable JSON Schema files are available at:
 - [`docs/json-schema/record.schema.json`](json-schema/record.schema.json)
 
 These schemas reflect the current `1.4-basic` format and can be used for validation in any JSON Schema-compatible tool.
+
+Additional v0.7.0 schema tracks:
+
+- [`docs/json-schema/decision-trail.schema.json`](json-schema/decision-trail.schema.json)
+- [`docs/json-schema/verification-result.schema.json`](json-schema/verification-result.schema.json)

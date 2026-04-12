@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/brigalss-a/decision-passport-core/docs/json-schema/decision-trail.schema.json",
+  "title": "DecisionTrail",
+  "description": "Structured pre-action decision evidence linked to a final Decision Passport artifact.",
+  "type": "object",
+  "required": [
+    "trail_version",
+    "trail_id",
+    "initiating_request",
+    "context_references",
+    "alternatives_considered",
+    "rejected_options",
+    "escalation_events",
+    "approval_checkpoint",
+    "final_approved_payload",
+    "linked_passport_id"
+  ],
+  "properties": {
+    "trail_version": {
+      "type": "string",
+      "const": "0.7.0-trail",
+      "description": "Version identifier for DecisionTrail structure."
+    },
+    "trail_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Deterministic or system-generated ID for the trail artifact."
+    },
+    "initiating_request": {
+      "type": "object",
+      "required": ["request_id", "summary"],
+      "properties": {
+        "request_id": { "type": "string", "minLength": 1 },
+        "summary": { "type": "string", "minLength": 1 },
+        "submitted_by": { "type": "string" },
+        "submitted_at_utc": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    },
+    "context_references": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["ref_id", "ref_type"],
+        "properties": {
+          "ref_id": { "type": "string", "minLength": 1 },
+          "ref_type": { "type": "string", "minLength": 1 },
+          "hash": { "type": "string" },
+          "uri": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "alternatives_considered": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["alternative_id", "summary"],
+        "properties": {
+          "alternative_id": { "type": "string", "minLength": 1 },
+          "summary": { "type": "string", "minLength": 1 },
+          "selected": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "rejected_options": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["option_id", "reason"],
+        "properties": {
+          "option_id": { "type": "string", "minLength": 1 },
+          "reason": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "escalation_events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["event_id", "reason", "trigger"],
+        "properties": {
+          "event_id": { "type": "string", "minLength": 1 },
+          "reason": { "type": "string", "minLength": 1 },
+          "trigger": { "type": "string", "minLength": 1 },
+          "policy_basis": { "type": "string" },
+          "escalated_at_utc": { "type": "string", "format": "date-time" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "approval_checkpoint": {
+      "type": "object",
+      "required": ["approval_status", "approved_by", "approved_at_utc"],
+      "properties": {
+        "approval_status": {
+          "type": "string",
+          "enum": ["APPROVED", "REJECTED", "PENDING"]
+        },
+        "approved_by": { "type": "string", "minLength": 1 },
+        "approved_at_utc": { "type": "string", "format": "date-time" },
+        "policy_ref": { "type": "string" },
+        "note": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "final_approved_payload": {
+      "type": "object",
+      "description": "Final payload approved for execution; must map deterministically to passport payloads.",
+      "minProperties": 1
+    },
+    "linked_passport_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "ID of the final Decision Passport artifact linked to this trail."
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/brigalss-a/decision-passport-core/docs/json-schema/verification-result.schema.json",
+  "title": "VerificationResult",
+  "description": "Machine-readable verifier result surface for Decision Passport artifacts.",
+  "type": "object",
+  "required": [
+    "status",
+    "summary",
+    "checks",
+    "reasonCodes",
+    "nextSteps"
+  ],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["PASS", "FAIL", "ERROR"]
+    },
+    "summary": { "type": "string" },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "passed"],
+        "properties": {
+          "name": { "type": "string" },
+          "passed": { "type": "boolean" },
+          "message": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "reasonCodes": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "nextSteps": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "tamperFindings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["code", "location", "reason", "remediation_hint"],
+        "properties": {
+          "code": { "type": "string" },
+          "location": { "type": "string" },
+          "reason": { "type": "string" },
+          "remediation_hint": { "type": "string" },
+          "risk_level": { "type": "string" },
+          "failure_class": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -9,12 +9,29 @@ Decision Passport Core verification checks:
 3. record_hash recomputation consistency.
 4. Manifest chain_hash match with the final record hash.
 
+## DecisionTrail in v0.7.0
+
+DecisionTrail is a structured pre-action forensic artifact. It is intentionally separate from the Decision Passport proof bundle.
+
+DecisionTrail captures:
+
+1. initiating request intent
+2. context references
+3. alternatives and rejected options
+4. escalation events
+5. approval checkpoint
+6. final approved payload
+7. linked passport id
+
+DecisionTrail is not final authorization by itself. The canonical authorization and execution evidence remains the Decision Passport artifact.
+
 ## What verification does not check
 
 1. Runtime authorization of actions.
 2. Policy correctness or policy approval workflow.
 3. Identity authenticity without external signing.
 4. Storage immutability guarantees.
+5. Transcript-level conversational provenance beyond structured trail fields.
 
 ## Inputs to verification
 

@@ -53,6 +53,13 @@ It is not a storage immutability platform.
 3. Signed bundle provenance and key management.
 4. Hardened storage controls and enterprise governance workflows.
 
+## Trail vs Passport boundary (v0.7.0)
+
+1. DecisionTrail is a pre-action structured forensic layer.
+2. Decision Passport is the canonical authorization and execution proof artifact.
+3. DecisionTrail does not replace Decision Passport verification.
+4. DecisionTrail should remain compact and structured, not a transcript dump.
+
 ## Logs, traces, audit logs, proof bundles, and enforcement
 
 1. Logs and traces are operational telemetry and can be edited or incomplete.

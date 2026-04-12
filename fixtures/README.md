@@ -21,6 +21,9 @@ Machine-readable expected outcomes are defined in `conformance-manifest.json`.
 | auth-exec-mismatch.json | FAIL | AUTHORIZATION_EXECUTION_MISMATCH |
 | semantic-inconsistent.json | FAIL | SEMANTIC_INCONSISTENCY |
 | malformed-bundle.json | FAIL | SCHEMA_MISSING_FIELD |
+| decision-trail-minimal.json | N/A (spec fixture) | N/A |
+| decision-trail-valid.json | N/A (spec fixture) | N/A |
+| decision-trail-invalid-missing-final-payload.json | N/A (spec fixture) | N/A |
 
 ## Notes
 
@@ -28,3 +31,4 @@ Machine-readable expected outcomes are defined in `conformance-manifest.json`.
 - Expected outcomes are defined against verifyBasicBundle (TypeScript) and verify_basic_bundle (Python).
 - The canonical expected verdict/code/location contract is `conformance-manifest.json`.
 - chain-break-bundle.json, manifest-mismatch-bundle.json, and missing-record-bundle.json are retained as legacy aliases for older references and are intentionally excluded from the canonical manifest.
+- decision-trail-* fixtures are schema/spec fixtures for v0.7.0 model development and are not yet part of verifier conformance manifest checks.
