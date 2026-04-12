@@ -8,6 +8,8 @@
     "typecheck": "pnpm -r run typecheck",
     "lint": "pnpm -r run lint",
     "demo": "pnpm --filter @decision-passport/demo demo",
+    "example:webhook-receipt": "tsx examples/reference-integrations/webhook-approval-receipt.ts",
+    "example:agent-receipt": "tsx examples/reference-integrations/agent-tool-execution-receipt.ts",
     "test": "pnpm -r test",
     "conformance": "tsx scripts/check-conformance-parity.ts",
     "verify-demo": "tsx scripts/verify-demo.ts",

@@ -375,6 +375,7 @@ If integrity checks fail, verification returns `FAIL` with integrity reason code
 - [JSON Schemas](docs/json-schema/): machine-readable schemas for `BasicProofBundle`, `ChainManifest`, `PassportRecord`
 - [Release verification](docs/release-verification.md): how to verify a published release locally
 - [Release provenance](docs/release-provenance.md): official release artifacts, 3-minute local verification, and trust limitations
+- [Reference integrations](examples/reference-integrations/README.md): two ultra-small end-to-end examples (webhook approval receipt and agent/tool execution receipt)
 - [Append-only guarantees](docs/append-only-guarantees.md): what the protocol enforces, what verification detects, storage-level limits
 - [Bundle Diff](docs/bundle-diff.md): how to compare two bundles, generate diff artifacts, and interpret findings
 
