@@ -9,6 +9,22 @@ Decision Passport Core verification checks:
 3. record_hash recomputation consistency.
 4. Manifest chain_hash match with the final record hash.
 
+## v0.7.0 release-truth status matrix
+
+| Surface | Status in v0.7.0 | Scope boundary |
+| --- | --- | --- |
+| DecisionPassport core integrity verification | Implemented | Hash-chain and manifest integrity are verified offline in TS and Python. |
+| DecisionTrail structure + linkage visibility | Implemented | Structured pre-action artifact and linkage semantics are verifier-visible; trail is not a policy engine. |
+| RuntimeClaim / DecisionGuard semantics | Partially implemented | Fail-closed semantics and deny taxonomy are modeled and verifier-visible; runtime guard executor is out of scope. |
+| OutcomeBinding result linkage semantics | Implemented (minimal) | Finite result states and claim-linkage checks are modeled; not a full telemetry or side-effect graph. |
+| DecisionVerifier semantic status surfaces | Implemented for TS verifier | Stable auditor contract remains primary; additive semantic statuses are exposed without replacing contract fields. |
+
+Spec-only or future scope (not implemented as runtime systems in v0.7.0):
+
+1. hosted execution guard runtime
+2. broad signing and identity attestation surfaces
+3. expanded outcome graph and execution telemetry pipelines
+
 ## DecisionTrail in v0.7.0
 
 DecisionTrail is a structured pre-action forensic artifact. It is intentionally separate from the Decision Passport proof bundle.

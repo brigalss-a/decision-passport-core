@@ -53,6 +53,27 @@ It is not a storage immutability platform.
 3. Signed bundle provenance and key management.
 4. Hardened storage controls and enterprise governance workflows.
 
+## v0.7.0 implementation classification
+
+This classification is release-truth and intentionally strict.
+
+1. DecisionTrail: implemented as structured model/schema plus verifier-visible linkage semantics.
+2. DecisionPassport: implemented as canonical hash-chain/manifest proof artifact with offline verification.
+3. DecisionGuard semantics: partially implemented (RuntimeClaim model + fail-closed semantic outcomes) but no full hosted runtime executor.
+4. DecisionVerifier: implemented for v0.7.0 semantic scope with stable auditor fields and additive semantic statuses.
+
+Spec-defined but not fully implemented in v0.7.0:
+
+1. guard runtime service lifecycle and execution orchestration
+2. replay-state authority infrastructure across tenants
+3. signing/key-management profile expansion
+
+Deferred to 0.8.x or later:
+
+1. hosted guard runtime implementation
+2. richer outcome/side-effect graphing
+3. extended signing and provenance ecosystems
+
 ## Trail vs Passport boundary (v0.7.0)
 
 1. DecisionTrail is a pre-action structured forensic layer.

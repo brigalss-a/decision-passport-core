@@ -1,6 +1,6 @@
 {
   "name": "@decision-passport/verifier-basic",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "offline-verifiable authorization and execution receipts for AI and high-consequence software actions",
   "type": "module",
   "publishConfig": { "access": "public" },

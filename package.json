@@ -1,7 +1,7 @@
 {
   "name": "decision-passport-core-workspace",
   "private": true,
-  "version": "0.6.0",
+  "version": "0.7.0",
   "packageManager": "pnpm@9.15.9",
   "engines": {
     "node": ">=20"

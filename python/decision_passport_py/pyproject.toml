@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "decision-passport-py"
-version = "0.6.0"
+version = "0.7.0"
 description = "offline-verifiable authorization and execution receipts for AI and high-consequence software actions"
 readme = "README.md"
 requires-python = ">=3.10"

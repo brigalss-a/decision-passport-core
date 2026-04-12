@@ -24,7 +24,7 @@ Both formats share the same `PassportRecord` and `ChainManifest` structures.
 
 For v0.7.0, schema expansion is core-first and constrained to trust-critical semantics.
 
-Planned primary schema additions:
+Primary schema additions in this release line:
 
 1. DecisionTrail
 2. RuntimeClaim
@@ -38,6 +38,13 @@ Scope boundaries for v0.7.0:
 3. no broad signing/profile schema expansion without complete fixture and verifier support
 
 Normative source for v0.7.0 model semantics remains decision-passport-core.
+
+Implementation truth for these schema tracks:
+
+1. DecisionTrail: implemented model/schema and verifier-visible linkage semantics
+2. RuntimeClaim: implemented schema with fail-closed semantic evaluation surfaces
+3. OutcomeBinding: implemented minimal schema and linkage semantics
+4. hosted runtime guard execution semantics: not implemented in this release
 
 ---
 

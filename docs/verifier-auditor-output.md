@@ -30,6 +30,12 @@ v0.7.0 adds verifier-visible semantic status fields on the TypeScript `@decision
 
 These fields are additive. They do not replace the stable auditor contract and must not silently repurpose existing verifier codes.
 
+Truth boundary for parity in v0.7.0:
+
+1. cross-language compatibility promise remains anchored on verdict, code, location, reason, and remediation_hint
+2. additive semantic statuses are currently canonical on the TypeScript verifier surface
+3. fixture contracts may declare typescript_only parity scope for semantic fields that are intentionally outside current Python parity guarantees
+
 ## Contract freeze policy
 
 For the public release track, auditor fields and code taxonomy are treated as stability-critical verifier API.

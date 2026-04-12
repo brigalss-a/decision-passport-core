@@ -13,6 +13,11 @@ Current scope:
 - deterministic verifier behavior on canonical fixtures
 - artifact attestation bound to GitHub Actions release workflow identity
 
+v0.7.0 truth boundary:
+
+1. this provenance surface demonstrates integrity and verifier behavior evidence
+2. it does not claim hosted runtime enforcement, external notarization, or signing-author identity guarantees
+
 ## 2. Official release artifacts
 
 For a `v*` tag, the official release evidence is:
@@ -107,7 +112,7 @@ Current limitations:
 Reference path for a specific tag:
 
 ```bash
-git checkout v0.6.0
+git checkout v0.7.0
 pnpm install --frozen-lockfile
 python -m pip install -e python/decision_passport_py
 pnpm build

@@ -8,13 +8,26 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Notes
+
+- No unreleased changes after v0.7.0 release packaging prep.
+
+## [0.7.0] - 2026-04-12
+
 ### Added
 
-- v0.7.0 core-first scope lock: DecisionTrail, RuntimeClaim, OutcomeBinding, and upgraded verifier semantics are the primary release line.
+- DecisionTrail model/spec surfaces and canonical fixtures for pre-action structure.
+- RuntimeClaim model/spec surfaces with fail-closed guard deny taxonomy semantics.
+- OutcomeBinding model/spec surfaces with finite execution-result states.
+- Verifier-visible semantic statuses for authorization, payload binding, runtime claim, outcome linkage, revocation, supersession, and trail linkage.
+- Negative semantic fixture corpus for revoked, superseded, trail linkage mismatch, and outcome linkage mismatch cases.
+- Release-truth documentation alignment across README and protocol boundary documents.
 
 ### Changed
 
 - Established decision-passport-core as the canonical source for v0.7.0 model semantics, verifier semantics, fixtures/golden outputs, and protocol/spec docs.
+- Conformance parity contracts now support per-fixture parity scope for additive semantic fields (`full` and `typescript_only`).
+- Version alignment to v0.7.0 across workspace/package/public Python metadata surfaces.
 
 ### Out of scope
 

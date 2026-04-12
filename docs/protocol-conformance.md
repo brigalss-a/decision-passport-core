@@ -65,6 +65,12 @@ It does not prove:
 - Replay resistance.
 - Signed provenance.
 
+v0.7.0 conformance truth:
+
+1. implemented conformance: bundle integrity, DecisionTrail linkage semantics, RuntimeClaim semantic checks, OutcomeBinding linkage semantics
+2. partially implemented: DecisionGuard runtime semantics are modeled and verifier-visible without shipping a hosted executor
+3. spec-only/future: runtime enforcement infrastructure, expanded signing profiles, and richer execution graph telemetry
+
 ## DecisionTrail minimal conformance (v0.7.0)
 
 DecisionTrail is a separate structured artifact that links to, but does not replace, Decision Passport.

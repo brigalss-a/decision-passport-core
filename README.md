@@ -49,17 +49,42 @@ Explicitly out of v0.7.0 scope:
 
 Sovereign and OpenClaw Lite can adopt v0.7.0 semantics after they are locked in core. They do not define the canonical model for this release.
 
+## v0.7.0 Implementation Truth Map
+
+This section is normative for what this repository can prove today.
+
+| Surface | v0.7.0 status | Truth statement |
+| --- | --- | --- |
+| DecisionPassport (bundle hash chain + manifest integrity) | Implemented | TypeScript and Python verifiers validate integrity, shape, and deterministic auditor outputs. |
+| DecisionTrail (structured pre-action artifact) | Implemented (model + schema + verifier-visible linkage semantics) | Trail structure and linkage signals are modeled and validated on canonical fixtures; trail is not an authorization decision by itself. |
+| DecisionGuard semantics (RuntimeClaim + fail-closed deny taxonomy) | Partially implemented | RuntimeClaim schema and verifier-visible outcomes are implemented; a full hosted/runtime guard executor is not included. |
+| DecisionVerifier semantics | Implemented for v0.7.0 scope | Verifier exposes stable auditor fields and additive semantic statuses for authorization, payload binding, runtime claim, outcome linkage, revocation, supersession, and trail linkage. |
+
+Spec-defined but not fully implemented in this release:
+
+1. full runtime enforcement service behavior and orchestration
+2. broad signing and key-management profiles
+3. external notarization or identity attestation workflows
+
+Future work (0.8.x or later):
+
+1. hosted guard runtime and replay-state infrastructure
+2. richer execution side-effect graph surfaces
+3. expanded signing/profile ecosystem with complete parity fixtures
+
 ## What this proves
 
 1. A bundle's record hashes, chain links, and manifest chain hash are internally consistent.
 2. Payload tampering and chain mutation are detected by verification.
 3. Verification runs offline with no database, API key, or cloud dependency.
+4. v0.7.0 verifier semantics classify runtime-claim, outcome-linkage, revocation/supersession, and trail-linkage states on supported bundle surfaces.
 
 ## What this does not prove
 
 1. Runtime policy enforcement at execution time.
 2. Storage-level immutability by itself.
 3. Who authored a bundle, unless a separate signing layer is used.
+4. That a hosted guard executor blocked or allowed execution in real time.
 
 ## When to use this
 
@@ -117,7 +142,7 @@ Python reference implementation is available in `python/decision_passport_py` an
 3. The offline verifier confirms `PASS` when hashes and links are intact.
 4. A tampered bundle is rejected as `FAIL`.
 5. HTML verification reports are generated in `artifacts/`.
-6. Current local validation on 2026-04-12: 106 TypeScript tests passing (`pnpm test`) and 4 Python tests passing (`python -m unittest discover -s tests -v` from `python/decision_passport_py`).
+6. Current local validation for v0.7.0 release prep requires all release gates in `docs/release-checklist.md` to pass, including TypeScript suite, conformance parity, demo/reference checks, and Python verifier checks on reference bundles.
 
 ### Optional Python quick check
 

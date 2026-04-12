@@ -56,6 +56,13 @@ Release is blocked if any gate is red.
 - Verify `docs/release-provenance.md` matches actual release workflow outputs.
 - Verify category statement is exactly: "offline-verifiable authorization and execution receipts for AI and high-consequence software actions".
 - Verify `docs/verifier-compatibility-promise.md` reflects supported/deprecated/unsupported status.
+- Verify explicit status mapping is present and consistent across docs for:
+	- DecisionTrail
+	- DecisionPassport
+	- DecisionGuard semantics
+	- DecisionVerifier
+- Verify each mapped surface is labeled as implemented, partially implemented, spec-defined but not fully implemented, or future work.
+- Verify release notes include a "Not included in v0.7.0" section without marketing ambiguity.
 
 ## Artifacts
 
