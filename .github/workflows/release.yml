@@ -22,9 +22,16 @@ jobs:
           node-version: 20
           cache: pnpm
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
       - run: pnpm install --frozen-lockfile
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -e python/decision_passport_py
       - run: pnpm build
       - run: pnpm test
+      - run: pnpm conformance
       - run: pnpm verify-demo
 
       - name: Generate checksums
@@ -35,18 +42,24 @@ jobs:
       - name: Collect release artifacts
         run: |
           mkdir -p release-artifacts
-          cp fixtures/valid-bundle.json release-artifacts/
-          cp fixtures/tampered-bundle.json release-artifacts/
+          for f in fixtures/*.json; do
+            case "$f" in
+              *".template.json") continue ;;
+            esac
+            cp "$f" release-artifacts/
+          done
           cp checksums.txt release-artifacts/
-          if [ -f artifacts/verification-summary.json ]; then
-            cp artifacts/verification-summary.json release-artifacts/
-          fi
-          if [ -f docs/examples/bundle-diff-report.json ]; then
-            cp docs/examples/bundle-diff-report.json release-artifacts/
-          fi
-          if [ -f docs/examples/bundle-diff-report.txt ]; then
-            cp docs/examples/bundle-diff-report.txt release-artifacts/
-          fi
+          cp artifacts/verification-summary.json release-artifacts/
+          cp artifacts/conformance-snapshot.json release-artifacts/
+
+      - name: Verify release artifact completeness
+        run: |
+          test -f release-artifacts/conformance-manifest.json
+          test -f release-artifacts/conformance-snapshot.json
+          test -f release-artifacts/verification-summary.json
+          test -f release-artifacts/checksums.txt
+          ls -1 release-artifacts > release-artifacts/release-assets.txt
+          cat release-artifacts/release-assets.txt
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2

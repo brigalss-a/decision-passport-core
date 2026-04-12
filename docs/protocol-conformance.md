@@ -1,6 +1,8 @@
 # Protocol Conformance
 
-This document defines the normative conformance checks for Decision Passport Core public preview bundles.
+offline-verifiable authorization and execution receipts for AI and high-consequence software actions
+
+This document defines the normative conformance checks for Decision Passport Core release-track bundles.
 
 ## Normative checks for 1.4-basic
 
@@ -27,6 +29,7 @@ These features improve diagnostics but are not required for baseline conformance
 ## Fixture-driven conformance
 
 The fixture suite in fixtures/ is canonical conformance input for this repo.
+The machine-readable verdict contract is defined in fixtures/conformance-manifest.json.
 
 Expected baseline outcomes:
 

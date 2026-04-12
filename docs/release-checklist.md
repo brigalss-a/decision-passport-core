@@ -2,6 +2,14 @@
 
 Use this checklist before publishing a Decision Passport Core release.
 
+## Non-negotiable release gates
+
+- semantic truth alignment
+- cross-language deterministic parity
+- adversarial verification coverage
+
+Release is blocked if any gate is red.
+
 ## Protocol and fixtures
 
 - Confirm verifyBasicBundle only accepts bundle_version 1.4-basic.
@@ -13,6 +21,7 @@ Use this checklist before publishing a Decision Passport Core release.
 - Run pnpm install --frozen-lockfile.
 - Run pnpm build.
 - Run pnpm test.
+- Run pnpm conformance.
 - Run pnpm verify-demo.
 
 ## Python reference validation
@@ -28,8 +37,11 @@ Use this checklist before publishing a Decision Passport Core release.
 - Update or add release notes file.
 - Verify README examples and paths.
 - Verify protocol conformance and compatibility docs are current.
+- Verify category statement is exactly: "offline-verifiable authorization and execution receipts for AI and high-consequence software actions".
+- Verify `docs/verifier-compatibility-promise.md` reflects supported/deprecated/unsupported status.
 
 ## Artifacts
 
 - Run pnpm checksums.
 - Verify release artifact checksums match generated output.
+- Verify `fixtures/conformance-manifest.json` and `artifacts/conformance-snapshot.json` are present and aligned.

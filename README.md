@@ -3,9 +3,9 @@
 [![CI](https://github.com/brigalss-a/decision-passport-core/actions/workflows/ci.yml/badge.svg)](https://github.com/brigalss-a/decision-passport-core/actions/workflows/ci.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
-Public Preview
+offline-verifiable authorization and execution receipts for AI and high-consequence software actions
 
-The trust layer for AI agent actions. Every decision is traceable, exportable, and independently verifiable.
+The trust layer for AI and high-consequence software actions. Every decision is traceable, exportable, and independently verifiable.
 
 **TypeScript + Python reference** · **pnpm** · **Append-only chain** · **Offline verification** · **No database required**
 
@@ -15,7 +15,7 @@ The trust layer for AI agent actions. Every decision is traceable, exportable, a
 
 | Signal | Current status |
 | --- | --- |
-| Status | Public preview |
+| Status | Public release track |
 | API stability | Pre-1.0, changes possible |
 | Verification scope | Hash-chain integrity plus manifest chain hash checks |
 | Security disclosure | See `SECURITY.md`, report privately via email |
@@ -368,7 +368,9 @@ If integrity checks fail, verification returns `FAIL` with integrity reason code
 
 - [Schema and versioning](docs/schema-versioning.md): bundle structure, record fields, hashing rules, evolution guidance
 - [Compatibility matrix](docs/compatibility-matrix.md): which tools work with which formats
+- [Verifier compatibility promise](docs/verifier-compatibility-promise.md): 12-month supported/deprecated/unsupported policy
 - [Protocol conformance](docs/protocol-conformance.md): normative verifier checks and fixture outcomes
+- [Conformance manifest](fixtures/conformance-manifest.json): machine-readable expected verdict map for canonical fixtures
 - [JSON Schemas](docs/json-schema/): machine-readable schemas for `BasicProofBundle`, `ChainManifest`, `PassportRecord`
 - [Release verification](docs/release-verification.md): how to verify a published release locally
 - [Append-only guarantees](docs/append-only-guarantees.md): what the protocol enforces, what verification detects, storage-level limits

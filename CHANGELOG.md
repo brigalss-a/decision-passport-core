@@ -8,6 +8,19 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Canonical machine-readable conformance contract at `fixtures/conformance-manifest.json`.
+- Cross-language conformance parity gate script `pnpm conformance` with release snapshot output at `artifacts/conformance-snapshot.json`.
+- Verifier compatibility policy document at `docs/verifier-compatibility-promise.md`.
+
+### Changed
+
+- Version alignment across workspace, TypeScript packages, browser verifier app, and Python package metadata to the v0.5.1 release line.
+- CI and release workflows now install Python and run parity conformance checks fail-closed.
+- Release artifact collection now includes canonical fixture corpus, conformance manifest, and conformance snapshot.
+- Release verification and checklist docs now enforce non-negotiable gates and parity evidence.
+
 ## [0.5.1] - 2026-04-11
 
 ### Changed

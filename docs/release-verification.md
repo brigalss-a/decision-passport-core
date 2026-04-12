@@ -6,12 +6,11 @@ Each tagged release (`v*`) produces:
 
 | Artifact | Description |
 | --- | --- |
-| `valid-bundle.json` | Deterministic fixture that verifies as PASS |
-| `tampered-bundle.json` | Deterministic fixture that verifies as FAIL |
-| Conformance fixtures (`broken-prev-hash`, `wrong-sequence`, `wrong-chain-hash`, `unsupported-version`, `malformed-bundle`) | Deterministic fixtures that verify as FAIL |
-| `compatible-optional-metadata.json` | Deterministic fixture that verifies as PASS |
+| Canonical fixture corpus (`fixtures/*.json`, excluding templates) | Deterministic PASS and FAIL conformance fixtures |
+| `conformance-manifest.json` | Machine-readable expected verdict contract for the fixture corpus |
+| `conformance-snapshot.json` | Generated release snapshot with TypeScript/Python parity evidence |
 | `checksums.txt` | SHA-256 checksums for fixture files |
-| `verification-summary.json` | Output of `pnpm verify-demo` (if generated) |
+| `verification-summary.json` | Output of `pnpm verify-demo` |
 
 ---
 
@@ -22,7 +21,7 @@ Each tagged release (`v*`) produces:
 ```bash
 git clone https://github.com/brigalss-a/decision-passport-core.git
 cd decision-passport-core
-git checkout v0.1.0   # or any release tag
+git checkout v0.5.1   # or any release tag
 pnpm install --frozen-lockfile
 pnpm build
 ```
@@ -51,7 +50,15 @@ pnpm checksums
 
 Compare the output with the `checksums.txt` file from the GitHub Release. The SHA-256 hashes should match exactly.
 
-### 5. Run the bundle diff
+### 5. Run conformance parity and snapshot generation
+
+```bash
+pnpm conformance
+```
+
+This gate verifies TypeScript and Python verifier parity over the canonical fixture corpus and generates `artifacts/conformance-snapshot.json`.
+
+### 6. Run the bundle diff
 
 ```bash
 pnpm diff-bundles fixtures/valid-bundle.json fixtures/tampered-bundle.json
@@ -59,7 +66,7 @@ pnpm diff-bundles fixtures/valid-bundle.json fixtures/tampered-bundle.json
 
 This should report exactly one difference (the tampered payload).
 
-### 6. Verify with Python reference implementation
+### 7. Verify with Python reference implementation
 
 ```bash
 cd python/decision_passport_py
@@ -80,10 +87,11 @@ The diff command exits with a non-zero code when bundles differ, which is expect
 - The hash chain engine correctly creates and verifies bundles
 - Tampered bundles are correctly rejected
 - Fixture files match the published checksums
+- TypeScript and Python verifier implementations stay in deterministic parity on the canonical fixture corpus
 
 ## What verification does NOT prove
 
-- It does not prove the release was created by a specific person (no code signing in public preview)
+- It does not prove the release was created by a specific person (no code signing in the current release track)
 - It does not prove the release artifacts were not modified after creation (no provenance attestation yet)
 - It does not prove the source code has no vulnerabilities
 - It does not replace a security audit

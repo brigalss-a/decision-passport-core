@@ -2,6 +2,8 @@
 
 This directory contains canonical protocol fixtures for offline, deterministic verification.
 
+Machine-readable expected outcomes are defined in `conformance-manifest.json`.
+
 ## Fixture Inventory
 
 | Fixture | Expected result | Primary reason codes |
@@ -21,3 +23,4 @@ This directory contains canonical protocol fixtures for offline, deterministic v
 - Expected outcomes are defined against verifyBasicBundle (TypeScript) and verify_basic_bundle (Python).
 - compatible-optional-metadata.json demonstrates that optional record metadata is protocol-compatible when hashes remain valid.
 - chain-break-bundle.json and manifest-mismatch-bundle.json remain as legacy aliases for older test references.
+- missing-record-bundle.json is retained as an adversarial sequence/linkage mismatch case.

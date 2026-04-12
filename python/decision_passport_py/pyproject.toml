@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "decision-passport-py"
-version = "0.1.0"
-description = "Python reference implementation for Decision Passport Core (offline-first, fixture-driven)"
+version = "0.5.1"
+description = "offline-verifiable authorization and execution receipts for AI and high-consequence software actions"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "Apache-2.0" }

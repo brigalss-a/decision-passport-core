@@ -4,7 +4,7 @@ from .explain_tamper import explain_tamper_chain
 from .fixtures import load_fixture
 from .manifest import create_manifest
 
-__version__ = "0.1.0"
+__version__ = "0.5.1"
 
 # Public alias to match TypeScript naming and public docs.
 explain_tamper = explain_tamper_chain

@@ -1,0 +1,89 @@
+{
+  "schema_version": "1",
+  "category_statement": "offline-verifiable authorization and execution receipts for AI and high-consequence software actions",
+  "corpus_version": "2026-04-12",
+  "supported_profiles": [
+    "1.4-basic"
+  ],
+  "fixtures": [
+    {
+      "file": "valid-bundle.json",
+      "expected_status": "PASS",
+      "required_reason_codes": []
+    },
+    {
+      "file": "tampered-bundle.json",
+      "expected_status": "FAIL",
+      "required_reason_codes": [
+        "CHAIN_INTEGRITY_FAILED",
+        "PAYLOAD_HASH_MISMATCH"
+      ]
+    },
+    {
+      "file": "broken-prev-hash.json",
+      "expected_status": "FAIL",
+      "required_reason_codes": [
+        "CHAIN_INTEGRITY_FAILED",
+        "PREV_HASH_MISMATCH"
+      ]
+    },
+    {
+      "file": "wrong-sequence.json",
+      "expected_status": "FAIL",
+      "required_reason_codes": [
+        "CHAIN_INTEGRITY_FAILED",
+        "SEQUENCE_MISMATCH"
+      ]
+    },
+    {
+      "file": "wrong-chain-hash.json",
+      "expected_status": "FAIL",
+      "required_reason_codes": [
+        "MANIFEST_HASH_MISMATCH"
+      ]
+    },
+    {
+      "file": "malformed-bundle.json",
+      "expected_status": "FAIL",
+      "required_reason_codes": [
+        "MALFORMED_BUNDLE"
+      ]
+    },
+    {
+      "file": "unsupported-version.json",
+      "expected_status": "FAIL",
+      "required_reason_codes": [
+        "UNSUPPORTED_BUNDLE_VERSION"
+      ]
+    },
+    {
+      "file": "compatible-optional-metadata.json",
+      "expected_status": "PASS",
+      "required_reason_codes": []
+    },
+    {
+      "file": "chain-break-bundle.json",
+      "expected_status": "FAIL",
+      "required_reason_codes": [
+        "CHAIN_INTEGRITY_FAILED",
+        "PREV_HASH_MISMATCH"
+      ]
+    },
+    {
+      "file": "manifest-mismatch-bundle.json",
+      "expected_status": "FAIL",
+      "required_reason_codes": [
+        "MANIFEST_HASH_MISMATCH"
+      ]
+    },
+    {
+      "file": "missing-record-bundle.json",
+      "expected_status": "FAIL",
+      "required_reason_codes": [
+        "CHAIN_INTEGRITY_FAILED",
+        "PREV_HASH_MISMATCH",
+        "SEQUENCE_MISMATCH"
+      ]
+    }
+  ]
+}

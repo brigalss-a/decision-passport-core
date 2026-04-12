@@ -2,7 +2,7 @@
 
 ## Current bundle version
 
-The public preview protocol uses a single bundle format:
+The release-track protocol uses a single bundle format:
 
 ```text
 bundle_version: "1.4-basic"
@@ -116,7 +116,7 @@ Breaking changes require:
 
 ### Current status
 
-The `1.4-basic` format is in public preview. The schema is stable for current use but may evolve before a 1.0 release. Breaking changes will be documented in the CHANGELOG and will increment the version.
+The `1.4-basic` format is on the release track. The schema is stable for current use but may evolve before a 1.0 release. Breaking changes will be documented in the CHANGELOG and will increment the version in line with `docs/verifier-compatibility-promise.md`.
 
 ---
 

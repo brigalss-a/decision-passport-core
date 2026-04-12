@@ -1,5 +1,7 @@
 # Release Notes v0.5.1
 
+offline-verifiable authorization and execution receipts for AI and high-consequence software actions
+
 ## Summary
 
 This is a docs-only patch release that follows v0.5.0.

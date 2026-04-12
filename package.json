@@ -1,13 +1,15 @@
 {
   "name": "decision-passport-core-workspace",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.5.1",
+  "description": "offline-verifiable authorization and execution receipts for AI and high-consequence software actions",
   "scripts": {
     "build": "pnpm -r build",
     "typecheck": "pnpm -r run typecheck",
     "lint": "pnpm -r run lint",
     "demo": "pnpm --filter @decision-passport/demo demo",
     "test": "pnpm -r test",
+    "conformance": "tsx scripts/check-conformance-parity.ts",
     "verify-demo": "tsx scripts/verify-demo.ts",
     "diff-bundles": "tsx scripts/diff-bundles.ts",
     "diff-artifacts": "tsx scripts/generate-diff-artifacts.ts",

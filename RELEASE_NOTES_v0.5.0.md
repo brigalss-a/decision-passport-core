@@ -1,4 +1,6 @@
-# Release Notes v0.5.0 (Draft)
+# Release Notes v0.5.0
+
+offline-verifiable authorization and execution receipts for AI and high-consequence software actions
 
 ## Summary
 

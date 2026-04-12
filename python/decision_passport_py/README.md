@@ -1,5 +1,7 @@
 # decision-passport-py
 
+offline-verifiable authorization and execution receipts for AI and high-consequence software actions
+
 Offline-first Python reference implementation for Decision Passport Core.
 
 ## Scope

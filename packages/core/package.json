@@ -1,6 +1,7 @@
 {
   "name": "@decision-passport/core",
-  "version": "0.1.0",
+  "version": "0.5.1",
+  "description": "offline-verifiable authorization and execution receipts for AI and high-consequence software actions",
   "type": "module",
   "publishConfig": { "access": "public" },
   "main": "dist/index.js",

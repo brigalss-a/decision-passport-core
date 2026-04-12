@@ -63,6 +63,6 @@ The browser verifier does not upload any data.
 ## Limits of compatibility claims
 
 - Bundle verification confirms structural and cryptographic integrity only. It does not confirm that the recorded actions actually occurred.
-- Verification does not prove who created the bundle. There is no signing in the public preview.
-- The `1.4-basic` format is in public preview and may change before a 1.0 release.
+- Verification does not prove who created the bundle. There is no signing in the current release track.
+- The `1.4-basic` format is on the release track and remains pre-1.0; compatibility expectations are defined in `docs/verifier-compatibility-promise.md`.
 - Enterprise features (claims, guard, replay protection, signed bundles) use extended formats not covered here.
