@@ -4,6 +4,12 @@ offline-verifiable authorization and execution receipts for AI and high-conseque
 
 These are minimal reference integrations. They are local examples, not production connectors.
 
+Determinism policy:
+
+1. Checked-in `*.bundle.json` files are canonical reference outputs.
+2. `pnpm example:smoke` regenerates local `artifacts/reference-integrations/*.generated.json` and fails if outputs drift from checked-in references.
+3. Update checked-in bundles only when behavior changes intentionally.
+
 ## Integration 1: Webhook approval receipt
 
 ### Webhook: What this example shows

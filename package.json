@@ -10,6 +10,7 @@
     "demo": "pnpm --filter @decision-passport/demo demo",
     "example:webhook-receipt": "tsx examples/reference-integrations/webhook-approval-receipt.ts",
     "example:agent-receipt": "tsx examples/reference-integrations/agent-tool-execution-receipt.ts",
+    "example:smoke": "tsx scripts/check-reference-integrations.ts",
     "test": "pnpm -r test",
     "conformance": "tsx scripts/check-conformance-parity.ts",
     "verify-demo": "tsx scripts/verify-demo.ts",

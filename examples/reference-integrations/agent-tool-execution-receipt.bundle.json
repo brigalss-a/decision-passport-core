@@ -1,15 +1,16 @@
 {
   "bundle_version": "1.4-basic",
-  "exported_at_utc": "2026-04-12T01:00:35.854Z",
+  "exported_at_utc": "2026-04-12T00:10:03.000Z",
   "passport_records": [
     {
-      "id": "c77ade68-2a05-4e5a-b86b-74e33059ae03",
+      "id": "ref-agent-r0",
       "chain_id": "ref-agent-tool-exec",
       "sequence": 0,
-      "timestamp_utc": "2026-04-12T01:00:35.852Z",
+      "timestamp_utc": "2026-04-12T00:10:00.000Z",
       "actor_id": "agent-ops",
       "actor_type": "ai_agent",
       "action_type": "AI_RECOMMENDATION",
+      "prev_hash": "GENESIS_0000000000000000000000000000000000000000000000000000000000000000",
       "payload": {
         "scenario": "agent_tool_execution_receipt",
         "tool": "document_classifier",
@@ -17,47 +18,46 @@
         "document_id": "doc-334"
       },
       "payload_hash": "fc9e19bcb015884e1570729ba4b1d416c2f04fd5e9c3f2de33ef10c7a6a782c3",
-      "prev_hash": "GENESIS_0000000000000000000000000000000000000000000000000000000000000000",
-      "record_hash": "ae4e3352518be7595858ef7ce1d4dea573c809732aeca52c75fa6dc5acffd5cd"
+      "record_hash": "126867397fef2f04094af9d5de527d6e2e0739e2f7d9c6217c6879a7489f494a"
     },
     {
-      "id": "441c6756-74bc-413f-9f5f-012c15fbae1b",
+      "id": "ref-agent-r1",
       "chain_id": "ref-agent-tool-exec",
       "sequence": 1,
-      "timestamp_utc": "2026-04-12T01:00:35.853Z",
+      "timestamp_utc": "2026-04-12T00:10:01.000Z",
       "actor_id": "policy-engine",
       "actor_type": "policy",
       "action_type": "POLICY_APPROVAL_GRANTED",
+      "prev_hash": "126867397fef2f04094af9d5de527d6e2e0739e2f7d9c6217c6879a7489f494a",
       "payload": {
         "policy_id": "pol-doc-allow-v1",
         "authorization_scope": "tool_execution"
       },
       "payload_hash": "863db2ed7bec4fbdcce81aa62464dc7876fac24856c99bcb618ce7339d073f23",
-      "prev_hash": "ae4e3352518be7595858ef7ce1d4dea573c809732aeca52c75fa6dc5acffd5cd",
-      "record_hash": "2aa2f8d4f63d0bd9a2c36ec0579a524e9bf6daf96f45d55159fee911027dc1fe"
+      "record_hash": "5d3a5dc118968cf648be03125d82cc78de2a8acf3188c3f8108dada865dfa5c3"
     },
     {
-      "id": "2b9991d5-fc64-430f-8e54-3e82c9879978",
+      "id": "ref-agent-r2",
       "chain_id": "ref-agent-tool-exec",
       "sequence": 2,
-      "timestamp_utc": "2026-04-12T01:00:35.854Z",
+      "timestamp_utc": "2026-04-12T00:10:02.000Z",
       "actor_id": "tool-runner",
       "actor_type": "system",
       "action_type": "EXECUTION_SUCCEEDED",
+      "prev_hash": "5d3a5dc118968cf648be03125d82cc78de2a8acf3188c3f8108dada865dfa5c3",
       "payload": {
         "tool_run_id": "run-778",
         "classification": "invoice"
       },
       "payload_hash": "ba2e81d967f154c1d7eb492f587a37f416d10728c4e054440de22c99b448c05a",
-      "prev_hash": "2aa2f8d4f63d0bd9a2c36ec0579a524e9bf6daf96f45d55159fee911027dc1fe",
-      "record_hash": "da75e1a48ee4fec3bd1f55b4cf4aabe8840121da54502681613bb24c59763283"
+      "record_hash": "d904687b81de3006e137d5176e042f0448e69430df4a090d4ec45f018ab3e55a"
     }
   ],
   "manifest": {
     "chain_id": "ref-agent-tool-exec",
     "record_count": 3,
-    "first_record_id": "c77ade68-2a05-4e5a-b86b-74e33059ae03",
-    "last_record_id": "2b9991d5-fc64-430f-8e54-3e82c9879978",
-    "chain_hash": "da75e1a48ee4fec3bd1f55b4cf4aabe8840121da54502681613bb24c59763283"
+    "first_record_id": "ref-agent-r0",
+    "last_record_id": "ref-agent-r2",
+    "chain_hash": "d904687b81de3006e137d5176e042f0448e69430df4a090d4ec45f018ab3e55a"
   }
 }

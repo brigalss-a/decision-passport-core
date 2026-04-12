@@ -1,15 +1,16 @@
 {
   "bundle_version": "1.4-basic",
-  "exported_at_utc": "2026-04-12T01:00:32.923Z",
+  "exported_at_utc": "2026-04-12T00:00:03.000Z",
   "passport_records": [
     {
-      "id": "fc5c71ce-af0c-44d3-8508-bcff6120cd33",
+      "id": "ref-webhook-r0",
       "chain_id": "ref-webhook-approval",
       "sequence": 0,
-      "timestamp_utc": "2026-04-12T01:00:32.922Z",
+      "timestamp_utc": "2026-04-12T00:00:00.000Z",
       "actor_id": "agent-router",
       "actor_type": "ai_agent",
       "action_type": "AI_RECOMMENDATION",
+      "prev_hash": "GENESIS_0000000000000000000000000000000000000000000000000000000000000000",
       "payload": {
         "scenario": "webhook_approval_receipt",
         "event_type": "payment_webhook",
@@ -17,47 +18,46 @@
         "intent": "dispatch_approved_webhook"
       },
       "payload_hash": "fb489cab627cf02535661c4c43fd86d61105535f5ac3bde2ddefb22b74957cfe",
-      "prev_hash": "GENESIS_0000000000000000000000000000000000000000000000000000000000000000",
-      "record_hash": "00967910e1afd4cbd9001b37a76ab0eab46e1b20893de21f3a5c20e60e8791fc"
+      "record_hash": "c2879a1707a3392510784219cf8640d90d2483313c0bb4ff0aa611d91975dcff"
     },
     {
-      "id": "a2a02bea-4af5-4d82-b515-e8ecc150f383",
+      "id": "ref-webhook-r1",
       "chain_id": "ref-webhook-approval",
       "sequence": 1,
-      "timestamp_utc": "2026-04-12T01:00:32.923Z",
+      "timestamp_utc": "2026-04-12T00:00:01.000Z",
       "actor_id": "reviewer-01",
       "actor_type": "human",
       "action_type": "HUMAN_APPROVAL_GRANTED",
+      "prev_hash": "c2879a1707a3392510784219cf8640d90d2483313c0bb4ff0aa611d91975dcff",
       "payload": {
         "approved_event_id": "evt-1001",
         "approval_scope": "webhook_dispatch"
       },
       "payload_hash": "0822fc6ae5bb4a822a8d3a5c099affbd72325b3baffc3ee09a789b110e6a70ea",
-      "prev_hash": "00967910e1afd4cbd9001b37a76ab0eab46e1b20893de21f3a5c20e60e8791fc",
-      "record_hash": "3fcfe69c80b915e65a295c9bd5a81032f337f84a45dff4e0e705ca1cf6109d82"
+      "record_hash": "26ea6e0fc8a7040a4e514acd0e81d82b4f9e8a3c267bc749843da23544a65c94"
     },
     {
-      "id": "d9ff31d0-ea9e-4958-b880-df49881d2238",
+      "id": "ref-webhook-r2",
       "chain_id": "ref-webhook-approval",
       "sequence": 2,
-      "timestamp_utc": "2026-04-12T01:00:32.923Z",
+      "timestamp_utc": "2026-04-12T00:00:02.000Z",
       "actor_id": "worker-webhook",
       "actor_type": "system",
       "action_type": "EXECUTION_SUCCEEDED",
+      "prev_hash": "26ea6e0fc8a7040a4e514acd0e81d82b4f9e8a3c267bc749843da23544a65c94",
       "payload": {
         "dispatch_id": "wh-2001",
         "delivered": true
       },
       "payload_hash": "b3e5cbc2dd9453962bffe63516e689169e66ba68d5d4d67c7139939ab0d418df",
-      "prev_hash": "3fcfe69c80b915e65a295c9bd5a81032f337f84a45dff4e0e705ca1cf6109d82",
-      "record_hash": "01e2215996edcb881b7ea2dbe2c60ddd4cf9c79fab7969ab46b51817dc6ce591"
+      "record_hash": "6e180b2edb1378055924ebcc11ef851adeaac42c051540bad4890fe175524ee8"
     }
   ],
   "manifest": {
     "chain_id": "ref-webhook-approval",
     "record_count": 3,
-    "first_record_id": "fc5c71ce-af0c-44d3-8508-bcff6120cd33",
-    "last_record_id": "d9ff31d0-ea9e-4958-b880-df49881d2238",
-    "chain_hash": "01e2215996edcb881b7ea2dbe2c60ddd4cf9c79fab7969ab46b51817dc6ce591"
+    "first_record_id": "ref-webhook-r0",
+    "last_record_id": "ref-webhook-r2",
+    "chain_hash": "6e180b2edb1378055924ebcc11ef851adeaac42c051540bad4890fe175524ee8"
   }
 }

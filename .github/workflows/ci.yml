@@ -24,5 +24,8 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm lint
       - run: pnpm test
+      - run: pnpm example:smoke
+      - run: python -m decision_passport.verify examples/reference-integrations/webhook-approval-receipt.bundle.json
+      - run: python -m decision_passport.verify examples/reference-integrations/agent-tool-execution-receipt.bundle.json
       - run: pnpm conformance
       - run: pnpm verify-demo

@@ -1,19 +1,49 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { createManifest, createRecord } from "@decision-passport/core";
+import { GENESIS_HASH, createManifest, hashCanonical, hashPayload } from "@decision-passport/core";
 import { verifyBasicBundle } from "@decision-passport/verifier-basic";
+
+type ActorType = "human" | "ai_agent" | "system" | "policy";
+
+function buildRecord(params: {
+  id: string;
+  chain_id: string;
+  sequence: number;
+  timestamp_utc: string;
+  actor_id: string;
+  actor_type: ActorType;
+  action_type:
+    | "AI_RECOMMENDATION"
+    | "HUMAN_APPROVAL_GRANTED"
+    | "EXECUTION_SUCCEEDED";
+  payload: Record<string, unknown>;
+  prev_hash: string;
+}) {
+  const payload_hash = hashPayload(params.payload);
+  const withoutHash = {
+    ...params,
+    payload_hash,
+  };
+  return {
+    ...withoutHash,
+    record_hash: hashCanonical(withoutHash),
+  };
+}
 
 const outDir = resolve("artifacts", "reference-integrations");
 mkdirSync(outDir, { recursive: true });
 
 const chainId = "ref-webhook-approval";
 
-const record0 = createRecord({
-  chainId,
-  lastRecord: null,
-  actorId: "agent-router",
-  actorType: "ai_agent",
-  actionType: "AI_RECOMMENDATION",
+const record0 = buildRecord({
+  id: "ref-webhook-r0",
+  chain_id: chainId,
+  sequence: 0,
+  timestamp_utc: "2026-04-12T00:00:00.000Z",
+  actor_id: "agent-router",
+  actor_type: "ai_agent",
+  action_type: "AI_RECOMMENDATION",
+  prev_hash: GENESIS_HASH,
   payload: {
     scenario: "webhook_approval_receipt",
     event_type: "payment_webhook",
@@ -22,24 +52,30 @@ const record0 = createRecord({
   },
 });
 
-const record1 = createRecord({
-  chainId,
-  lastRecord: record0,
-  actorId: "reviewer-01",
-  actorType: "human",
-  actionType: "HUMAN_APPROVAL_GRANTED",
+const record1 = buildRecord({
+  id: "ref-webhook-r1",
+  chain_id: chainId,
+  sequence: 1,
+  timestamp_utc: "2026-04-12T00:00:01.000Z",
+  actor_id: "reviewer-01",
+  actor_type: "human",
+  action_type: "HUMAN_APPROVAL_GRANTED",
+  prev_hash: record0.record_hash,
   payload: {
     approved_event_id: "evt-1001",
     approval_scope: "webhook_dispatch",
   },
 });
 
-const record2 = createRecord({
-  chainId,
-  lastRecord: record1,
-  actorId: "worker-webhook",
-  actorType: "system",
-  actionType: "EXECUTION_SUCCEEDED",
+const record2 = buildRecord({
+  id: "ref-webhook-r2",
+  chain_id: chainId,
+  sequence: 2,
+  timestamp_utc: "2026-04-12T00:00:02.000Z",
+  actor_id: "worker-webhook",
+  actor_type: "system",
+  action_type: "EXECUTION_SUCCEEDED",
+  prev_hash: record1.record_hash,
   payload: {
     dispatch_id: "wh-2001",
     delivered: true,
@@ -48,7 +84,7 @@ const record2 = createRecord({
 
 const bundle = {
   bundle_version: "1.4-basic" as const,
-  exported_at_utc: new Date().toISOString(),
+  exported_at_utc: "2026-04-12T00:00:03.000Z",
   passport_records: [record0, record1, record2],
   manifest: createManifest([record0, record1, record2]),
 };
