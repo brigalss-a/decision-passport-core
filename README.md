@@ -3,11 +3,34 @@
 [![CI](https://github.com/brigalss-a/decision-passport-core/actions/workflows/ci.yml/badge.svg)](https://github.com/brigalss-a/decision-passport-core/actions/workflows/ci.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
-offline-verifiable authorization and execution receipts for AI and high-consequence software actions
+**Offline-verifiable authorization and execution receipts for AI agents, tools, workflows, and autonomous systems.**
 
-The trust layer for AI and high-consequence software actions. Every decision is traceable, exportable, and independently verifiable.
+Decision Passport Core is the public protocol layer for creating, exporting, and independently verifying tamper-evident proof bundles.
+
+It helps answer:
+
+```text
+What was requested?
+Who or what approved it?
+What exact payload was bound?
+What executed or failed?
+Can the result be verified offline without trusting the original system?
+```
 
 **TypeScript + Python reference** · **pnpm** · **Append-only chain** · **Offline verification** · **No database required**
+
+---
+
+## Current public line
+
+**v0.9.0 — Autonomous Action Receipt Profile**
+
+Decision Passport Core now covers:
+
+- Core proof bundles and offline verifier semantics.
+- Tool-call execution receipts.
+- Batch verification and local audit reports.
+- Autonomous / physical-world action receipt profiles.
 
 ---
 
@@ -16,87 +39,91 @@ The trust layer for AI and high-consequence software actions. Every decision is 
 | Signal | Current status |
 | --- | --- |
 | Status | Public release track |
+| Current implementation line | v0.9.0 — Autonomous Action Receipt Profile |
 | API stability | Pre-1.0, changes possible |
-| Verification scope | Hash-chain integrity plus manifest chain hash checks |
+| Verification scope | Hash-chain integrity, manifest checks, wrapper receipt verification, batch verification reports, autonomous action profile fixtures |
 | Security disclosure | See `SECURITY.md`, report privately via email |
-| Recommended usage | Proof layer for traceability and offline verification |
-| Not yet included | Runtime enforcement, claim tokens, replay locks, signed bundles |
+| Recommended usage | Proof layer for traceability, tool-call receipts, batch audit, autonomous-action receipt profiles, and offline verification |
+| Not yet included | Hosted runtime enforcement, claim tokens, replay locks, DB persistence, signed identity/attestation layer, safety certification |
 
-## v0.7.0 Core-First Scope Lock
+---
 
-Decision Passport v0.7.0 is implemented core-first in this repository.
+## Release track
 
-For v0.7.0, this repository is the canonical source for:
-
-1. model semantics
-2. verifier semantics
-3. fixture and golden output corpus
-4. protocol/spec documentation
-
-Primary v0.7.0 scope:
-
-1. DecisionTrail
-2. RuntimeClaim
-3. OutcomeBinding
-4. upgraded verifier semantics for authorization, runtime claim, and outcome linkage
-
-Explicitly out of v0.7.0 scope:
-
-1. hosted guard runtime implementation
-2. enterprise-only control plane surfaces
-3. broad signing/profile expansion without complete verifier and fixture coverage
-4. UI-first feature expansion
-
-Sovereign and OpenClaw Lite can adopt v0.7.0 semantics after they are locked in core. They do not define the canonical model for this release.
-
-## v0.7.0 Implementation Truth Map
-
-This section is normative for what this repository can prove today.
-
-| Surface | v0.7.0 status | Truth statement |
+| Version | Status | Capability |
 | --- | --- | --- |
-| DecisionPassport (bundle hash chain + manifest integrity) | Implemented | TypeScript and Python verifiers validate integrity, shape, and deterministic auditor outputs. |
-| DecisionTrail (structured pre-action artifact) | Implemented (model + schema + verifier-visible linkage semantics) | Trail structure and linkage signals are modeled and validated on canonical fixtures; trail is not an authorization decision by itself. |
-| DecisionGuard semantics (RuntimeClaim + fail-closed deny taxonomy) | Partially implemented | RuntimeClaim schema and verifier-visible outcomes are implemented; a full hosted/runtime guard executor is not included. |
-| DecisionVerifier semantics | Implemented for v0.7.0 scope | Verifier exposes stable auditor fields and additive semantic statuses for authorization, payload binding, runtime claim, outcome linkage, revocation, supersession, and trail linkage. |
+| v0.7.0 | Released | Core-first semantics: DecisionTrail, RuntimeClaim, OutcomeBinding verifier-visible semantics |
+| v0.8.0 | Released | Tool Call Wrapper: wrap async tool/function executions into offline-verifiable receipts |
+| v0.8.1 | Released | Batch Verification + Audit Reports: verify receipt sets, classify failures, generate local reports |
+| v0.9.0 | Current | Autonomous Action Receipt Profile: safety-envelope and evidence-hash receipt profile for autonomous/physical-world actions |
 
-Spec-defined but not fully implemented in this release:
+---
 
-1. full runtime enforcement service behavior and orchestration
-2. broad signing and key-management profiles
-3. external notarization or identity attestation workflows
+## v0.9.0 Implementation Truth Map
 
-Future work (0.8.x or later):
+This section is normative for what this repository can prove in the current public line.
 
-1. hosted guard runtime and replay-state infrastructure
-2. richer execution side-effect graph surfaces
-3. expanded signing/profile ecosystem with complete parity fixtures
+| Surface | v0.9.0 status | Truth statement |
+| --- | --- | --- |
+| Core proof bundles | Implemented | TypeScript and Python verifiers validate supported bundle chain and manifest integrity. |
+| DecisionTrail / RuntimeClaim / OutcomeBinding semantics | Implemented for verifier-visible protocol surfaces | These semantics remain protocol/bundle-level and do not imply hosted runtime enforcement. |
+| Tool Call Wrapper | Implemented | Async tool/function executions can be wrapped into Decision Passport receipts with SUCCESS, FAILED, DENIED, and ABORTED outcomes. |
+| Wrapper verification | Implemented | Wrapper-generated receipts can be verified offline through existing verifier paths. |
+| Batch verification | Implemented | Multiple proof bundles can be verified together using deterministic offline verification rules. |
+| Failure classification | Implemented | Batch results classify common failure families in stable machine-readable categories. |
+| Audit reports | Implemented | Local JSON/Markdown reports can summarize verification results for audit and conformance workflows. |
+| Autonomous Action Receipt Profile | Implemented | Autonomous/physical-world actions can be represented as proof bundles using safety-envelope claims, evidence hashes, and outcome binding. |
+| Simulation-to-execution profile | Implemented as docs/fixtures | Simulation scenario hashes can be bound to runtime action receipts. |
+| Runtime enforcement | Not included | The repo records and verifies receipts; it does not block or allow execution at runtime. |
+| Replay protection | Not included | Distributed replay locks and claim-token registries belong in future control-plane/runtime layers. |
+| Functional safety certification | Not included | Decision Passport records and verifies claims; it does not certify autonomous systems. |
+
+---
 
 ## What this proves
 
 1. A bundle's record hashes, chain links, and manifest chain hash are internally consistent.
-2. Payload tampering and chain mutation are detected by verification.
+2. Payload tampering and chain mutation are detected by offline verification.
 3. Verification runs offline with no database, API key, or cloud dependency.
 4. v0.7.0 verifier semantics classify runtime-claim, outcome-linkage, revocation/supersession, and trail-linkage states on supported bundle surfaces.
+5. v0.8.0 Tool Call Wrapper can bind requested input hash, authorization state, execution outcome, and output/error hash into a verifiable receipt.
+6. v0.8.1 Batch Verification can verify receipt sets, classify verification failures, and generate local audit reports.
+7. v0.9.0 Autonomous Action Receipt Profile can bind autonomous-action metadata, safety-envelope claims, sensor/context hashes, simulation hashes, and outcomes into verifiable proof bundles.
 
 ## What this does not prove
 
 1. Runtime policy enforcement at execution time.
-2. Storage-level immutability by itself.
-3. Who authored a bundle, unless a separate signing layer is used.
-4. That a hosted guard executor blocked or allowed execution in real time.
+2. Distributed replay prevention.
+3. Storage-level immutability by itself.
+4. Who authored a bundle, unless a separate signing/identity layer is used.
+5. That a hosted guard executor blocked or allowed execution in real time.
+6. That an external tool provider performed a side effect beyond evidence bound into the receipt.
+7. That autonomous systems are safe.
+8. Functional safety certification.
+9. Robot, vehicle, drone, or machine control.
+10. NVIDIA, ROS, Isaac, Jetson, DRIVE, CUDA, or hardware integration.
 
 ## When to use this
 
-Use this repository when you need portable, offline-checkable proof artifacts for AI action history.
+Use this repository when you need portable, offline-checkable proof artifacts for:
+
+- AI action history.
+- Tool-call receipts.
+- Workflow execution evidence.
+- Batch verification and audit/conformance workflows.
+- Autonomous or physical-world action receipt profiles.
 
 ## When you need stronger infrastructure
 
-Use stronger infrastructure when you need execution claims, fail-closed guard enforcement, replay protection, tenant isolation, signed bundles, or regulated deployment controls.
+Use stronger infrastructure when you need runtime guard enforcement, execution claims, distributed replay protection, tenant isolation, signed bundles, key management, identity attestation, regulated deployment controls, or physical safety systems.
+
+Those belong in control-plane, sovereign, runtime, or domain-specific adapters — not in decision-passport-core.
 
 ## How this differs from logs, traces, and observability
 
-Logs and traces are operational telemetry. Decision Passport Core is a verifiable proof format with canonical hashing and chain integrity checks. Observability helps you inspect behavior, this repo helps you verify integrity of exported proof artifacts.
+Logs and traces are operational telemetry. Decision Passport Core is a verifiable proof format with canonical hashing, chain integrity checks, receipt generation, batch verification, and profile-level proof semantics. Observability helps you inspect behavior. Decision Passport helps you verify the integrity of exported proof artifacts.
+
+---
 
 ## Verify in 60 seconds
 
@@ -111,17 +138,19 @@ pnpm verify-demo
 
 No database, API key, or cloud account required.
 
-### First 5 Minutes (high-confidence path)
+### First 5 Minutes
 
-Use this exact sequence for a fast, trust-focused validation pass:
+Use this exact sequence for a fast validation pass:
 
 ```bash
 pnpm install --frozen-lockfile
 pnpm build
 pnpm test
 pnpm conformance
+pnpm verifier:golden
 pnpm verify-demo
 pnpm example:smoke
+pnpm example:batch-verification
 python -m decision_passport.verify examples/reference-integrations/webhook-approval-receipt.bundle.json
 python -m decision_passport.verify examples/reference-integrations/agent-tool-execution-receipt.bundle.json
 ```
@@ -131,18 +160,11 @@ If all commands pass, you have validated:
 1. Core verifier correctness.
 2. TypeScript/Python conformance parity.
 3. Deterministic reference-integration behavior.
-4. Auditor-grade output paths on canonical bundle surfaces.
+4. Tool Call Wrapper receipt generation.
+5. Batch verification and audit report generation.
+6. Auditor-grade output paths on canonical bundle surfaces.
 
 Python reference implementation is available in `python/decision_passport_py` and mirrors the protocol surface for offline create and verify flows.
-
-**What this verifies:**
-
-1. The hash chain engine builds cleanly.
-2. A decision chain can be created and exported.
-3. The offline verifier confirms `PASS` when hashes and links are intact.
-4. A tampered bundle is rejected as `FAIL`.
-5. HTML verification reports are generated in `artifacts/`.
-6. Current local validation for v0.7.0 release prep requires all release gates in `docs/release-checklist.md` to pass, including TypeScript suite, conformance parity, demo/reference checks, and Python verifier checks on reference bundles.
 
 ### Optional Python quick check
 
@@ -175,9 +197,9 @@ npx serve . -l 3000
 
 ## What is Decision Passport?
 
-Decision Passport is an **append-only, hash-linked record system** for AI agent actions.
+Decision Passport is an **append-only, hash-linked record system** for AI, tool, workflow, and autonomous-action receipts.
 
-Every material action your AI agent performs, such as a recommendation, an approval decision, or an execution result, is stamped into a tamper-evident chain. That chain is bundled and can be independently verified offline.
+Every material action — such as a recommendation, an approval, a tool execution, a batch verification result, or an autonomous-action claim — can be stamped into a tamper-evident chain. That chain is bundled and can be independently verified offline.
 
 This repository provides deterministic verification semantics through canonical hashing and explicit chain rules. Record creation still uses runtime UUID and timestamp values, so fixture regeneration is not byte-identical unless controlled inputs are used.
 
@@ -188,10 +210,10 @@ This repository provides deterministic verification semantics through canonical 
 ### Without Decision Passport
 
 ```text
-AI agent runs, tool calls happen, results returned, nothing verifiable is exported.
-Hard to explain what was decided.
-Hard to prove what executed.
-Hard to support external review.
+AI agents run, tool calls happen, workflows execute, results are returned.
+There may be logs, but no portable proof artifact.
+External reviewers must trust the original system.
+Hard to prove what was approved, what payload was bound, and what outcome was recorded.
 ```
 
 ### With Decision Passport
@@ -381,39 +403,47 @@ decision-passport-core/
 │   │   ├── src/types.ts         ActionType, PassportRecord, ChainManifest, BasicProofBundle
 │   │   ├── src/chain.ts         createRecord(), verifyChain(), assertValidChain()
 │   │   ├── src/hashing.ts       hashCanonical(), hashPayload(): SHA-256, deterministic
-│   │   ├── src/canonical.ts     Canonical JSON serialiser (no duplicate hashing)
+│   │   ├── src/canonical.ts     Canonical JSON serialiser
 │   │   ├── src/manifest.ts      createManifest()
 │   │   ├── src/explain-tamper.ts explainTamper(): what changed and why it broke
 │   │   ├── src/bundle-diff.ts   diffBundles(): compare two bundles field by field
 │   │   └── src/errors.ts        ChainValidationError
 │   │
-│   ├── verifier-basic/     ← Offline bundle verifier
-│   │   ├── src/verify-bundle.ts   verifyBundle(): zero external deps
-│   │   └── src/html-report.ts     renderVerificationReport(): static HTML export
+│   ├── verifier-basic/     ← Offline bundle verifier + batch verification
+│   │   ├── src/verify-bundle.ts       verifyBundle(): zero external deps
+│   │   ├── src/batch-verification.ts  verifyBundleBatch(), failure classification, audit reports
+│   │   └── src/html-report.ts         renderVerificationReport(): static HTML export
+│   │
+│   ├── tool-call-wrapper/  ← Stateless async tool/function receipt wrapper
+│   │   ├── src/with-decision-passport-tool-call.ts
+│   │   ├── src/verify-tool-call-receipt.ts
+│   │   ├── src/hash.ts
+│   │   ├── src/redaction.ts
+│   │   └── src/errors.ts
 │   │
 │   └── demo/               ← Runnable demo
 │       └── src/index.ts         Full demo: record → export → verify → PASS
 │
 ├── apps/
-│   └── verifier-web/       ← Browser verifier (drag-and-drop, zero dependencies)
+│   └── verifier-web/       ← Browser verifier
 │
-├── fixtures/               ← Deterministic conformance fixtures
+├── fixtures/
 │   ├── valid-bundle.json
 │   ├── tampered-bundle.json
 │   ├── broken-prev-hash.json
-│   ├── wrong-sequence.json
-│   ├── wrong-chain-hash.json
 │   ├── malformed-bundle.json
-│   ├── unsupported-version.json
-│   └── compatible-optional-metadata.json
+│   └── autonomous/         ← Autonomous Action Receipt Profile fixtures
+│
+├── examples/
+│   └── reference-integrations/
+│       ├── tool-call-wrapper/
+│       ├── batch-verification/
+│       └── autonomous-action-receipt/
 │
 ├── python/
-│   └── decision_passport_py/    ← Python reference implementation (offline-first)
+│   └── decision_passport_py/    ← Python reference implementation
 │
-└── artifacts/              ← Generated by verify-demo
-    ├── verification-report.html
-    ├── tampered-report.html
-    └── verification-summary.json
+└── artifacts/              ← Generated by verifier/demo scripts
 ```
 
 ### Trust chain model
@@ -611,18 +641,21 @@ Contact: [contact@bespea.com](mailto:contact@bespea.com)
 
 - [x] Core hash chain engine
 - [x] BasicProofBundle export
-- [x] Offline verifier (zero-dependency)
+- [x] Offline verifier
 - [x] CLI verifier
 - [x] Demo with sample data
-- [x] Tamper explainer (`explainTamper()`: what changed and why it broke)
+- [x] Tamper explainer
 - [x] HTML verification report export
-- [x] Browser verifier (drag-and-drop, client-side only)
+- [x] Browser verifier
 - [x] Deterministic valid + tampered fixtures
-- [ ] ASCII chain visualiser
-- [ ] Policy version binding helpers
-- [ ] Redaction mode (`metadata-only` and `hash-only` bundles)
-- [x] Bundle diff utility (`diffBundles()`: compare two bundles)
-- [ ] OpenClaw Lite bridge (see `decision-passport-openclaw-lite`)
+- [x] Bundle diff utility
+- [x] Tool Call Wrapper (`withDecisionPassportToolCall()`)
+- [x] Batch Verification + Audit Reports (`verifyBundleBatch()`, failure classification, JSON/Markdown reports)
+- [x] Autonomous Action Receipt Profile
+- [ ] MCP verifier/recorder server
+- [ ] OpenClaw Lite alignment against core wrapper
+- [ ] Provider adapters for OpenAI/Anthropic tool-use flows
+- [ ] Python parity for Tool Call Wrapper
 - [ ] Trusted timestamping integration (RFC 3161)
 
 ---
