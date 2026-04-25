@@ -302,6 +302,37 @@ See [docs/TOOL_CALL_WRAPPER.md](docs/TOOL_CALL_WRAPPER.md) for full API referenc
 
 ---
 
+## Batch Verification
+
+Decision Passport can verify individual receipts or batch-verify receipt sets for audit and conformance workflows.
+
+```typescript
+import { verifyBundleBatch, createVerificationAuditReport } from '@decision-passport/verifier-basic';
+
+const report = verifyBundleBatch([bundle1, bundle2, bundle3], { label: 'audit-q1' });
+
+console.log(report.passedCount);   // 2
+console.log(report.failedCount);   // 1
+console.log(report.failureSummary.byClass);
+// { CHAIN_BREAK: 0, TAMPERED_PAYLOAD: 1, MALFORMED_BUNDLE: 0, ... }
+
+// Export a Markdown audit report
+const artifact = createVerificationAuditReport(report, { format: 'markdown' });
+console.log(artifact.content);
+```
+
+**What this proves:**
+- A set of bundles verified against the same deterministic offline rules as individual verification
+- Failures classified into stable machine-readable categories
+- Audit reports reproducible at any time from the same bundle set
+
+**What this does not prove:**
+- GPU acceleration, AI factory runtime integration, real-time monitoring, or cloud audit services
+
+See [docs/BATCH_VERIFICATION.md](docs/BATCH_VERIFICATION.md) for full API reference.
+
+---
+
 ## Architecture
 
 ```text
