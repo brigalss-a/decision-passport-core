@@ -1,0 +1,117 @@
+{
+  "bundle_version": "1.4-basic",
+  "exported_at_utc": "2026-04-25T10:00:00.000Z",
+  "passport_records": [
+    {
+      "id": "4c364dd4-58fe-4f52-bc7e-c1bd0b9952d3",
+      "chain_id": "autonomous-vehicle-highway-003",
+      "sequence": 0,
+      "timestamp_utc": "2026-04-25T22:35:18.452Z",
+      "actor_id": "av-unit-AV-5",
+      "actor_type": "ai_agent",
+      "action_type": "AI_RECOMMENDATION",
+      "payload": {
+        "tool_call_phase": "REQUESTED",
+        "actor": {
+          "id": "av-unit-AV-5",
+          "type": "autonomous_system",
+          "modelVersion": "highway-nav-v4.1",
+          "controllerVersion": "drive-os-1.9.3"
+        },
+        "action": {
+          "name": "lane_change_maneuver",
+          "actionType": "EXECUTION_PENDING",
+          "riskClass": "safety_relevant_physical_action",
+          "environment": "highway-I95-km342",
+          "zone": "LANE_2_TO_3",
+          "correlationId": "route-8821"
+        },
+        "safetyEnvelope": {
+          "envelopeId": "env-AV5-20260425",
+          "policyVersion": "highway-safety-v3.0",
+          "maxSpeed": 120,
+          "minHumanDistance": 5,
+          "allowedOperatingMode": "autonomous",
+          "emergencyStopAvailable": true,
+          "confidenceThreshold": 0.97,
+          "constraintsHash": "d2e5f1a8c3b6"
+        },
+        "evidence": {
+          "sensorSnapshotHash": "sha256:6b2f8d1a9c4e0f3b7d2a6e1c5f9b3a8d0e4f2c6b1a9d3e7f",
+          "perceptionOutputHash": "sha256:4a9f3b1d6e2c8f5a0d3b7e1c4f8a2d6b9c3e0f4a7d1b5c8"
+        }
+      },
+      "payload_hash": "452aec698a73ab3e2b6cd58883e14b0b4b661c7ecf90679b7a95879b666adb64",
+      "prev_hash": "GENESIS_0000000000000000000000000000000000000000000000000000000000000000",
+      "record_hash": "e1fbdb18224c2587ea5bd1c60b09557a517fd10f5d8f1ad614a23a4675f08088"
+    },
+    {
+      "id": "26852bca-8661-4485-8b5e-4d7353f1bfe2",
+      "chain_id": "autonomous-vehicle-highway-003",
+      "sequence": 1,
+      "timestamp_utc": "2026-04-25T22:35:18.452Z",
+      "actor_id": "highway-safety-policy-v3.0",
+      "actor_type": "policy",
+      "action_type": "POLICY_APPROVAL_GRANTED",
+      "payload": {
+        "tool_call_phase": "AUTHORIZED",
+        "authorization": {
+          "approved": true,
+          "authorizationType": "policy",
+          "policyVersion": "highway-safety-v3.0",
+          "reason": "Lane change within speed/distance envelope at initiation",
+          "decisionId": "auth-AV5-20260425-001"
+        }
+      },
+      "payload_hash": "d192fbf258aa35a5fd8b53b1aa2cf19daab973a31b85692a84e49582d1a46c69",
+      "prev_hash": "e1fbdb18224c2587ea5bd1c60b09557a517fd10f5d8f1ad614a23a4675f08088",
+      "record_hash": "563568e782d17550b83f2f3f24d97ced9c59f0166d61a3095cdaf15d65d22cab"
+    },
+    {
+      "id": "5a7661e8-75c4-4607-9cd1-ec1d63c84eae",
+      "chain_id": "autonomous-vehicle-highway-003",
+      "sequence": 2,
+      "timestamp_utc": "2026-04-25T22:35:18.452Z",
+      "actor_id": "av-unit-AV-5",
+      "actor_type": "ai_agent",
+      "action_type": "EXECUTION_PENDING",
+      "payload": {
+        "tool_call_phase": "EXECUTION_STARTED",
+        "correlationId": "route-8821"
+      },
+      "payload_hash": "4b5b0db159a1d84f8eb1d011291b11d2c962efef328a5dd74f60d4338405397e",
+      "prev_hash": "563568e782d17550b83f2f3f24d97ced9c59f0166d61a3095cdaf15d65d22cab",
+      "record_hash": "59b83f5449e6759b5274f15924f6af9e0a15870310804293c712dba334259c41"
+    },
+    {
+      "id": "d39e9e5b-9036-48cc-b98b-d30944d52e43",
+      "chain_id": "autonomous-vehicle-highway-003",
+      "sequence": 3,
+      "timestamp_utc": "2026-04-25T22:35:18.452Z",
+      "actor_id": "highway-safety-policy-v3.0",
+      "actor_type": "policy",
+      "action_type": "EXECUTION_ABORTED",
+      "payload": {
+        "tool_call_phase": "ABORTED",
+        "outcome": {
+          "status": "SAFETY_BLOCKED",
+          "incident": "sudden_obstacle_detected_mid_maneuver",
+          "incidentHash": "sha256:9e1a3d5f8b2c4e7a0d3f6b1c5e9a2d4f7c0b3e6a1d4f7c0",
+          "durationMs": 180
+        },
+        "safetyAction": "emergency_abort",
+        "reason": "Obstacle detected within 2.3m during maneuver; safety system triggered abort"
+      },
+      "payload_hash": "52c38ba0ee7e1124bbf163fc5756ca446764ee28307fe18f8b8713a9645562b7",
+      "prev_hash": "59b83f5449e6759b5274f15924f6af9e0a15870310804293c712dba334259c41",
+      "record_hash": "bf48ff7c6f62f9fbdb15c5aa059c8b994a528594a2e71f268b3b54ef18ba8a55"
+    }
+  ],
+  "manifest": {
+    "chain_id": "autonomous-vehicle-highway-003",
+    "record_count": 4,
+    "first_record_id": "4c364dd4-58fe-4f52-bc7e-c1bd0b9952d3",
+    "last_record_id": "d39e9e5b-9036-48cc-b98b-d30944d52e43",
+    "chain_hash": "bf48ff7c6f62f9fbdb15c5aa059c8b994a528594a2e71f268b3b54ef18ba8a55"
+  }
+}

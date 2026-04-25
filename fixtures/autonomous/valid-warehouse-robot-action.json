@@ -1,0 +1,122 @@
+{
+  "bundle_version": "1.4-basic",
+  "exported_at_utc": "2026-04-25T10:00:00.000Z",
+  "passport_records": [
+    {
+      "id": "b8fd42e6-2a4a-463c-a1dd-63b1387b7a91",
+      "chain_id": "autonomous-warehouse-robot-001",
+      "sequence": 0,
+      "timestamp_utc": "2026-04-25T22:35:18.443Z",
+      "actor_id": "warehouse-robot-WR-7",
+      "actor_type": "ai_agent",
+      "action_type": "AI_RECOMMENDATION",
+      "payload": {
+        "tool_call_phase": "REQUESTED",
+        "actor": {
+          "id": "warehouse-robot-WR-7",
+          "type": "robot",
+          "modelVersion": "pick-nav-v3.2",
+          "controllerVersion": "warehouse-os-2.1.0"
+        },
+        "action": {
+          "name": "pick_and_place",
+          "actionType": "EXECUTION_PENDING",
+          "riskClass": "physical_world_action",
+          "environment": "warehouse-zone-A3",
+          "zone": "ZONE_A3",
+          "target": "shelf-bin-A3-042",
+          "correlationId": "order-78921"
+        },
+        "safetyEnvelope": {
+          "envelopeId": "env-WR7-20260425",
+          "policyVersion": "warehouse-safety-v1.4",
+          "allowedZone": "ZONE_A3",
+          "maxSpeed": 1.5,
+          "minHumanDistance": 1,
+          "maxForce": 20,
+          "allowedOperatingMode": "autonomous",
+          "emergencyStopAvailable": true,
+          "confidenceThreshold": 0.95,
+          "constraintsHash": "a3b8f2e1d9c4"
+        },
+        "evidence": {
+          "sensorSnapshotHash": "sha256:7f3a1b9e2c5d4f8a0e6b3c7d1a5f9e2b4c8d3a6f1e0b5c9d",
+          "perceptionOutputHash": "sha256:2d8f1a3c6e9b5d7f0a4e8c2b6d9f3a1e5c8b4d7f0e3a9c2",
+          "simulationScenarioHash": "sha256:9c4d2f8a1b5e3c7d6f0a2e4b8d1f5c3a7e9b2d4f6a0c8e1",
+          "modelArtifactHash": "sha256:1e5b9d3a7f2c6e4b8d0a1f3c5e7b9d2a4f6c8e0b3d5a7f1"
+        }
+      },
+      "payload_hash": "b7d23f3e8a69d5640e49b3dc85bc51585de1584c3044aaf6d0c08753602bcfd8",
+      "prev_hash": "GENESIS_0000000000000000000000000000000000000000000000000000000000000000",
+      "record_hash": "dbaa8bccadd6a2875afe508357d36c80f858ee853e234b91d0e76ef260fcc3ca"
+    },
+    {
+      "id": "0c263a4a-b122-4566-8cec-5612035c7ea3",
+      "chain_id": "autonomous-warehouse-robot-001",
+      "sequence": 1,
+      "timestamp_utc": "2026-04-25T22:35:18.445Z",
+      "actor_id": "warehouse-safety-policy-v1.4",
+      "actor_type": "policy",
+      "action_type": "POLICY_APPROVAL_GRANTED",
+      "payload": {
+        "tool_call_phase": "AUTHORIZED",
+        "authorization": {
+          "approved": true,
+          "authorizationType": "policy",
+          "policyVersion": "warehouse-safety-v1.4",
+          "approvedBy": "safety-controller",
+          "reason": "Action within approved zone, speed, and force limits",
+          "decisionId": "auth-WR7-20260425-001"
+        }
+      },
+      "payload_hash": "1bdf064d9fe991b3e81039b866a180336ed3c4b0d6f9e29c79f2620aba378103",
+      "prev_hash": "dbaa8bccadd6a2875afe508357d36c80f858ee853e234b91d0e76ef260fcc3ca",
+      "record_hash": "638cb79c5b4cc0815c566a2888dfc8a13a5e799f7f857a82748bc40a3ac91344"
+    },
+    {
+      "id": "8ff09717-3b10-4a15-a47a-774057177a9c",
+      "chain_id": "autonomous-warehouse-robot-001",
+      "sequence": 2,
+      "timestamp_utc": "2026-04-25T22:35:18.445Z",
+      "actor_id": "warehouse-robot-WR-7",
+      "actor_type": "ai_agent",
+      "action_type": "EXECUTION_PENDING",
+      "payload": {
+        "tool_call_phase": "EXECUTION_STARTED",
+        "correlationId": "order-78921",
+        "target": "shelf-bin-A3-042"
+      },
+      "payload_hash": "e71abc0e481f0c49283584932580a9eaf25bb986af3ec5eeb47ad62e1103c526",
+      "prev_hash": "638cb79c5b4cc0815c566a2888dfc8a13a5e799f7f857a82748bc40a3ac91344",
+      "record_hash": "f34732fb528db5432b43b29f62d40da38ab6673ae010fe85632dc827c6f5e1ae"
+    },
+    {
+      "id": "297fad10-6520-4ae0-941d-af35c948e56d",
+      "chain_id": "autonomous-warehouse-robot-001",
+      "sequence": 3,
+      "timestamp_utc": "2026-04-25T22:35:18.445Z",
+      "actor_id": "warehouse-robot-WR-7",
+      "actor_type": "ai_agent",
+      "action_type": "EXECUTION_SUCCEEDED",
+      "payload": {
+        "tool_call_phase": "SUCCEEDED",
+        "outcome": {
+          "status": "SUCCEEDED",
+          "durationMs": 3400,
+          "incident": null,
+          "outcomeEvidenceHash": "sha256:4f8ab8e613f1c399f9bb18ab7e0c383319ffed34318ac70b908b353e31683bf5"
+        }
+      },
+      "payload_hash": "2b8737a24d7e8b96b6b011641ae0da7dbc1f9d55427e0ec3f2a2fb5169b279b7",
+      "prev_hash": "f34732fb528db5432b43b29f62d40da38ab6673ae010fe85632dc827c6f5e1ae",
+      "record_hash": "7c7b189c1b67da3baeb99e160d1111857b5e485f9f25a735f8dbc00b63cde21b"
+    }
+  ],
+  "manifest": {
+    "chain_id": "autonomous-warehouse-robot-001",
+    "record_count": 4,
+    "first_record_id": "b8fd42e6-2a4a-463c-a1dd-63b1387b7a91",
+    "last_record_id": "297fad10-6520-4ae0-941d-af35c948e56d",
+    "chain_hash": "7c7b189c1b67da3baeb99e160d1111857b5e485f9f25a735f8dbc00b63cde21b"
+  }
+}
