@@ -6,7 +6,7 @@
 
 v0.8.0 ships **Tool Call Passport Wrapper**, a generic stateless SDK that turns any async tool/function execution into an offline-verifiable Decision Passport receipt.
 
-This bridges the gap between Decision Passport's static proof-bundle model and real-world async tool execution: developers can now wrap any async function and receive a cryptographically verifiable record of what was authorized, what ran, and what the outcome was.
+This bridges the gap between Decision Passport's static proof-bundle model and real-world async tool execution: developers can now wrap any async function and receive a hash-chain verifiable record of the supplied authorization metadata, the execution attempt, and the recorded outcome.
 
 ---
 
@@ -119,12 +119,17 @@ This package:
 1. Abort-during-execution is best-effort (documented in `docs/TOOL_CALL_WRAPPER.md`)
 2. No stateful replay protection (requires external persistence layer)
 3. `authorization_status` shows `NOT_EVALUATED` in basic verifier — chain integrity is fully verified
-4. TypeScript only — Python parity planned for v0.9.0
+4. TypeScript only — Python parity is planned for a future parity release after the v0.8.x / v0.9.0 protocol line is stabilised
 
 ---
 
 ## Recommended Next PRs
 
-1. **`decision-passport-mcp`** — MCP server adapter using this wrapper as the receipt engine
-2. **Provider adapters** — thin wrappers for OpenAI tool calls and Anthropic tool use
-3. **Python parity** — `python/tool_call_wrapper.py`
+1. **v0.8.1 — Batch Verification + Audit Reports**
+   Add batch receipt verification, deterministic failure classification, and local JSON/Markdown audit reports.
+
+2. **v0.9.0 — Autonomous Action Receipt Profile**
+   Add a protocol profile for autonomous/physical-world action receipts with safety-envelope and evidence-hash binding.
+
+3. **Future adapters**
+   `decision-passport-mcp`, provider adapters, OpenClaw alignment, and Python parity should follow after the core primitives are stable.
