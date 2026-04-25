@@ -1,0 +1,88 @@
+{
+  "bundle_version": "1.4-basic",
+  "exported_at_utc": "2026-04-25T22:20:16.582Z",
+  "passport_records": [
+    {
+      "id": "23c453f7-bf06-4af1-89a6-d707558653f9",
+      "chain_id": "5d67ef03-3698-4d7f-8c8f-8c1ea3d8bb91",
+      "sequence": 0,
+      "timestamp_utc": "2026-04-25T22:20:16.581Z",
+      "actor_id": "agent-analyst",
+      "actor_type": "ai_agent",
+      "action_type": "AI_RECOMMENDATION",
+      "payload": {
+        "tool_call_phase": "REQUESTED",
+        "tool_name": "analyze_document",
+        "tool_version": "2.0.0",
+        "input_hash": "32e6230ec9e7cf386f0cbc06781c197fdf01eff7474513a8eada83b26af578f6"
+      },
+      "payload_hash": "44e9e483abd7cd95891d521fd2cc6c507ef52e5974cb2522899a058d3d75ee6a",
+      "prev_hash": "GENESIS_0000000000000000000000000000000000000000000000000000000000000000",
+      "record_hash": "0802bdcabc4ca33fac7fd37ba96f40fafff11571e449ecdaa246e8c94052cb49"
+    },
+    {
+      "id": "a2eae9c6-37bd-4f73-9201-6932ac008341",
+      "chain_id": "5d67ef03-3698-4d7f-8c8f-8c1ea3d8bb91",
+      "sequence": 1,
+      "timestamp_utc": "2026-04-25T22:20:16.581Z",
+      "actor_id": "authorization-engine",
+      "actor_type": "policy",
+      "action_type": "POLICY_APPROVAL_GRANTED",
+      "payload": {
+        "tool_call_phase": "AUTHORIZED",
+        "authorization_type": "policy",
+        "policy_version": "policy-v2",
+        "receipt_id": "5d67ef03-3698-4d7f-8c8f-8c1ea3d8bb91"
+      },
+      "payload_hash": "980dfd6cae1603876b57b6066f99bd86bf65248f1bed304ec00d5e65cb2602dd",
+      "prev_hash": "0802bdcabc4ca33fac7fd37ba96f40fafff11571e449ecdaa246e8c94052cb49",
+      "record_hash": "0125e4e45e1f1380d05e6fe2153200f019636027113dc48834a4003c3ae631e8"
+    },
+    {
+      "id": "34e23975-d438-4451-9278-0ef9de33d15e",
+      "chain_id": "5d67ef03-3698-4d7f-8c8f-8c1ea3d8bb91",
+      "sequence": 2,
+      "timestamp_utc": "2026-04-25T22:20:16.581Z",
+      "actor_id": "tool-call-wrapper",
+      "actor_type": "system",
+      "action_type": "EXECUTION_PENDING",
+      "payload": {
+        "tool_call_phase": "EXECUTION_STARTED",
+        "tool_name": "analyze_document",
+        "tool_version": "2.0.0",
+        "input_hash": "32e6230ec9e7cf386f0cbc06781c197fdf01eff7474513a8eada83b26af578f6",
+        "receipt_id": "5d67ef03-3698-4d7f-8c8f-8c1ea3d8bb91"
+      },
+      "payload_hash": "edcea99ac98d28513b5daedb50dae22bb3b22ec00cb0847d1cea48eb7ff96901",
+      "prev_hash": "0125e4e45e1f1380d05e6fe2153200f019636027113dc48834a4003c3ae631e8",
+      "record_hash": "a4c531fd83adf92ae68c3f21d6bdf1a1f1e1b751086f308a1870bff378876eb2"
+    },
+    {
+      "id": "8f2a0de5-2916-47ea-9ba5-7d002816ee88",
+      "chain_id": "5d67ef03-3698-4d7f-8c8f-8c1ea3d8bb91",
+      "sequence": 3,
+      "timestamp_utc": "2026-04-25T22:20:16.582Z",
+      "actor_id": "tool-call-wrapper",
+      "actor_type": "system",
+      "action_type": "EXECUTION_FAILED",
+      "payload": {
+        "tool_call_phase": "EXECUTION_FAILED",
+        "error_hash": "6c89fba21ebd2971b11cdf9fe9f49f7588be605e32ed83d4a721ce2fc205fb16",
+        "error_name": "Error",
+        "error_message": "Document not found: invalid",
+        "duration_ms": 1,
+        "receipt_id": "5d67ef03-3698-4d7f-8c8f-8c1ea3d8bb91"
+      },
+      "payload_hash": "232ddaf0cd742d68fcb4186fc453eeab6c75a5bc8729cb4db3feb25c0257a4c5",
+      "prev_hash": "a4c531fd83adf92ae68c3f21d6bdf1a1f1e1b751086f308a1870bff378876eb2",
+      "record_hash": "42b0499d43e765896f5396d1153d7df2c11ceced928b0f9b26b9c8e0d95ec873"
+    }
+  ],
+  "manifest": {
+    "chain_id": "5d67ef03-3698-4d7f-8c8f-8c1ea3d8bb91",
+    "record_count": 4,
+    "first_record_id": "23c453f7-bf06-4af1-89a6-d707558653f9",
+    "last_record_id": "8f2a0de5-2916-47ea-9ba5-7d002816ee88",
+    "chain_hash": "42b0499d43e765896f5396d1153d7df2c11ceced928b0f9b26b9c8e0d95ec873"
+  }
+}

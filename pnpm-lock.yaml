@@ -32,6 +32,15 @@ importers:
         specifier: workspace:*
         version: link:../verifier-basic
 
+  packages/tool-call-wrapper:
+    dependencies:
+      '@decision-passport/core':
+        specifier: workspace:*
+        version: link:../core
+      '@decision-passport/verifier-basic':
+        specifier: workspace:*
+        version: link:../verifier-basic
+
   packages/verifier-basic:
     dependencies:
       '@decision-passport/core':

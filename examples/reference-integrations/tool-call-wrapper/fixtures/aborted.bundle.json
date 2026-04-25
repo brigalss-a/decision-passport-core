@@ -1,0 +1,65 @@
+{
+  "bundle_version": "1.4-basic",
+  "exported_at_utc": "2026-04-25T22:20:16.600Z",
+  "passport_records": [
+    {
+      "id": "e718a4c7-77da-4c4f-9b1b-78e2569ce28f",
+      "chain_id": "a1b4e507-76e2-4534-a1bc-2dda7d90f16a",
+      "sequence": 0,
+      "timestamp_utc": "2026-04-25T22:20:16.599Z",
+      "actor_id": "agent-01",
+      "actor_type": "ai_agent",
+      "action_type": "AI_RECOMMENDATION",
+      "payload": {
+        "tool_call_phase": "REQUESTED",
+        "tool_name": "long_running_export",
+        "input_hash": "5ecdb5746c2165d901999d71a416b7eb7f5b7e5295ab5f27fdb83a4b4744d078"
+      },
+      "payload_hash": "d32f9e8d652bc679f88bd7c1b5ad4fc2514c906eeffc48a1a7eb5012e3bb4b4f",
+      "prev_hash": "GENESIS_0000000000000000000000000000000000000000000000000000000000000000",
+      "record_hash": "f70aac99de3cc00b30e1c9cdba12bc8a57712b383d66329728c515c9a4fbe52d"
+    },
+    {
+      "id": "d00a3811-3767-4855-9edf-fec67c7b184e",
+      "chain_id": "a1b4e507-76e2-4534-a1bc-2dda7d90f16a",
+      "sequence": 1,
+      "timestamp_utc": "2026-04-25T22:20:16.599Z",
+      "actor_id": "authorization-engine",
+      "actor_type": "policy",
+      "action_type": "POLICY_APPROVAL_GRANTED",
+      "payload": {
+        "tool_call_phase": "AUTHORIZED",
+        "authorization_type": "policy",
+        "receipt_id": "a1b4e507-76e2-4534-a1bc-2dda7d90f16a"
+      },
+      "payload_hash": "dd233ed55063426eae41823a433105f2f5612432dca8bc483adc735437758cbc",
+      "prev_hash": "f70aac99de3cc00b30e1c9cdba12bc8a57712b383d66329728c515c9a4fbe52d",
+      "record_hash": "97c04d48dcf8878b1af6ea565dc0474ec1ff1a034f8074d867e88241f910a5ab"
+    },
+    {
+      "id": "749f3cd5-22ea-476a-8f4a-2dda7a430f4f",
+      "chain_id": "a1b4e507-76e2-4534-a1bc-2dda7d90f16a",
+      "sequence": 2,
+      "timestamp_utc": "2026-04-25T22:20:16.599Z",
+      "actor_id": "tool-call-wrapper",
+      "actor_type": "system",
+      "action_type": "EXECUTION_ABORTED",
+      "payload": {
+        "tool_call_phase": "EXECUTION_ABORTED",
+        "reason": "AbortSignal was already aborted before execution started",
+        "duration_ms": 0,
+        "receipt_id": "a1b4e507-76e2-4534-a1bc-2dda7d90f16a"
+      },
+      "payload_hash": "c5636d9b36e504758e322dff3a43355df1a2ca43dd324091449691f863952a54",
+      "prev_hash": "97c04d48dcf8878b1af6ea565dc0474ec1ff1a034f8074d867e88241f910a5ab",
+      "record_hash": "e45185c08aa7992215541b99fa07abe76934a4a8bc15caf347f8943f01d08a8c"
+    }
+  ],
+  "manifest": {
+    "chain_id": "a1b4e507-76e2-4534-a1bc-2dda7d90f16a",
+    "record_count": 3,
+    "first_record_id": "e718a4c7-77da-4c4f-9b1b-78e2569ce28f",
+    "last_record_id": "749f3cd5-22ea-476a-8f4a-2dda7a430f4f",
+    "chain_hash": "e45185c08aa7992215541b99fa07abe76934a4a8bc15caf347f8943f01d08a8c"
+  }
+}

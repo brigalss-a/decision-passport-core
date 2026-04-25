@@ -1,0 +1,34 @@
+{
+  "name": "@decision-passport/tool-call-wrapper",
+  "version": "0.8.0",
+  "description": "Generic stateless tool-call wrapper that produces offline-verifiable Decision Passport receipts for any async function/tool execution",
+  "type": "module",
+  "publishConfig": { "access": "public" },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brigalss-a/decision-passport-core.git"
+  },
+  "homepage": "https://github.com/brigalss-a/decision-passport-core#readme",
+  "bugs": {
+    "url": "https://github.com/brigalss-a/decision-passport-core/issues"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "pnpm run typecheck",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@decision-passport/core": "workspace:*",
+    "@decision-passport/verifier-basic": "workspace:*"
+  }
+}

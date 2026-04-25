@@ -1,0 +1,88 @@
+{
+  "bundle_version": "1.4-basic",
+  "exported_at_utc": "2026-04-25T22:20:16.571Z",
+  "passport_records": [
+    {
+      "id": "aeed69e6-363e-49b7-ad2f-d9a2a0c6c4eb",
+      "chain_id": "45f0076d-a4f3-418d-8b9e-ce1c366ccec0",
+      "sequence": 0,
+      "timestamp_utc": "2026-04-25T22:20:16.568Z",
+      "actor_id": "agent-mailer",
+      "actor_type": "ai_agent",
+      "action_type": "AI_RECOMMENDATION",
+      "payload": {
+        "tool_call_phase": "REQUESTED",
+        "tool_name": "send_email",
+        "tool_version": "1.0.0",
+        "tool_provider": "local-smtp",
+        "input_hash": "4f8ab8e613f1c399f9bb18ab7e0c383319ffed34318ac70b908b353e31683bf5"
+      },
+      "payload_hash": "45de5d55f3a1f9a0c246930f577d08746a4001d7e8403f57f1cf43e2796f5650",
+      "prev_hash": "GENESIS_0000000000000000000000000000000000000000000000000000000000000000",
+      "record_hash": "e27237bed67746602983aaf4726249304ca89d3527a26eacc3d184107a27937d"
+    },
+    {
+      "id": "e1cb0683-d67a-4dc3-aad7-38dba5aa3b56",
+      "chain_id": "45f0076d-a4f3-418d-8b9e-ce1c366ccec0",
+      "sequence": 1,
+      "timestamp_utc": "2026-04-25T22:20:16.571Z",
+      "actor_id": "authorization-engine",
+      "actor_type": "policy",
+      "action_type": "POLICY_APPROVAL_GRANTED",
+      "payload": {
+        "tool_call_phase": "AUTHORIZED",
+        "authorization_type": "policy",
+        "policy_version": "policy-v1",
+        "reason": "Allowed by communication policy",
+        "receipt_id": "45f0076d-a4f3-418d-8b9e-ce1c366ccec0"
+      },
+      "payload_hash": "11c370d14e02b9c11bff367a6d12b08d2eb446f569267a0ae8ccfbf02f73eada",
+      "prev_hash": "e27237bed67746602983aaf4726249304ca89d3527a26eacc3d184107a27937d",
+      "record_hash": "339e05f2ba048b472dfa6027df908cfe1707d937b311f9ff8326fa19143b4a11"
+    },
+    {
+      "id": "f76b0891-bc6d-4326-8bf2-b53fba873b7e",
+      "chain_id": "45f0076d-a4f3-418d-8b9e-ce1c366ccec0",
+      "sequence": 2,
+      "timestamp_utc": "2026-04-25T22:20:16.571Z",
+      "actor_id": "tool-call-wrapper",
+      "actor_type": "system",
+      "action_type": "EXECUTION_PENDING",
+      "payload": {
+        "tool_call_phase": "EXECUTION_STARTED",
+        "tool_name": "send_email",
+        "tool_version": "1.0.0",
+        "input_hash": "4f8ab8e613f1c399f9bb18ab7e0c383319ffed34318ac70b908b353e31683bf5",
+        "receipt_id": "45f0076d-a4f3-418d-8b9e-ce1c366ccec0"
+      },
+      "payload_hash": "b32e39efbd2e9acdb6286f9a091f02befb556b9a45034dca6cdb1a54e6c62f71",
+      "prev_hash": "339e05f2ba048b472dfa6027df908cfe1707d937b311f9ff8326fa19143b4a11",
+      "record_hash": "14cefd68d762eaaf5e14b6a590d96c89dd4c09db6af74775bed3b3be2354d962"
+    },
+    {
+      "id": "a71c21e4-a023-457a-89c5-5b35b811d778",
+      "chain_id": "45f0076d-a4f3-418d-8b9e-ce1c366ccec0",
+      "sequence": 3,
+      "timestamp_utc": "2026-04-25T22:20:16.571Z",
+      "actor_id": "tool-call-wrapper",
+      "actor_type": "system",
+      "action_type": "EXECUTION_SUCCEEDED",
+      "payload": {
+        "tool_call_phase": "EXECUTION_SUCCEEDED",
+        "output_hash": "e8599785114126710bcef9646d761c9f796db23a60af5368088f525119661ea8",
+        "duration_ms": 0,
+        "receipt_id": "45f0076d-a4f3-418d-8b9e-ce1c366ccec0"
+      },
+      "payload_hash": "48e94e5ea48b2ece37af33ba0c5d19c6a468da3ab1a7357b0018ca76c75433c9",
+      "prev_hash": "14cefd68d762eaaf5e14b6a590d96c89dd4c09db6af74775bed3b3be2354d962",
+      "record_hash": "f7ffc78748a550fc04ad144b1f1ef1efff3beba5799879e4f5e8e8bb179cb302"
+    }
+  ],
+  "manifest": {
+    "chain_id": "45f0076d-a4f3-418d-8b9e-ce1c366ccec0",
+    "record_count": 4,
+    "first_record_id": "aeed69e6-363e-49b7-ad2f-d9a2a0c6c4eb",
+    "last_record_id": "a71c21e4-a023-457a-89c5-5b35b811d778",
+    "chain_hash": "f7ffc78748a550fc04ad144b1f1ef1efff3beba5799879e4f5e8e8bb179cb302"
+  }
+}

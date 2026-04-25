@@ -261,6 +261,47 @@ console.log(result.status); // 'PASS'
 
 ---
 
+## Tool Call Wrapper
+
+Wrap any async tool/function call and export a portable proof bundle that can be verified offline.
+
+```typescript
+import { withDecisionPassportToolCall, verifyToolCallReceipt } from '@decision-passport/tool-call-wrapper';
+
+const receipt = await withDecisionPassportToolCall({
+  tool: { name: 'send-email', version: '1.0' },
+  actor: { id: 'claude-agent-01', type: 'ai_agent' },
+  input: { to: 'alice@example.com', subject: 'Hello' },
+  authorization: { approved: true, authorizationType: 'policy', policyVersion: 'v2.1' },
+  execute: async (ctx) => {
+    return { messageId: 'msg-001', delivered: true };
+  }
+});
+
+console.log(receipt.status);           // 'SUCCESS'
+console.log(receipt.inputHash);        // SHA-256 of normalized input
+console.log(receipt.outputHash);       // SHA-256 of normalized output
+console.log(receipt.verification.ok);  // true — bundle verified offline
+
+const verification = verifyToolCallReceipt(receipt.bundle);
+console.log(verification.ok);  // true
+```
+
+**What this proves:**
+- The tool was called with a specific input (input hash)
+- The tool produced a specific output (output hash)
+- Authorization was granted before execution
+- The full lifecycle is recorded in a tamper-evident chain
+
+**What this does not prove:**
+- That the agent identity is cryptographically verified
+- That the tool execution was runtime-enforced
+- That replay attacks are prevented
+
+See [docs/TOOL_CALL_WRAPPER.md](docs/TOOL_CALL_WRAPPER.md) for full API reference.
+
+---
+
 ## Architecture
 
 ```text
