@@ -1,0 +1,49 @@
+{
+  "bundle_version": "1.4-basic",
+  "exported_at_utc": "2026-04-25T22:20:16.590Z",
+  "passport_records": [
+    {
+      "id": "04939869-2da2-447d-a5c8-25ac600a78dd",
+      "chain_id": "527b744a-799d-4f03-a3ad-680595957720",
+      "sequence": 0,
+      "timestamp_utc": "2026-04-25T22:20:16.589Z",
+      "actor_id": "agent-risky",
+      "actor_type": "ai_agent",
+      "action_type": "AI_RECOMMENDATION",
+      "payload": {
+        "tool_call_phase": "REQUESTED",
+        "tool_name": "delete_production_table",
+        "tool_version": "1.0.0",
+        "input_hash": "e45d6d87ea592135452638fe65688cf30afaa4d45fe10e7c8bc43d76fad43f14"
+      },
+      "payload_hash": "18ddcb2910cde7a7c26f078fba4201f51c676bf901f9afbbdc604a6c5cd8ce3f",
+      "prev_hash": "GENESIS_0000000000000000000000000000000000000000000000000000000000000000",
+      "record_hash": "1a41cb4b361f301a7620e605a83aea8562b7dc34f7a8cd1b43fac3c2ba46b409"
+    },
+    {
+      "id": "266982d5-dae7-43a0-b43c-7ffcf5cab2cd",
+      "chain_id": "527b744a-799d-4f03-a3ad-680595957720",
+      "sequence": 1,
+      "timestamp_utc": "2026-04-25T22:20:16.590Z",
+      "actor_id": "authorization-engine",
+      "actor_type": "policy",
+      "action_type": "POLICY_EXCEPTION",
+      "payload": {
+        "tool_call_phase": "DENIED",
+        "authorization_type": "policy",
+        "reason": "Destructive operations require explicit human approval",
+        "receipt_id": "527b744a-799d-4f03-a3ad-680595957720"
+      },
+      "payload_hash": "175d580cd78e0674dc810322acf23e133baefe9a174d89738513408ccf7bbe22",
+      "prev_hash": "1a41cb4b361f301a7620e605a83aea8562b7dc34f7a8cd1b43fac3c2ba46b409",
+      "record_hash": "b887ed44fadcc57f8bf2463daa1c2e76a56a3b62b0b30e0a8dd3cf1e2ff98efd"
+    }
+  ],
+  "manifest": {
+    "chain_id": "527b744a-799d-4f03-a3ad-680595957720",
+    "record_count": 2,
+    "first_record_id": "04939869-2da2-447d-a5c8-25ac600a78dd",
+    "last_record_id": "266982d5-dae7-43a0-b43c-7ffcf5cab2cd",
+    "chain_hash": "b887ed44fadcc57f8bf2463daa1c2e76a56a3b62b0b30e0a8dd3cf1e2ff98efd"
+  }
+}
