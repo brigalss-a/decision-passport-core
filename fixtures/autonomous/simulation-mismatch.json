@@ -1,0 +1,70 @@
+{
+  "bundle_version": "1.4-basic",
+  "exported_at_utc": "2026-04-25T10:00:00.000Z",
+  "passport_records": [
+    {
+      "id": "835b2e37-2100-4661-a873-52dc2400f342",
+      "chain_id": "autonomous-industrial-robot-004",
+      "sequence": 0,
+      "timestamp_utc": "2026-04-25T22:35:18.455Z",
+      "actor_id": "industrial-arm-IA-3",
+      "actor_type": "ai_agent",
+      "action_type": "AI_RECOMMENDATION",
+      "payload": {
+        "tool_call_phase": "REQUESTED",
+        "actor": {
+          "id": "industrial-arm-IA-3",
+          "type": "robot",
+          "modelVersion": "welding-v1.8",
+          "controllerVersion": "arm-os-4.2.1"
+        },
+        "action": {
+          "name": "precision_weld",
+          "actionType": "EXECUTION_PENDING",
+          "riskClass": "physical_world_action",
+          "environment": "assembly-line-B"
+        },
+        "evidence": {
+          "simulationScenarioHash": "sha256:simscenario-ORIGINAL-3f8a1b9e2c5d4f8a0e6b3c7d1a5f",
+          "sensorSnapshotHash": "sha256:7a1b4c9d2e5f3a8b6c0d4e8f1a3b7c2d5e9f0a4b8c3d7e1"
+        }
+      },
+      "payload_hash": "454e60618f26b24edbc9b9394578d25787fce389f4a232431c3fbd46d6767ce4",
+      "prev_hash": "GENESIS_0000000000000000000000000000000000000000000000000000000000000000",
+      "record_hash": "1216ad695f4a38473c98c40fa823ac8e40736a33b05832b3b533cc1995b0b16d"
+    },
+    {
+      "id": "ede370c2-ff9a-425a-83a4-97e35228f478",
+      "chain_id": "autonomous-industrial-robot-004",
+      "sequence": 1,
+      "timestamp_utc": "2026-04-25T22:35:18.455Z",
+      "actor_id": "welding-safety-policy-v1.2",
+      "actor_type": "policy",
+      "action_type": "POLICY_EXCEPTION",
+      "payload": {
+        "tool_call_phase": "DENIED",
+        "authorization": {
+          "approved": false,
+          "authorizationType": "simulation_validated",
+          "reason": "Simulation scenario hash mismatch: runtime environment diverges from validated scenario. Simulation hash at authorization time: sha256:simscenario-MUTATED-xxxxxxxxxxxxxxxx. Expected: sha256:simscenario-ORIGINAL-3f8a1b9e2c5d4f8a0e6b3c7d1a5f",
+          "decisionId": "deny-IA3-20260425-sim-mismatch"
+        },
+        "outcome": {
+          "status": "DENIED",
+          "incident": "simulation_to_real_mismatch",
+          "incidentHash": "sha256:0b3e7a1f4c8d2a5b9f3c1e6d0a4f8b2c5e9a1d3f7b0c4e8"
+        }
+      },
+      "payload_hash": "29733bcea2134a4ca17b72c5b9457b8c841912dd3df1ca57d64ffa13d5060ce9",
+      "prev_hash": "1216ad695f4a38473c98c40fa823ac8e40736a33b05832b3b533cc1995b0b16d",
+      "record_hash": "fe8677ef66d76e5d5cca29f2df595af4c211e07435a68a327d3079e37a767f68"
+    }
+  ],
+  "manifest": {
+    "chain_id": "autonomous-industrial-robot-004",
+    "record_count": 2,
+    "first_record_id": "835b2e37-2100-4661-a873-52dc2400f342",
+    "last_record_id": "ede370c2-ff9a-425a-83a4-97e35228f478",
+    "chain_hash": "fe8677ef66d76e5d5cca29f2df595af4c211e07435a68a327d3079e37a767f68"
+  }
+}

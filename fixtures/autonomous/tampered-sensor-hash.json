@@ -1,0 +1,80 @@
+{
+  "bundle_version": "1.4-basic",
+  "exported_at_utc": "2026-04-25T10:00:00.000Z",
+  "passport_records": [
+    {
+      "id": "809f1729-c149-47fb-8b3b-9123153837e8",
+      "chain_id": "autonomous-edge-agent-005",
+      "sequence": 0,
+      "timestamp_utc": "2026-04-25T22:35:18.458Z",
+      "actor_id": "edge-agent-EA-9",
+      "actor_type": "ai_agent",
+      "action_type": "AI_RECOMMENDATION",
+      "payload": {
+        "tool_call_phase": "REQUESTED",
+        "actor": {
+          "id": "edge-agent-EA-9",
+          "type": "edge_agent",
+          "modelVersion": "inspection-v2.5"
+        },
+        "action": {
+          "name": "equipment_inspection",
+          "actionType": "EXECUTION_PENDING",
+          "riskClass": "physical_world_action"
+        },
+        "evidence": {
+          "sensorSnapshotHash": "sha256:TAMPERED-sensor-hash-0000000000000000000000000000000000000000",
+          "perceptionOutputHash": "sha256:8c1a4b7d2e5f9c3a6b0d4e8f2a1b5c9d3e7f0a4b8d2c6e1"
+        }
+      },
+      "payload_hash": "2ef7965008b8525822f92972a80f15362f39847ad172fe83c7152ebf75664ddf",
+      "prev_hash": "GENESIS_0000000000000000000000000000000000000000000000000000000000000000",
+      "record_hash": "b67c982f1938c10759bff4fc9ba35fa75b8e79d3f2f3a28c24790c8365ccb3ad"
+    },
+    {
+      "id": "407ab5d4-0d88-4414-bede-210cd36d7ef7",
+      "chain_id": "autonomous-edge-agent-005",
+      "sequence": 1,
+      "timestamp_utc": "2026-04-25T22:35:18.458Z",
+      "actor_id": "inspection-policy-v1.0",
+      "actor_type": "policy",
+      "action_type": "POLICY_APPROVAL_GRANTED",
+      "payload": {
+        "tool_call_phase": "AUTHORIZED",
+        "authorization": {
+          "approved": true,
+          "authorizationType": "policy"
+        }
+      },
+      "payload_hash": "b66527b08c5550c3179bc0407e1b62ea3e1af16a053be1edcc4221cc05efe2d8",
+      "prev_hash": "b67c982f1938c10759bff4fc9ba35fa75b8e79d3f2f3a28c24790c8365ccb3ad",
+      "record_hash": "1ce4fd528bf748c30d00b981b59362c8ab97ab809c070434891de2ae3d50ef6a"
+    },
+    {
+      "id": "2cdbf350-ebd5-4b59-956f-fe7dd7730a7d",
+      "chain_id": "autonomous-edge-agent-005",
+      "sequence": 2,
+      "timestamp_utc": "2026-04-25T22:35:18.458Z",
+      "actor_id": "edge-agent-EA-9",
+      "actor_type": "ai_agent",
+      "action_type": "EXECUTION_SUCCEEDED",
+      "payload": {
+        "tool_call_phase": "SUCCEEDED",
+        "outcome": {
+          "status": "SUCCEEDED",
+          "durationMs": 2100
+        }
+      },
+      "payload_hash": "4f64d4349a06b550ad334d56b61e98aa80fd9f5406c80474b5839162cde6d62c",
+      "prev_hash": "1ce4fd528bf748c30d00b981b59362c8ab97ab809c070434891de2ae3d50ef6a",
+      "record_hash": "28bba29dd12e6ee16a837f04e141bc7c40948ebf996dcaa39ecab498ef566edd"
+    }
+  ],
+  "manifest": {
+    "chain_id": "autonomous-edge-agent-005",
+    "record_count": 3,
+    "first_record_id": "809f1729-c149-47fb-8b3b-9123153837e8",
+    "last_record_id": "2cdbf350-ebd5-4b59-956f-fe7dd7730a7d",
+    "chain_hash": "28bba29dd12e6ee16a837f04e141bc7c40948ebf996dcaa39ecab498ef566edd"
+  }
+}

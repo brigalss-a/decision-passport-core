@@ -1,0 +1,86 @@
+{
+  "bundle_version": "1.4-basic",
+  "exported_at_utc": "2026-04-25T10:00:00.000Z",
+  "passport_records": [
+    {
+      "id": "47c57284-c49a-47bc-b019-57266c0887aa",
+      "chain_id": "autonomous-drone-delivery-002",
+      "sequence": 0,
+      "timestamp_utc": "2026-04-25T22:35:18.448Z",
+      "actor_id": "delivery-drone-DD-12",
+      "actor_type": "ai_agent",
+      "action_type": "AI_RECOMMENDATION",
+      "payload": {
+        "tool_call_phase": "REQUESTED",
+        "actor": {
+          "id": "delivery-drone-DD-12",
+          "type": "drone",
+          "modelVersion": "delivery-nav-v2.0",
+          "controllerVersion": "flight-os-3.0.1"
+        },
+        "action": {
+          "name": "fly_to_destination",
+          "actionType": "EXECUTION_PENDING",
+          "riskClass": "safety_relevant_physical_action",
+          "environment": "urban-restricted-airspace",
+          "zone": "ZONE_RESTRICTED",
+          "target": "delivery-point-C7",
+          "correlationId": "delivery-44512"
+        },
+        "safetyEnvelope": {
+          "envelopeId": "env-DD12-20260425",
+          "policyVersion": "airspace-safety-v2.1",
+          "allowedZone": "ZONE_APPROVED_ONLY",
+          "maxSpeed": 8,
+          "minHumanDistance": 30,
+          "allowedOperatingMode": "autonomous",
+          "emergencyStopAvailable": true,
+          "confidenceThreshold": 0.98,
+          "constraintsHash": "f7c2a8e1b4d9"
+        },
+        "evidence": {
+          "sensorSnapshotHash": "sha256:3a9f2b7c5d1e8f4a0b6c2d8e3f9a1b5c7d2e4f8a0b3c6d9f",
+          "perceptionOutputHash": "sha256:8d1f4c9a2e6b3f7a1d5c0e8b4f2a9d3c6e1f4b7a0d5c8e2"
+        }
+      },
+      "payload_hash": "694584139a256323555301588669efb4485c3407d44493662ae667a6a9f228c8",
+      "prev_hash": "GENESIS_0000000000000000000000000000000000000000000000000000000000000000",
+      "record_hash": "657351b24cf8c7c216aa94f40b1cff6f78b334c56f9c084f6127963e93dee3a0"
+    },
+    {
+      "id": "61fcae4c-1b77-41fc-bfde-ef13c9f9f604",
+      "chain_id": "autonomous-drone-delivery-002",
+      "sequence": 1,
+      "timestamp_utc": "2026-04-25T22:35:18.448Z",
+      "actor_id": "airspace-safety-policy-v2.1",
+      "actor_type": "policy",
+      "action_type": "HUMAN_APPROVAL_REJECTED",
+      "payload": {
+        "tool_call_phase": "DENIED",
+        "authorization": {
+          "approved": false,
+          "authorizationType": "policy",
+          "policyVersion": "airspace-safety-v2.1",
+          "approvedBy": "airspace-controller",
+          "reason": "Target zone ZONE_RESTRICTED is outside approved flight envelope",
+          "decisionId": "deny-DD12-20260425-001"
+        },
+        "outcome": {
+          "status": "DENIED",
+          "incident": "attempted_restricted_airspace_entry",
+          "incidentHash": "sha256:1c4e8a2f6d0b3c7e9f1a5d2b8f4c0a6e3d1f9b5c7a2e4d8f"
+        }
+      },
+      "payload_hash": "83c8ae6b9df95991f4c41e9470e89b29a66f12f2fc178420bbb28a6b76cd5e43",
+      "prev_hash": "657351b24cf8c7c216aa94f40b1cff6f78b334c56f9c084f6127963e93dee3a0",
+      "record_hash": "2ff4455f1a48c0e9d7dc509a958d8b6b8cdc6da2e2fa39ed8f27f2f7c79c7a03"
+    }
+  ],
+  "manifest": {
+    "chain_id": "autonomous-drone-delivery-002",
+    "record_count": 2,
+    "first_record_id": "47c57284-c49a-47bc-b019-57266c0887aa",
+    "last_record_id": "61fcae4c-1b77-41fc-bfde-ef13c9f9f604",
+    "chain_hash": "2ff4455f1a48c0e9d7dc509a958d8b6b8cdc6da2e2fa39ed8f27f2f7c79c7a03"
+  }
+}

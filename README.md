@@ -333,6 +333,45 @@ See [docs/BATCH_VERIFICATION.md](docs/BATCH_VERIFICATION.md) for full API refere
 
 ---
 
+## Autonomous Action Receipt Profile
+
+Decision Passport makes autonomous execution provable — from AI tool calls to physical-world action receipts.
+
+The Autonomous Action Receipt Profile defines how to use `BasicProofBundle` and `PassportRecord` to create offline-verifiable receipts for autonomous system actions: warehouse robots, delivery drones, autonomous vehicles, industrial arms, and edge AI agents.
+
+> **Decision Passport does not replace functional safety systems.**  
+> Decision Passport records and verifies which safety envelope, evidence hashes, and authorization claims were bound to an autonomous action.
+
+```typescript
+import { verifyBasicBundle } from '@decision-passport/verifier-basic';
+import { readFileSync } from 'node:fs';
+
+// Load a Decision Passport bundle from an autonomous robot
+const bundle = JSON.parse(readFileSync('robot-receipt.json', 'utf8'));
+const result = verifyBasicBundle(bundle);
+
+// PASS: sensor hash, safety envelope, authorization, and outcome are all intact
+// FAIL + HASH_MISMATCH: sensor data was tampered with after the record was signed
+console.log(result.status); // "PASS" or "FAIL"
+```
+
+**What this proves:**
+- Which sensor/context evidence hashes were bound to the autonomous decision
+- Which safety envelope constraints were declared at decision time
+- What authorization claim was granted or denied
+- Whether a simulation scenario hash was included at authorization time
+- What outcome was recorded — succeeded, failed, aborted, denied, or safety-blocked
+- Chain integrity: none of the above can be mutated without breaking verification
+
+**What this does not prove:**
+- That sensors were accurate, safety envelopes were appropriate, or simulations were valid
+- Safety certification — Decision Passport is not certified under ISO 26262 or any safety standard
+- Hardware control or integration with NVIDIA DRIVE, Isaac, Jetson, ROS, or any external SDK
+
+See [docs/AUTONOMOUS_ACTION_PROFILE.md](docs/AUTONOMOUS_ACTION_PROFILE.md) and [docs/SIMULATION_TO_EXECUTION_PROFILE.md](docs/SIMULATION_TO_EXECUTION_PROFILE.md).
+
+---
+
 ## Architecture
 
 ```text
