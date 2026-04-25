@@ -1,0 +1,94 @@
+{
+  "batchLabel": "mixed-demo",
+  "verifiedAt": "2026-04-25T22:32:59.983Z",
+  "generatedAt": "2026-04-25T22:32:59.985Z",
+  "summary": {
+    "totalCount": 6,
+    "passedCount": 2,
+    "failedCount": 4,
+    "failFastTriggered": false
+  },
+  "failureSummary": {
+    "totalFailed": 4,
+    "byClass": {
+      "CHAIN_BREAK": 0,
+      "MANIFEST_MISMATCH": 0,
+      "TAMPERED_PAYLOAD": 0,
+      "UNSUPPORTED_VERSION": 1,
+      "MALFORMED_BUNDLE": 1,
+      "MISSING_RECORD": 0,
+      "HASH_MISMATCH": 2,
+      "AUTHORIZATION_MISMATCH": 0,
+      "UNKNOWN": 0
+    },
+    "failedIndices": [
+      1,
+      3,
+      4,
+      5
+    ]
+  },
+  "results": [
+    {
+      "index": 0,
+      "chainId": "fixture-chain-001",
+      "status": "PASS",
+      "code": "SUCCESS_VALID",
+      "reason": "Bundle passed schema, integrity, ordering, and semantic checks.",
+      "reasonCodes": []
+    },
+    {
+      "index": 1,
+      "chainId": "fixture-chain-001",
+      "status": "FAIL",
+      "code": "HASH_MISMATCH",
+      "reason": "Record payload hash does not match deterministic recomputation.",
+      "batchFailureClass": "HASH_MISMATCH",
+      "reasonCodes": [
+        "CHAIN_INTEGRITY_FAILED",
+        "PAYLOAD_HASH_MISMATCH"
+      ]
+    },
+    {
+      "index": 2,
+      "chainId": "45f0076d-a4f3-418d-8b9e-ce1c366ccec0",
+      "status": "PASS",
+      "code": "SUCCESS_VALID",
+      "reason": "Bundle passed schema, integrity, ordering, and semantic checks.",
+      "reasonCodes": []
+    },
+    {
+      "index": 3,
+      "status": "FAIL",
+      "code": "SCHEMA_MISSING_FIELD",
+      "reason": "Required field passport_records is missing.",
+      "batchFailureClass": "MALFORMED_BUNDLE",
+      "reasonCodes": [
+        "EMPTY_OR_MISSING_RECORDS"
+      ]
+    },
+    {
+      "index": 4,
+      "chainId": "fixture-chain-001",
+      "status": "FAIL",
+      "code": "VERSION_UNSUPPORTED",
+      "reason": "Bundle version 2.0-future is not supported by verifyBasicBundle.",
+      "batchFailureClass": "UNSUPPORTED_VERSION",
+      "reasonCodes": [
+        "UNSUPPORTED_BUNDLE_VERSION"
+      ]
+    },
+    {
+      "index": 5,
+      "chainId": "45f0076d-a4f3-418d-8b9e-ce1c366ccec0",
+      "status": "FAIL",
+      "code": "HASH_MISMATCH",
+      "reason": "Record payload hash does not match deterministic recomputation.",
+      "batchFailureClass": "HASH_MISMATCH",
+      "reasonCodes": [
+        "CHAIN_INTEGRITY_FAILED",
+        "PAYLOAD_HASH_MISMATCH"
+      ]
+    }
+  ]
+}
