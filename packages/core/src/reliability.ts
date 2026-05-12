@@ -31,6 +31,25 @@ import type { BasicProofBundle, PassportRecord } from "./types.js";
 /** Outcome classification for a single PassportRecord action. */
 export type ActionOutcome = "success" | "failure" | "approval_granted" | "approval_rejected" | "override" | "other";
 
+export interface ReliabilitySignal {
+  /** Source session/chain identifier for the behavioral observation. */
+  readonly session_id: string;
+  /** ISO 8601 timestamp for when the behavior was observed. */
+  readonly observed_at: string;
+  /** Optional confidence/importance weight. Defaults to 1 when normalized. */
+  readonly weight?: number;
+  /** Optional structured metrics such as pdr, calibration, adaptation, or robustness. */
+  readonly metrics?: Readonly<Record<string, number>>;
+}
+
+export interface ReliabilitySignalWindow {
+  readonly session_count: number;
+  readonly first_observed_at: string;
+  readonly last_observed_at: string;
+  readonly total_weight: number;
+  readonly average_metrics: Readonly<Record<string, number>>;
+}
+
 /**
  * Per-session reliability summary derived from a single BasicProofBundle.
  *
@@ -147,6 +166,50 @@ export interface ActorReliabilityProfile {
  * Below this threshold a trend is labelled "stable".
  */
 export const SIGNIFICANCE_THRESHOLD = 0.01;
+
+// ---------------------------------------------------------------------------
+// Reliability signal helpers
+// ---------------------------------------------------------------------------
+
+export function normalizeReliabilitySignals(
+  signals: readonly ReliabilitySignal[] | undefined,
+): readonly ReliabilitySignal[] {
+  if (!signals) return [];
+
+  return [...signals]
+    .map((signal) => ({ ...signal, weight: signal.weight ?? 1 }))
+    .sort((a, b) => {
+      const byTime = a.observed_at.localeCompare(b.observed_at);
+      return byTime === 0 ? a.session_id.localeCompare(b.session_id) : byTime;
+    });
+}
+
+export function summarizeReliabilitySignalWindow(
+  signals: readonly ReliabilitySignal[],
+): ReliabilitySignalWindow | undefined {
+  const normalized = normalizeReliabilitySignals(signals);
+  if (normalized.length === 0) return undefined;
+
+  const totalWeight = normalized.reduce((sum, signal) => sum + (signal.weight ?? 1), 0);
+  const metricTotals = new Map<string, number>();
+
+  for (const signal of normalized) {
+    const weight = signal.weight ?? 1;
+    for (const [metric, value] of Object.entries(signal.metrics ?? {})) {
+      metricTotals.set(metric, (metricTotals.get(metric) ?? 0) + value * weight);
+    }
+  }
+
+  return {
+    session_count: new Set(normalized.map((signal) => signal.session_id)).size,
+    first_observed_at: normalized[0].observed_at,
+    last_observed_at: normalized[normalized.length - 1].observed_at,
+    total_weight: totalWeight,
+    average_metrics: Object.fromEntries(
+      [...metricTotals.entries()].map(([metric, total]) => [metric, total / totalWeight]),
+    ),
+  };
+}
 
 // ---------------------------------------------------------------------------
 // Internal helpers
