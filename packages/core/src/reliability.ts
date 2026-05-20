@@ -171,16 +171,70 @@ export const SIGNIFICANCE_THRESHOLD = 0.01;
 // Reliability signal helpers
 // ---------------------------------------------------------------------------
 
+const ISO_TIMESTAMP_RE =
+  /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d+)?(Z|[+-]\d{2}:\d{2})$/;
+
+function isValidIsoTimestamp(value: string): boolean {
+  const match = ISO_TIMESTAMP_RE.exec(value);
+  if (!match) return false;
+
+  const [, yearText, monthText, dayText, hourText, minuteText, secondText, offset] = match;
+  const year = Number(yearText);
+  const month = Number(monthText);
+  const day = Number(dayText);
+  const hour = Number(hourText);
+  const minute = Number(minuteText);
+  const second = Number(secondText);
+
+  if (month < 1 || month > 12) return false;
+  const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
+  if (day < 1 || day > daysInMonth) return false;
+  if (hour > 23 || minute > 59 || second > 59) return false;
+  if (offset !== "Z") {
+    const offsetHour = Number(offset.slice(1, 3));
+    const offsetMinute = Number(offset.slice(4, 6));
+    if (offsetHour > 23 || offsetMinute > 59) return false;
+  }
+
+  return Number.isFinite(Date.parse(value));
+}
+
 export function normalizeReliabilitySignals(
   signals: readonly ReliabilitySignal[] | undefined,
 ): readonly ReliabilitySignal[] {
   if (!signals) return [];
 
   return [...signals]
-    .map((signal) => ({ ...signal, weight: signal.weight ?? 1 }))
+    .map((signal) => {
+      if (signal.session_id.trim().length === 0) {
+        throw new RangeError("normalizeReliabilitySignals: session_id must be non-empty");
+      }
+      if (!isValidIsoTimestamp(signal.observed_at)) {
+        throw new RangeError(
+          "normalizeReliabilitySignals: observed_at must be a valid ISO 8601 timestamp",
+        );
+      }
+
+      const weight = signal.weight ?? 1;
+      if (!Number.isFinite(weight) || weight <= 0) {
+        throw new RangeError("normalizeReliabilitySignals: weight must be a positive finite number");
+      }
+
+      for (const [metric, value] of Object.entries(signal.metrics ?? {})) {
+        if (!Number.isFinite(value)) {
+          throw new RangeError(
+            `normalizeReliabilitySignals: metric "${metric}" must be a finite number`,
+          );
+        }
+      }
+
+      return { ...signal, weight };
+    })
     .sort((a, b) => {
-      const byTime = a.observed_at.localeCompare(b.observed_at);
-      return byTime === 0 ? a.session_id.localeCompare(b.session_id) : byTime;
+      const byTime = Date.parse(a.observed_at) - Date.parse(b.observed_at);
+      if (byTime !== 0) return byTime;
+      const bySession = a.session_id.localeCompare(b.session_id);
+      return bySession === 0 ? a.observed_at.localeCompare(b.observed_at) : bySession;
     });
 }
 
@@ -192,11 +246,13 @@ export function summarizeReliabilitySignalWindow(
 
   const totalWeight = normalized.reduce((sum, signal) => sum + (signal.weight ?? 1), 0);
   const metricTotals = new Map<string, number>();
+  const metricWeights = new Map<string, number>();
 
   for (const signal of normalized) {
     const weight = signal.weight ?? 1;
     for (const [metric, value] of Object.entries(signal.metrics ?? {})) {
       metricTotals.set(metric, (metricTotals.get(metric) ?? 0) + value * weight);
+      metricWeights.set(metric, (metricWeights.get(metric) ?? 0) + weight);
     }
   }
 
@@ -206,7 +262,9 @@ export function summarizeReliabilitySignalWindow(
     last_observed_at: normalized[normalized.length - 1].observed_at,
     total_weight: totalWeight,
     average_metrics: Object.fromEntries(
-      [...metricTotals.entries()].map(([metric, total]) => [metric, total / totalWeight]),
+      [...metricTotals.entries()]
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([metric, total]) => [metric, total / (metricWeights.get(metric) ?? 1)]),
     ),
   };
 }
